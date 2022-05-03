@@ -7,12 +7,18 @@ import './Task.js';
 import "./Login.js";
 
 const HIDE_COMPLETED_STRING = "hideCompleted";
+const IS_LOADING_STRING = "isLoading";
 
 const getUser = () => Meteor.user();
 const isUserLogged = () => !!getUser();
 
 Template.mainContainer.onCreated(function mainContainerOnCreated() {
   this.state = new ReactiveDict();
+
+  const handler = Meteor.subscribe('tasks');
+  Tracker.autorun(() => {
+    this.state.set(IS_LOADING_STRING, !handler.ready());
+  });
 });
 
 const getTasksFilter = () => {
@@ -33,10 +39,6 @@ Template.mainContainer.helpers({
     const hideCompleted = instance.state.get(HIDE_COMPLETED_STRING);
 
     const { pendingOnlyFilter, userFilter } = getTasksFilter();
-    console.log('jones36 pendingOnlyFilter',pendingOnlyFilter);
-    console.log('jones36 userFilter',userFilter);
-    console.log('jones36 hideCompleted',hideCompleted);
-    console.log('jones36 hideCompleted ? pendingOnlyFilter : userFilter',hideCompleted ? pendingOnlyFilter : userFilter);
 
     if (!isUserLogged()) {
      return [];
@@ -60,11 +62,14 @@ Template.mainContainer.helpers({
   },
   isUserLogged() {
     const tmp = isUserLogged();
-    console.log('jones38',Meteor.user());
     return tmp;
   },
   getUser() {
     return getUser();
+  },
+  isLoading() {
+    const instance = Template.instance();
+    return instance.state.get(IS_LOADING_STRING);
   }
 });
 
