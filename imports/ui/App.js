@@ -5,6 +5,8 @@ import { ReactiveDict } from 'meteor/reactive-dict';
 import './App.html';
 import './Task.js';
 import "./Login.js";
+import "./Router.js";
+import "./Lists_show_page.html";
 
 const HIDE_COMPLETED_STRING = "hideCompleted";
 const IS_LOADING_STRING = "isLoading";

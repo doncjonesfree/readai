@@ -40,6 +40,9 @@
                   {{> task}}
                 {{/each}}
             </ul>
+
+            {{> Template.dynamic template=main}}
+
           {{ else }}
             {{> login }}
           {{ /if }}
@@ -52,4 +55,8 @@
         <input type="text" name="text" placeholder="Type to add new tasks" />
         <button type="submit">Add Task</button>
     </form>
+</template>
+
+<template name="Lists_show_page9">
+  *** Lists show page in App.html
 </template>
