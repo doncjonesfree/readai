@@ -15,7 +15,8 @@ const getUser = () => Meteor.user();
 const isUserLogged = () => !!getUser();
 
 Template.mainContainer.onCreated(function mainContainerOnCreated() {
-  this.state = new ReactiveDict();
+  this.state = new ReactiveDict('app'); // retain value on reload
+  this.state.set('data',1);
 
   const handler = Meteor.subscribe('tasks');
   Tracker.autorun(() => {
@@ -69,6 +70,10 @@ Template.mainContainer.helpers({
   getUser() {
     return getUser();
   },
+  data() {
+    const instance = Template.instance();
+    return instance.state.get('data');
+  },
   isLoading() {
     const instance = Template.instance();
     return instance.state.get(IS_LOADING_STRING);
@@ -76,6 +81,10 @@ Template.mainContainer.helpers({
 });
 
 Template.mainContainer.events({
+  'click #update_data'(event,instance){
+    const data = parseInt( instance.state.get('data') ) + 1;
+    instance.state.set('data',data);
+  },
   "click #hide-completed-button"(event, instance) {
     const currentHideCompleted = instance.state.get(HIDE_COMPLETED_STRING);
     instance.state.set(HIDE_COMPLETED_STRING, !currentHideCompleted);
