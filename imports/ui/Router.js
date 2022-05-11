@@ -1,5 +1,3 @@
-console.log('jones1',Meteor.isServer);
-
 import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 
 FlowRouter.route('/lists/:_id', {

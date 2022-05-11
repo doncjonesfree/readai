@@ -1,12 +1,12 @@
 import { Template } from 'meteor/templating';
-import { TasksCollection } from '/imports/db/TasksCollection';
+import { TasksCollection } from '/imports/db/Collections';
 import { ReactiveDict } from 'meteor/reactive-dict';
 
 import './App.html';
 import './Task.js';
 import "./Login.js";
 import "./Router.js";
-import "./Lists_show_page.html";
+import "./Lists_show_page.html"; //
 
 const HIDE_COMPLETED_STRING = "hideCompleted";
 const IS_LOADING_STRING = "isLoading";
@@ -14,9 +14,15 @@ const IS_LOADING_STRING = "isLoading";
 const getUser = () => Meteor.user();
 const isUserLogged = () => !!getUser();
 
+const state = new ReactiveDict(''); // retain value on reload if name specified
+
 Template.mainContainer.onCreated(function mainContainerOnCreated() {
-  this.state = new ReactiveDict('app'); // retain value on reload
+  this.state = new ReactiveDict(''); // retain value on reload if name specified
   this.state.set('data',1);
+
+  console.log('jones19a',state.get('data'));
+  state.set('data',1);
+  console.log('jones19b',state.get('data'));
 
   const handler = Meteor.subscribe('tasks');
   Tracker.autorun(() => {
@@ -71,8 +77,9 @@ Template.mainContainer.helpers({
     return getUser();
   },
   data() {
-    const instance = Template.instance();
-    return instance.state.get('data');
+    return state.get('data'); //
+    // const instance = Template.instance();
+    // return instance.state.get('data');
   },
   isLoading() {
     const instance = Template.instance();
@@ -82,8 +89,11 @@ Template.mainContainer.helpers({
 
 Template.mainContainer.events({
   'click #update_data'(event,instance){
-    const data = parseInt( instance.state.get('data') ) + 1;
-    instance.state.set('data',data);
+    // const data = parseInt( instance.state.get('data') ) + 1;
+    // instance.state.set('data',data);
+    console.log('jones19c',state.get('data'));
+    const data = parseInt( state.get('data') ) + 1;
+    state.set('data',data);
   },
   "click #hide-completed-button"(event, instance) {
     const currentHideCompleted = instance.state.get(HIDE_COMPLETED_STRING);

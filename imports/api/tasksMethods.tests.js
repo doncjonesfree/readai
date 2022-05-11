@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 import { mockMethodCall } from 'meteor/quave:testing';
 import { assert } from 'chai';
-import { TasksCollection } from '/imports/db/TasksCollection';
+import { TasksCollection } from '/imports/db/Collections';
 import '/imports/api/tasksMethods';
 
 if (Meteor.isServer) {

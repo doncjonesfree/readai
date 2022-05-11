@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { TasksCollection } from "/imports/db/TasksCollection";
+import { TasksCollection } from "/imports/db/Collections";
 
 import './Task.html';
 

@@ -1,0 +1,545 @@
+﻿TestNum	Type	Form	Page	Number	Question	Picture	Answer1	Answer2	Answer3	Answer4	Correct	keyword	CB	CDT	MB	MDT
+2	PrimaryI	A	NULL	1	A room where food is cooked is called a		kitchen	den	parlor		1	cook	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:24.000
+3	PrimaryI	A	NULL	2	Something that has been given to you is a		gift	favorite	profit		1	given	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:24.000
+4	PrimaryI	A	NULL	3	lawbreakers are arrested by the		firemen	police	scouts		2	lawbreaker	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:24.000
+5	PrimaryI	A	NULL	4	The one who broke the toy should get the		reward	blame	benefit		2	broke	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:24.000
+6	PrimaryI	A	NULL	5	When there is very little light, it is		dark	easy	heavy		1	light	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:24.000
+7	PrimaryI	A	NULL	6	A trip in an airplane is a		flight	shipment	voyage		1	airplane	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:24.000
+8	PrimaryI	A	NULL	7	A sandal is a kind of		boat	bird	shoe		3	sandal	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:24.000
+9	PrimaryI	A	NULL	8	Something that is likely to hurt you is		accidental	secure	dangerous		3	likely	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:24.000
+10	PrimaryI	A	NULL	9	A giant looks like a man but is		weaker	larger	quicker		2	giant	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:24.000
+11	PrimaryI	A	NULL	10	If you go toward a higher place, you go		apart	upward	underground		2	higher	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:56.000
+12	PrimaryI	A	NULL	11	A chair is padded to make it		softer	stronger	smaller		1	padded	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:56.000
+13	PrimaryI	A	NULL	12	If you leave immediately, you go		in a while	right away	briefly		2	immediately	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:56.000
+14	PrimaryI	A	NULL	13	The head of a school is the		custodian	teacher	principal		3	head	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:56.000
+15	PrimaryI	A	NULL	14	A chain worn around the wrist is		an anklet	a bracelet	a necklace		2	wrist	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:56.000
+16	PrimaryI	A	NULL	15	To get ready to do something is to		prepare	condense	recite		1	ready	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:56.000
+17	PrimaryI	A	NULL	16	If you have all you need, you have		extras	lost	enough		3	need	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:56.000
+18	PrimaryI	A	NULL	17	Something that doesn't cost much is		expensive	free	cheap		3	cost	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:56.000
+19	PrimaryI	A	NULL	18	Someone who thinks about what he is doing is		friendly	lazy	careful		3	think	1	2003-04-25 14:23:18.000	1	2010-11-29 11:35:56.000
+20	PrimaryI	A	NULL	19	Something stiff is hard to		burn	bend	sell		2	stiff	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+21	PrimaryI	A	NULL	20	A lad is a		boy	girl	woman		1	lad	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+22	PrimaryI	A	NULL	21	If you arrive before you are expected, you are		soon	late	early		3	arrive	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+23	PrimaryI	A	NULL	22	If you copy something by following its lines, you		track it	trace it	design it		2	copy	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+24	PrimaryI	A	NULL	23	If an answer is <b>not</b> true, it is		correct	good	false		3	true	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+25	PrimaryI	A	NULL	24	A long, narrow piece of paper is a		strip	bag	square		1	piece	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+26	PrimaryI	A	NULL	25	If a tree has a big hole inside, it is		shallow	ripe	hollow		3	tree	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+27	PrimaryI	A	NULL	26	A building where things are manufactured is a		warehouse	showroom	factory		3	manufacture	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+28	PrimaryI	A	NULL	27	A calm day is		windy	quiet	warm		2	calm	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+29	PrimaryI	A	NULL	28	Moist means a little bit		hot	wet	used		2	moist	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+30	PrimaryI	A	NULL	29	If you turn toward an object, you		face it	ignore it	touch it		1	toward	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+31	PrimaryI	A	NULL	30	A narrow, back street in a town is		a pathway	an alley	a runway		2	narrow	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+32	PrimaryI	A	NULL	31	To select means to		turndown	pick out	do without		2	select	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+33	PrimaryI	A	NULL	32	An object that holds things in place is a		brace	hammer	chisel		1	holds	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+34	PrimaryI	A	NULL	33	The coast is the land near the		sea	river	hill		1	coast	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+35	PrimaryI	A	NULL	34	A thick row of bushes used as a fence is a		grove	forest	hedge		3	fence	1	2003-04-25 14:23:18.000	1	2010-11-29 11:36:46.000
+36	PrimaryI	A	NULL	35	The seeds of wheat, corn, and oats are called		plants	soil	grain		3	wheat	1	2003-04-25 14:23:18.000	1	2010-11-29 11:38:14.000
+37	PrimaryI	A	NULL	36	A bitter taste is		smooth	unpleasant	delicious		2	bitter	1	2003-04-25 14:23:19.000	1	2010-11-29 11:38:14.000
+38	PrimaryI	A	NULL	37	The price a store asks for something is the		tax	amount	change		2	price	1	2003-04-25 14:23:19.000	1	2010-11-29 11:38:14.000
+76	PrimaryI	B	NULL	1	A hole in the ground that goes far down is		deep	full	high		1	down	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+77	PrimaryI	B	NULL	2	If a tree leans, it is		slanting	bare	straight		1	lean	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+78	PrimaryI	B	NULL	3	A helmet protects your                   		chest	head	hands		2	helmet	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+79	PrimaryI	B	NULL	4	A very large animal like an elephant is      		light	huge	slight		2	elephant	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+80	PrimaryI	B	NULL	5	A champion is a person who              		wins	opposes	fails		1	champion	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+81	PrimaryI	B	NULL	6	A blindfold covers the                   		eyes	ears	mouth		1	blindfold	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+82	PrimaryI	B	NULL	7	A long stick is a                          		fork	pipe	pole		3	stick	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+83	PrimaryI	B	NULL	8	To do what you are told is to		object	decide	obey		3	told	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+84	PrimaryI	B	NULL	9	If the hat belongs to the girl, it is           		ours	hers	his		2	belongs	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+85	PrimaryI	B	NULL	10	A thick, sweet liquid made by bees is called 		syrup	honey	sugar		2	liquid	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+86	PrimaryI	B	NULL	11	A carpet is a heavy material to cover        		floors	walls	chairs		1	carpet	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+87	PrimaryI	B	NULL	12	When you toss a ball, you                  		waste it	throw it	lose it		2	toss	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+88	PrimaryI	B	NULL	13	A strap or chain used to hold a dog is a		bit	muzzle	leash		3	strap	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+89	PrimaryI	B	NULL	14	If you are saved from danger, you are       		rewarded	rescued	replaced		2	danger	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+90	PrimaryI	B	NULL	15	Something a person aims for is his		target	sight	bulletin		1	aim	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+91	PrimaryI	B	NULL	16	A thing that can't be done is		powerless	deceptive	impossible		3	thing	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+93	PrimaryI	B	NULL	18	To get the meaning of something is to		instruct	record	understand		3	meaning	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+94	PrimaryI	B	NULL	19	If the mouse escapes from the trap, he gets		hurt	away	caught		2	escape	1	2003-04-25 15:12:19.000	1	2010-11-29 11:39:13.000
+95	PrimaryI	B	NULL	20	A boulder is a large		rock	dam	hill		1	boulder	1	2003-04-25 15:12:19.000	1	2010-11-29 11:39:13.000
+96	PrimaryI	B	NULL	21	The rear of a house Is the		front	roof	back		3	rear	1	2003-04-25 15:12:19.000	1	2010-11-29 11:39:13.000
+92	PrimaryI	B	NULL	17	Your favorite toy is the one you like		somewhat	least	especially		3	favorite	1	2003-04-25 15:12:19.000	1	2010-11-29 11:38:14.000
+97	PrimaryI	B	NULL	22	The tip of something is its		length	end	outside		2	tip	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+98	PrimaryI	B	NULL	23	Something that is an antique must be		modern	broken	old		3	antique	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+99	PrimaryI	B	NULL	24	When a song drags, it Is too		slow	loud	fast		1	drags	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+100	PrimaryI	B	NULL	25	Something chilled has been		heated	melted	cooled		3	chilled	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+101	PrimaryI	B	NULL	26	Something well known is		unknown	uncommon	familiar		3	known	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+102	PrimaryI	B	NULL	27	A paper with spaces to be filled in is		a message	a blank	an article		2	spaces	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+103	PrimaryI	B	NULL	28	A comedy is a show that is		long	funny	interesting		2	comedy	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+104	PrimaryI	B	NULL	29	A room that is bare has no		furniture	heat	windows		1	bare	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+105	PrimaryI	B	NULL	30	To be happy is to be		sad	merry	jealous		2	happy	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+106	PrimaryI	B	NULL	31	To blossom means to have		fruit	flowers	seeds		2	blossom	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+107	PrimaryI	B	NULL	32	If you are safe, you are		secure	conquered	armed		1	safe	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+108	PrimaryI	B	NULL	33	When you look something over carefully, you		inspect it	collect it	project it		1	carefully	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+109	PrimaryI	B	NULL	34	If you can hardly swim, you swim with		strength	ease	difficulty		3	hardly	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+110	PrimaryI	B	NULL	35	Bamboo is a kind of		game	mistake	plant		3	bamboo	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+111	PrimaryI	B	NULL	36	An oral agreement is		handwritten	spoken	printed		2	oral	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+112	PrimaryI	B	NULL	37	To find out something for the first time is to		hunt	discover	explore		2	first	1	2003-04-25 15:12:20.000	1	2010-11-29 11:39:13.000
+169	PrimaryII	A	NULL	1	If you stay overnight, you stay until		evening	tomorrow	dinner		2	overnight	1	2003-05-07 14:32:24.000	1	2010-11-11 17:13:09.000
+170	PrimaryII	A	NULL	2	A thief is a person who		spies	steals	thinks		2	thief	1	2003-05-07 14:32:24.000	1	2010-11-11 17:13:09.000
+171	PrimaryII	A	NULL	3	To go on is to		continue	concern	consist		1	continue	1	2003-05-07 14:32:24.000	1	2010-11-11 17:13:09.000
+172	PrimaryII	A	NULL	4	A chore is a small		job	business	river		1	chore	1	2003-05-07 14:32:24.000	1	2010-11-11 17:13:09.000
+173	PrimaryII	A	NULL	5	Someone who is polite has good		luck	wishes	manners		3	polite	1	2003-05-07 14:32:24.000	1	2010-11-11 17:13:09.000
+174	PrimaryII	A	NULL	6	If an answer is exact, it is		a guess	just right	difficult		2	exact	1	2003-05-07 14:32:24.000	1	2010-11-11 17:13:09.000
+175	PrimaryII	A	NULL	7	A ton is a measure of		weight	time	power		1	ton	1	2003-05-07 14:32:24.000	1	2010-11-11 17:13:09.000
+176	PrimaryII	A	NULL	8	If the way a person acts is odd, it is		regular	natural	strange		3	odd	1	2003-05-07 14:32:24.000	1	2010-11-11 17:13:09.000
+177	PrimaryII	A	NULL	9	Foolish talk or action is		debate	cleverness	nonsense		3	foolish	1	2003-05-07 14:32:24.000	1	2010-11-11 17:13:09.000
+178	PrimaryII	A	NULL	10	If you obtain a reward, you		hate it	lose it	get it		3	obtain	1	2003-05-07 14:32:24.000	1	2010-11-11 17:13:09.000
+179	PrimaryII	A	NULL	11	A grave danger is		unimportant	serious	routine		2	grave	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:09.000
+180	PrimaryII	A	NULL	12	Words saying you are sorry are		an apology	a defense	a pardon		1	apology	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:09.000
+181	PrimaryII	A	NULL	13	A large, flat dish for serving food is a		bowl	mug	platter		3	platter	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:09.000
+182	PrimaryII	A	NULL	14	If two things are connected, they are		separated	joined	divided		2	connected	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:09.000
+183	PrimaryII	A	NULL	15	To sprout means to begin to		shower	drip	grow		3	sprout	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:09.000
+184	PrimaryII	A	NULL	16	A bundle is a		package	pair	barrel		1	bundle	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:09.000
+185	PrimaryII	A	NULL	17	If you're uncertain, you're not		trusted	willing	sure		3	uncertain	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:09.000
+186	PrimaryII	A	NULL	18	Velvet is a kind of		cheese	vegetable	cloth		3	velvet	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:09.000
+187	PrimaryII	A	NULL	19	If you ruin something, you		organize it	wreck it	collect it		2	ruin	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:09.000
+188	PrimaryII	A	NULL	20	Beware means be		afraid	careful	bold		2	beware	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+189	PrimaryII	A	NULL	21	If someone is very rude to you, you are		insulted	amused	gratified		1	rude	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+190	PrimaryII	A	NULL	22	To be ready is to be		late	prepared	started		2	ready	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+191	PrimaryII	A	NULL	23	Something which occurs		wins	happens	hides		2	occurs	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+192	PrimaryII	A	NULL	24	A careless person is		thoughtless	worried	neglected		1	careless	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+193	PrimaryII	A	NULL	25	To make something is to		produce it	cancel it	imagine it		1	produce	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+194	PrimaryII	A	NULL	26	To injure is to		take it	get well	do harm		3	injure	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+195	PrimaryII	A	NULL	27	A person who sees something happen is a		reporter	speculator	witness		3	witness	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+196	PrimaryII	A	NULL	28	If you stop for a while, you		retreat	pause	leave		2	while	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+197	PrimaryII	A	NULL	29	A place where grain is ground is a		silo	mill	factory		2	grain	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+198	PrimaryII	A	NULL	30	To brag is to be		boastful	cruel	shy		1	brag	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+199	PrimaryII	A	NULL	31	The girl who does about as well as everyone else is		unusual	average	special		2	average	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+200	PrimaryII	A	NULL	32	A piece of work to be done is a		punishment	force	task		3	work	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+201	PrimaryII	A	NULL	33	If you keep something from happening, you		invent it	prevent it	accept it		2	prevent	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+202	PrimaryII	A	NULL	34	Success in a contest is a		destruction	failure	victory		3	success	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+203	PrimaryII	A	NULL	35	Another word for purchase is		buy	lose	sell		1	purchase	1	2003-05-07 14:32:25.000	1	2010-11-11 17:13:59.000
+204	PrimaryII	A	NULL	36	Land that will grow nothing is		fertile	barren	productive		2	barren	1	2003-05-07 14:32:25.000	1	2010-11-11 17:14:57.000
+205	PrimaryII	A	NULL	37	A place to keep dogs is a		kennel	cave	fence		1	kennel	1	2003-05-07 14:32:25.000	1	2010-11-11 17:14:57.000
+210	PrimaryII	B	NULL	1	Something built by  man is		a flower	a bridge	music		2	built	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+211	PrimaryII	B	NULL	2	If something is cut in little pieces, it is		strained	chopped	melted		2	pieces	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+212	PrimaryII	B	NULL	3	An order is a		command	tool	treasure		1	order	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+213	PrimaryII	B	NULL	4	To mix is to		stir	chatter	choose		1	mix	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+214	PrimaryII	B	NULL	5	If you shove something, you		tow it	drag it	push it		3	shove	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+215	PrimaryII	B	NULL	6	Perhaps means		perfect	maybe	against		2	perhaps	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+216	PrimaryII	B	NULL	7	If something glows, it		shines	disappears	cools		1	glows	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+217	PrimaryII	B	NULL	8	To go back is to		progress	accelerate	return		3	back	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+218	PrimaryII	B	NULL	9	A thing you keep to remind you of a place is a		testimonial	memorial	souvenir		3	remind	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+219	PrimaryII	B	NULL	10	To move along smoothly is to		jerk	leap	glide		3	smoothly	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+220	PrimaryII	B	NULL	11	The seashore is the		crest	coast	canyon		2	seashore	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+221	PrimaryII	B	NULL	12	To stay is to		remain	repeat	regard		1	stay	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+222	PrimaryII	B	NULL	13	If a dress is partly sewn, it is		completed	embroidered	unfinished		3	sewn	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+223	PrimaryII	B	NULL	14	Something that hangs and swings loosely is		stable	dangling	immobile		2	hangs	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+224	PrimaryII	B	NULL	15	To throw things here and there is to		bounce	collect	scatter		3	throw	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+225	PrimaryII	B	NULL	16	One time around a racetrack is a		lap	tract	stretch		1	racetrack	1	2003-05-07 14:57:36.000	1	2010-11-11 17:14:57.000
+226	PrimaryII	B	NULL	17	If a thing is on the farther side, it is		beneath	between	beyond		3	farther	1	2003-05-07 14:57:36.000	1	2010-11-11 17:39:41.000
+227	PrimaryII	B	NULL	18	A vowel if a certain kind of		word	sentence	letter		3	vowel	1	2003-05-07 14:57:36.000	1	2010-11-11 17:39:41.000
+228	PrimaryII	B	NULL	19	If something occupies you, it keeps you		hungry	busy	home		2	occupy	1	2003-05-07 14:57:36.000	1	2010-11-11 17:39:41.000
+229	PrimaryII	B	NULL	20	A tidy room is		tiny	neat	crowded		2	tidy	1	2003-05-07 14:57:36.000	1	2010-11-11 17:39:41.000
+230	PrimaryII	B	NULL	21	Something unnecessary is		not needed	important	little known		1	unnessary	1	2003-05-07 14:57:36.000	1	2010-11-11 17:39:41.000
+231	PrimaryII	B	NULL	22	To look steadily at something for a long time is to		draw	gaze	review		2	steady	1	2003-05-07 14:57:36.000	1	2010-11-11 17:39:41.000
+232	PrimaryII	B	NULL	23	Your aunt's daughter is your		niece	cousin	sister		2	uncle	1	2003-05-07 14:57:36.000	1	2010-11-11 17:39:41.000
+233	PrimaryII	B	NULL	24	A mare is a female		horse	fish	bat		1	mare	1	2003-05-07 14:57:36.000	1	2010-11-11 17:39:41.000
+234	PrimaryII	B	NULL	25	If you are anxious to do something, you are		eager	indifferent	uninterested		1	anxious	1	2003-05-07 14:57:36.000	1	2010-11-11 17:39:41.000
+235	PrimaryII	B	NULL	26	To warn is to		heat	betray	caution		3	warn	1	2003-05-07 14:57:36.000	1	2010-11-11 17:39:41.000
+236	PrimaryII	B	NULL	27	To sigh is to let out a long, deep		scream	laugh	breath		3	sigh	1	2003-05-07 14:57:36.000	1	2010-11-11 17:39:41.000
+237	PrimaryII	B	NULL	28	To possess is to		cook	own	belong		2	possess	1	2003-05-07 14:57:36.000	1	2010-11-11 17:39:41.000
+238	PrimaryII	B	NULL	29	A man who makes and repairs clothing is a		merchant	tailor	welder		2	repair	1	2003-05-07 14:57:36.000	1	2010-11-11 17:39:41.000
+239	PrimaryII	B	NULL	30	To fasten together is to		bind	untie	hinder		1	fasten	1	2003-05-07 14:57:36.000	1	2010-11-11 17:39:41.000
+240	PrimaryII	B	NULL	31	To make greater is to		lessen	increase	diminish		2	greater	1	2003-05-07 14:57:36.000	1	2010-11-11 17:39:41.000
+241	PrimaryII	B	NULL	32	A noble person is		wicked	sorry	good		3	noble	1	2003-05-07 14:57:37.000	1	2010-11-11 17:39:41.000
+242	PrimaryII	B	NULL	33	Something that happened a sbort time ago happened		again	recently	late		2	past	1	2003-05-07 14:57:37.000	1	2010-11-11 17:39:41.000
+243	PrimaryII	B	NULL	34	The blank space around the printing on a page is the		brim	trim	margin		3	print	1	2003-05-07 14:57:37.000	1	2010-11-11 17:39:41.000
+244	PrimaryII	B	NULL	35	A plank floor is made of		wood	tile	cement		1	plank	1	2003-05-07 14:57:37.000	1	2010-11-11 17:39:41.000
+245	PrimaryII	B	NULL	36	A smooth, glossy cloth is		corduroy	satin	tweed		2	glossy	1	2003-05-07 14:57:37.000	1	2010-11-11 17:39:41.000
+246	PrimaryII	B	NULL	37	A place where ships can unload is a		port	depot	warehouse		1	unload	1	2003-05-07 14:57:37.000	1	2010-11-11 17:39:41.000
+247	PrimaryIII	A	1	1	To trade one thing for another is to make—		1 a contract	2 a mistake	3 an exchange	4 a transmission	3	trade	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:20.000
+248	PrimaryIII	A	1	2	An alert dog is—		5 drowsy	6 watchful	7 stupid	8 itchy	6	alert	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:20.000
+249	PrimaryIII	A	1	3	A boulder is a large—		1 building	2 bridge	3 rock	4 plant	3	boulder	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:20.000
+250	PrimaryIII	A	1	4	If you blend two things, you—		5 melt them	6 freeze them	7 separate them	8 mix them	8	blend	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:20.000
+251	PrimaryIII	A	1	5	If a man makes up a new dress design, it is a—		1 reproduction	2 creation	3 duplicate	4 habit	2	creation	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:20.000
+252	PrimaryIII	A	1	6	Something for one person only is—		5 private	6 public	7 common	8 plural	5	private	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:20.000
+253	PrimaryIII	A	1	7	If you are dismissed, you are expected to—		1 accept	2 return	3 stay	4 leave	4	dismiss	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:20.000
+254	PrimaryIII	A	1	8	When you are defeated in a game, you—		5 win	6 cheer	7 draw	8 lose	8	defeat	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:20.000
+255	PrimaryIII	A	1	9	Something which helps solve a mystery is a—		1 process	2 clue	3 destination	4 puzzle	2	solve	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:20.000
+256	PrimaryIII	A	1	10	Something crushed into dust is a—		5 liquid	6 duster	7 crust	8 powder	8	crush	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:20.000
+257	PrimaryIII	A	1	11	The person who trains an athletic team is the—		1 captain	2 commodore	3 coach	4 catcher	3	train	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:20.000
+258	PrimaryIII	A	1	12	Someone who does something wrong is—		5 cautious	6 guilty	7 injured	8 convinced	6	wrong	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:20.000
+259	PrimaryIII	A	1	13	A fish moves by means of its—		1 fins	2 limbs	3 flippers	4 scales	1	fins	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:20.000
+260	PrimaryIII	A	1	14	Chess is a kind of—		5 container	6 furniture	7 motion	8 game	8	chess	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:20.000
+261	PrimaryIII	A	1	15	Something that is precious is—		1 little	2 pretty	3 valuable	4 shiny	3	precious	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:52.000
+262	PrimaryIII	A	1	16	A patriotic person loves his—		5 father	6 house	7 country	8 enemies	7	patriotic	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:52.000
+263	PrimaryIII	A	1	17	Decent behavior is—		1 rude	2 proper	3 awkward	4 incorrect	2	decent	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:52.000
+264	PrimaryIII	A	1	18	Regret is a feeling of being—		5 sorry	6 excited	7 sleepy	8 ready	5	regret	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:52.000
+265	PrimaryIII	A	1	19	If you grumble about something, you—		1 belittle	2 compliment	3 comply	4 complain	4	grumble	1	2003-05-07 15:36:25.000	1	2010-11-11 12:38:52.000
+266	PrimaryIII	A	1	20	A handy person is—		5 clumsy	6 handsome	7 skillful	8 attractive	7	handy	1	2003-05-07 15:36:26.000	1	2010-11-11 12:38:52.000
+267	PrimaryIII	A	1	21	If a thing is shut up on all sides. It is—		1 released	2 empty	3 detached	4 enclosed	4	enclose	1	2003-05-07 15:36:26.000	1	2010-11-11 12:38:52.000
+268	PrimaryIII	A	1	22	Most wheels turn around on the—		5 drum	6 axle	7 spoke	8 bridge	6	axle	1	2003-05-07 15:36:26.000	1	2010-11-11 12:38:52.000
+269	PrimaryIII	A	1	23	A natural shelter for boats is a—		1 docket	2 shed	3 harbor	4 garage	3	shelter	1	2003-05-07 15:36:26.000	1	2010-11-11 12:38:52.000
+270	PrimaryIII	A	1	24	A demonstrated fact is—		5 proven	6 popular	7 untrue	8 picketed	5	demonstrate	1	2003-05-07 15:36:26.000	1	2010-11-11 12:38:52.000
+271	PrimaryIII	A	1	25	To settle a question is to make—		1 a criticism	2 a plan	3 a decision	4 an announcement	3	settle	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+272	PrimaryIII	A	1	26	An accomplished task is—		5 complex	6 lengthened	7 rewarded	8 completed	8	accomplish	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+273	PrimaryIII	A	1	27	If you characterize a person, you—		1 confuse him	2 insult him	3 describe him	4 attack him	3	characterize	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+274	PrimaryIII	A	1	28	Splendid furniture is very—		5 sporty	6 old	7 worn	8 grand	8	splendid	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+275	PrimaryIII	A	1	29	A woman who owns a rooming house is a—		1 roomer	2 landlady	3 boarder	4 tenant	2	rooming	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+276	PrimaryIII	A	1	30	If a person does something that is against the law, he is an—		5 ambassador	6 offender	7 official	8 officer	6	offend	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+277	PrimaryIII	A	2	31	A disaster causes much—		1 suffering	2 disagreement	3 planning	4 pleasure	1	disaster	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+278	PrimaryIII	A	2	32	Your uncle's daughter is your—		5 nephew	6 cousin	7 niece	8 aunt	6	cousin	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+279	PrimaryIII	A	2	33	A wilted plant is—		1 fresh	2 limp	3 stiff	4 lively	2	wilt	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+280	PrimaryIII	A	2	34	To get something back is to—		5 recover it	6 steal it	7 deliver it	8 return it	5	recover	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+281	PrimaryIII	A	2	35	The height at which a plane flies is its—		1 altitude	2 antenna	3 pressure	4 depth	1	height	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+282	PrimaryIII	A	2	36	A house is supported by its—		5 windows	6 roof	7 foundation	8 ceiling	7	support	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+283	PrimaryIII	A	2	37	A man's occupation is his—		1 hobby	2 address	3 education	4 job	4	occupation	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+284	PrimaryIII	A	2	38	If you dread something, you look forward to it with—		5 curiosity	6 patience	7 fear	8 hope	7	dread	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+285	PrimaryIII	A	2	39	Manicure is the care of—		1 hair	2 hands	3 men	4 money	2	manicure	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+286	PrimaryIII	A	2	40	If you flee, you—		5 float	6 wash	7 tag along	8 runaway	8	flee	1	2003-05-07 15:36:26.000	1	2010-11-11 12:39:49.000
+287	PrimaryIII	A	2	41	A coil is the shape of a—		1 braid	2 stem	3 triangle	4 spiral	4	coil	1	2003-05-07 15:36:26.000	1	2010-11-11 13:19:25.000
+288	PrimaryIII	A	2	42	Inland means away from the—		5 city	6 coast	7 farm	8 land	6	inland	1	2003-05-07 15:36:26.000	1	2010-11-11 13:19:25.000
+289	PrimaryIII	A	2	43	When a disease spreads rapidly, we have an—		1 epidemic	2 immunity	3 antidote	4 accident	1	disease	1	2003-05-07 15:36:26.000	1	2010-11-11 13:19:25.000
+290	PrimaryIII	A	2	44	If rain is anticipated, it is—		5 desired	6 needed	7 feared	8 expected	8	anticipate	1	2003-05-07 15:36:26.000	1	2010-11-11 13:19:25.000
+291	PrimaryIII	A	2	45	If you manage on your allowance, you—		1 spend it	2 save it	3 get along	4 waste it	3	manage	1	2003-05-07 15:36:26.000	1	2010-11-11 13:19:25.000
+292	PrimaryIII	B	1	1	A weapon is used for—		1 building	2 farming	3 fighting	4 washing	3	weapon	1	2003-05-08 09:44:16.000	1	2010-11-11 13:19:25.000
+293	PrimaryIII	B	1	2	Butterscotch is a type of—		5 sandwich	6 candy	7 cloth	8 cheese	6	butterscotch	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+294	PrimaryIII	B	1	3	If you are drowsy, you are—		1 watchful	2 alert	3 sleepy	4 upset	3	drowsy	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+295	PrimaryIII	B	1	4	When you magnify something, you make it look—		5 better	6 smaller	7 further	8 bigger	8	magnify	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+296	PrimaryIII	B	1	5	A confused person is—		1 angry	2 mixed up	3 mean	4 comical	2	confuse	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+297	PrimaryIII	B	1	6	To find a topic in a book, you look in the—		5 index	6 preface	7 bibliography	8 title	5	topic	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+298	PrimaryIII	B	1	7	When you sweat, you—		1 ache	2 rest	3 worry	4 perspire	4	sweat	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+299	PrimaryIII	B	1	8	Widows have no—		5 relatives	6 children	7 ribs	8 husbands	8	widow	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+300	PrimaryIII	B	1	9	The short, stiff hairs on a brush are—		1 teeth	2 bristles	3 beards	4 fur	2	bristle	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+301	PrimaryIII	B	1	10	If you're not sure of something, you are—		5 confident	6 positive	7 simple	8 doubtful	8	doubt	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+302	PrimaryIII	B	1	11	A duplicate of a letter is—		1 an addition	2 a reply	3 a copy	4 an original	3	duplicate	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+303	PrimaryIII	B	1	12	You can smooth a rough edge with a—		5 saw	6 file	7 hammer	8 flint	6	rough	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+304	PrimaryIII	B	1	13	A carnation is a kind of—		1 flower	2 country	3 automobile	4 celebration	1	carnation	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+305	PrimaryIII	B	1	14	Which is an example of a fluid?		5 ice	6 brick	7 metal	8 water	8	fluid	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+306	PrimaryIII	B	1	15	To find how things are alike or different is to—		1 emphasize	2 verify	3 compare	4 omit	3	compare	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+307	PrimaryIII	B	1	16	A defeated team is—		5 happy	6 outstanding	7 beaten	8 winning	7	defeat	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+308	PrimaryIII	B	1	17	The hide of an animal is its—		1 color	2 skin	3 back	4 leather	2	hide	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+309	PrimaryIII	B	1	18	Your wardrobe is all your—		5 clothes	6 furniture	7 tools	8 possessions	5	wardrobe	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+310	PrimaryIII	B	1	19	A garment is something that you—		1 eat	2 destroy	3 waste	4 wear	4	garment	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+311	PrimaryIII	B	1	20	A man in charge of a group of workers is a—		5 pharmacist	6 florist	7 foreman	8 porter	7	in charge	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+312	PrimaryIII	B	1	21	If a person leaves, he—		1 lingers	2 loses	3 abides	4 departs	4	depart	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+313	PrimaryIII	B	2	22	A person not afraid to take risks is—		5 cautious	6 daring	7 prudent	8 thoughtful	6	dare	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+314	PrimaryIII	B	2	23	A comment is a brief—		1 practice	2 pause	3 remark	4 complaint	3	comment	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+315	PrimaryIII	B	2	24	A mystery is something that is—		5 unknown	6 frightful	7 enlarged	8 evil	5	mystery	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+316	PrimaryIII	B	2	25	A raid is a sudden—		1 storm	2 pain	3 attack	4 illness	3	raid	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+317	PrimaryIII	B	2	26	If the boy had the opportunity to get a Job, he had a good—		5 friend	6 experience	7 time	8 chance	8	opportunity	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+318	PrimaryIII	B	2	27	Withered grass needs—		1 mowing	2 sun	3 rain	4 cooling	3	wither	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+319	PrimaryIII	B	2	28	To heal a person is to bring him back to—		5 safety	6 wealth	7 earth	8 health	8	heal	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+320	PrimaryIII	B	2	29	To move about without much of a plan is to—		1 guide	2 wander	3 tumble	4 mislead	2	wander	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+321	PrimaryIII	B	2	30	The way a thing works is its—		5 orientation	6 operation	7 output	8 purpose	6	operation	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+322	PrimaryIII	B	2	31	A considerate person is—		1 thoughtful	2 handsome	3 impolite	4 patient	1	considerate	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+323	PrimaryIII	B	2	32	A thick rope made of twisted metal wires is a—		5 braid	6 cable	7 twine	8 coil	6	twisted	1	2003-05-08 09:44:17.000	1	2010-11-11 13:19:25.000
+324	PrimaryIII	B	2	33	Time you can do as you please with is called—		1 toil	2 leisure	3 sleep	4 assignment	2	leisure	1	2003-05-08 09:44:18.000	1	2010-11-11 13:19:25.000
+325	PrimaryIII	B	2	34	Something that has happened lately is—		5 recent	6 overdue	7 tardy	8 delayed	5	lately	1	2003-05-08 09:44:18.000	1	2010-11-11 13:19:25.000
+326	PrimaryIII	B	2	35	A ward is a section of a—		1 hospital	2 garden	3 store	4 theatre	1	ward	1	2003-05-08 09:44:18.000	1	2010-11-11 13:19:25.000
+327	PrimaryIII	B	2	36	Social problems are those that deal with—		5 machines	6 music	7 people	8 appearance	7	social	1	2003-05-08 09:44:18.000	1	2010-11-11 13:19:25.000
+328	PrimaryIII	B	2	37	The first light of day is the—		1 dusk	2 sunset	3 gloom	4 dawn	4	dawn	1	2003-05-08 09:44:18.000	1	2010-11-11 13:19:25.000
+329	PrimaryIII	B	2	38	An animal hunted by another for food is its—		5 companion	6 mate	7 prey	8 defender	7	prey	1	2003-05-08 09:44:18.000	1	2010-11-11 13:19:25.000
+330	PrimaryIII	B	2	39	Discarded clothing Is not—		1 clean	2 wanted	3 warm	4 woven	2	discard	1	2003-05-08 09:44:18.000	1	2010-11-11 13:19:25.000
+331	PrimaryIII	B	2	40	To give reasons for or against a thing is to—		5 obey	6 cooperate	7 accept	8 argue	8	reason	1	2003-05-08 09:44:18.000	1	2010-11-11 13:19:25.000
+332	PrimaryIII	B	2	41	If a thing is held firmly in place, it Is—		1 untied	2 released	3 parked	4 anchored	4	anchor	1	2003-05-08 09:44:18.000	1	2010-11-11 13:19:25.000
+333	PrimaryIII	B	2	42	A wharf is a loading—		5 van	6 dock	7 crane	8 hook	6	wharf	1	2003-05-08 09:44:18.000	1	2010-11-11 13:19:25.000
+334	PrimaryIII	B	2	43	Your destination is where you are—		1 going	2 working	3 living	4 leaving	1	destination	1	2003-05-08 09:44:18.000	1	2010-11-11 13:19:25.000
+335	PrimaryIII	B	2	44	Faulty brakes on a car are—		5 perfect	6 smashed	7 responsive	8 defective	8	faulty	1	2003-05-08 09:44:18.000	1	2010-11-11 13:19:25.000
+336	PrimaryIII	B	2	45	A solid mass with no special shape is a—		1 hollow	2 link	3 lump	4 metal	3	mass	1	2003-05-08 09:44:18.000	1	2010-11-11 13:19:25.000
+337	PrimaryII	A	NULL	0	A baby cat is a	NULL	puppy	kitten	cub	NULL	2	baby	NULL	NULL	1	2010-11-11 17:13:09.000
+338	PrimaryIII	A	1	-3	Cows do not provide-	NULL	1 eggs	2 milk	3 meat	4 hides	4	provide	NULL	NULL	1	2010-11-11 12:38:20.000
+339	PrimaryIII	A	1	-2	To share something is to be-	NULL	5 generous	6 confused	7 selfish	8 playful	5	share	NULL	NULL	1	2010-11-11 12:38:20.000
+363	Int1	A	1	1	If somebody were to vanish, he would—		1 melt	2 disappear	3 resign	4 emerge	2	vanish	1	2003-06-12 17:53:38.000	1	2010-11-09 12:30:05.000
+364	Int1	A	1	2	An older person is—		5 a junior	6 an elder	7 a veteran	8 a champion	6	elder	1	2003-06-12 17:53:38.000	1	2010-11-09 12:29:01.000
+365	Int1	A	1	3	A scholar is someone who has—		1 friends	2 wealth	3 students	4 knowledge	4	scholar	1	2003-06-12 17:53:38.000	1	2010-11-09 12:30:05.000
+366	Int1	A	1	4	An automobile is propelled by its—		5 brakes	6 propeller	7 engine	8 muscles	7	propel	1	2003-06-12 17:53:39.000	1	2010-11-09 12:30:06.000
+367	Int1	A	1	5	A tool used to chip away stone or wood is a—		1 wedge	2 saw	3 bolt	4 chisel	4	chisel	1	2003-06-12 17:53:39.000	1	2010-11-09 12:30:07.000
+368	Int1	A	1	6	When you find the answer to a problem, you—		5 explain it	6 request it	7 solve it	8 add it	7	solve	1	2003-06-12 17:53:39.000	1	2010-11-09 12:30:09.000
+369	Int1	A	1	7	Something peculiar is—		1 different	2 rejected	3 orderly	4 pleasant	1	peculiar	1	2003-06-12 17:53:39.000	1	2010-11-09 12:30:09.000
+370	Int1	A	1	8	To identify a type of car is to—		5 pursue it	6 ignore it	7 recognize it	8 want it	7	identify	1	2003-06-12 17:53:39.000	1	2010-11-09 12:30:09.000
+371	Int1	A	1	9	A word indicating more than one is—		1 singular	2 plural	3 classified	4 solitary	2	plural	1	2003-06-12 17:53:39.000	1	2010-11-09 12:30:09.000
+372	Int1	A	1	10	Money charged for belonging to a club is called—		5 charge	6 fare	7 tax	8 dues	8	dues	1	2003-06-12 17:53:39.000	1	2010-11-09 12:30:09.000
+373	Int1	A	1	11	To convince a person is to make him—		1 fall	2 finish	3 agree	4 conspicuous	3	convince	1	2003-06-12 17:53:39.000	1	2010-11-09 12:30:09.000
+374	Int1	A	1	12	To slide a boat into the water is to—		5 launch it	6 retrieve it	7 dismiss it	8 sink It	5	launch	1	2003-06-12 17:53:39.000	1	2010-11-09 12:31:03.000
+375	Int1	A	1	13	An unfilled space is a—		1 bridge	2 gap	3 link	4 dash	2	gap	1	2003-06-12 17:53:39.000	1	2010-11-09 12:31:03.000
+376	Int1	A	1	14	A furious person is very—		5 delicate	6 firm	7 angry	8 crude	7	furious	1	2003-06-12 17:53:39.000	1	2010-11-09 12:31:03.000
+377	Int1	A	1	15	Soil that is tightly pressed together is—		1 connected	2 granular	3 compact	4 porous	3	compact	1	2003-06-12 17:53:39.000	1	2010-11-09 12:31:03.000
+378	Int1	A	1	16	A garment is a piece of—		5 furniture	6 machinery	7 clothing	8 fiction	7	garment	1	2003-06-12 17:53:39.000	1	2010-11-09 12:31:03.000
+379	Int1	A	1	17	To recite a poem is to—		1 study it	2 write it	3 change it	4 repeat it	4	recite	1	2003-06-12 17:53:39.000	1	2010-11-09 12:31:03.000
+380	Int1	A	1	18	A performer skilled in feats requiring bodily control could be—		5 an acrobat	6 a comedian	7 an announcer	8 a jester	5	acrobat	1	2003-06-12 17:53:39.000	1	2010-11-09 12:31:03.000
+381	Int1	A	1	19	A person who is secure is—		1 punished	2 safe	3 rewarded	4 shrewd	2	secure	1	2003-06-12 17:53:39.000	1	2010-11-09 12:31:03.000
+382	Int1	A	1	20	A severe fright could cause a feeling of—		5 gratitude	6 disdain	7 horror	8 comfort	7	severe	1	2003-06-12 17:53:39.000	1	2010-11-09 12:31:03.000
+383	Int1	A	1	21	To grasp something is to—		1 include it	2 weigh it	3 blow it	4 seize it	4	grasp	1	2003-06-12 17:53:39.000	1	2010-11-09 12:31:03.000
+384	Int1	A	1	22	A sick person who is kept from contact with others is—		5 cured	6 quarantined	7 discharged	8 rejected	6	quarantine	1	2003-06-12 17:53:39.000	1	2010-11-09 12:32:11.000
+385	Int1	A	2	23	That which is not useful is—		1 harmful	2 lost	3 hash	4 waste	4	waste	1	2003-06-12 17:53:39.000	1	2010-11-09 12:32:11.000
+386	Int1	A	2	24	Something that happens once in a while  is—		5 abrupt	6 frequent	7 occasional	8 gradual	7	occasional	1	2003-06-12 17:53:39.000	1	2010-11-09 12:32:11.000
+387	Int1	A	2	25	To live a life of ease is to be—		1 comfortable	2 alone	3 busy	4 essential	1	comfortable	1	2003-06-12 17:53:39.000	1	2010-11-09 12:32:11.000
+388	Int1	A	2	26	If you are eager to go to school, you are—		5 uninterested	6 enthusiastic	7 confident	8 worried	6	enthusiastic	1	2003-06-12 17:53:39.000	1	2010-11-09 12:32:11.000
+389	Int1	A	2	27	A substance that is dirty is—		1 saluted	2 tidy	3 solvent	4 impure	4	impure	1	2003-06-12 17:53:39.000	1	2010-11-09 12:32:11.000
+390	Int1	A	2	28	A person who writes songs is a—		5 singer	6 teacher	7 soloist	8 composer	8	composer	1	2003-06-12 17:53:39.000	1	2010-11-09 12:32:11.000
+391	Int1	A	2	29	A ruler who is cruel and unjustly severe  is called		1 lord	2 tyrant	3 mayor	4 philosopher	2	tyrant	1	2003-06-12 17:53:39.000	1	2010-11-09 12:32:11.000
+392	Int1	A	2	30	A chest of drawers used in a bedroom is called a—		5 trunk	6 cabinet	7 bureau	8 hamper	7	bureau	1	2003-06-12 17:53:39.000	1	2010-11-09 12:32:11.000
+393	Int1	A	2	31	When you give money to help a cause, you make a—		1 request	2 collection	3 loan	4 contribution	4	contribution	1	2003-06-12 17:53:39.000	1	2010-11-09 12:32:11.000
+394	Int1	A	2	32	A person is an—		5 event	6 object	7 individual	8 image	7	individual	1	2003-06-12 17:53:39.000	1	2010-11-09 12:32:11.000
+395	Int1	A	2	33	If something is certain, it is—		1 undoubted	2 unnecessary	3 unusual	4 untrue	1	certain	1	2003-06-12 17:53:39.000	1	2010-11-09 12:32:11.000
+396	Int1	A	2	34	If you are hostile to another person, you  are—		5 unfriendly	6 trusting	7 polite	8 humble	5	hostile	1	2003-06-12 17:53:39.000	1	2010-11-09 12:32:11.000
+397	Int1	A	2	35	The thrust of a rocket is its—		1 weight	2 push	3 direction	4 composition	2	thrust	1	2003-06-12 17:53:39.000	1	2010-11-09 12:33:40.000
+398	Int1	A	2	36	A tragic event is—		5 tremendous	6 sad	7 boring	8 happy	6	tragic	1	2003-06-12 17:53:39.000	1	2010-11-09 12:33:40.000
+399	Int1	A	2	37	A person who is not boastful is—		1 modest	2 proud	3 delighted	4 small	1	modest	1	2003-06-12 17:53:40.000	1	2010-11-09 12:33:40.000
+400	Int1	A	2	38	That which is around you is your—		5 environment	6 education	7 attitude	8 livelihood	5	environment	1	2003-06-12 17:53:40.000	1	2010-11-09 12:33:40.000
+401	Int1	A	2	39	The power to last a long time is—		1 endurance	2 integration	3 compensation	4 experience	1	endurance	1	2003-06-12 17:53:40.000	1	2010-11-09 12:33:40.000
+402	Int1	A	2	40	A person who is getting along very well in life is—		5 neglected	6 prosperous	7 generous	8 old	6	prosperous	1	2003-06-12 17:53:40.000	1	2010-11-09 12:33:40.000
+403	Int1	A	2	41	To live in a place is to—		1 retreat	2 dwell	3 depart	4 relax	2	dwell	1	2003-06-12 17:53:40.000	1	2010-11-09 12:33:40.000
+404	Int1	A	2	42	To keep something by itself is to—		5 desert it	6 avoid it	7 isolate it	8 moderate it	7	isolate	1	2003-06-12 17:53:40.000	1	2010-11-09 12:33:40.000
+405	Int1	A	2	43	People are ushered when they are—		1 escorted	2 advised	3 dismissed	4 identified	1	escorted	1	2003-06-12 17:53:40.000	1	2010-11-09 12:33:40.000
+406	Int1	A	2	44	What you are offered for doing what you don't want to do is a—		5 penalty	6 threat	7 bribe	8 charge	7	bribe	1	2003-06-12 17:53:40.000	1	2010-11-09 12:33:40.000
+407	Int1	A	2	45	A line of vehicles traveling together is a—		1 flock	2 relay	3 chain	4 caravan	4	caravan	1	2003-06-12 17:53:40.000	1	2010-11-09 12:33:40.000
+408	Int1	A	2	46	To show a great liking for someone is to be—		5 affectionate	6 pleasant	7 unselfish	8 adorable	5	affectionate	1	2003-06-12 17:53:40.000	1	2010-11-09 12:33:40.000
+409	Int1	A	2	47	A desperate person has no—		1 energy	2 hope	3 imagination	4 fear	2	desperate	1	2003-06-12 17:53:40.000	1	2010-11-09 12:33:40.000
+410	Int1	A	2	48	If the value of something declines, it—		5 balances	6 mounts	7 increases	8 goes down	8	declines	1	2003-06-12 17:53:40.000	1	2010-11-09 12:33:40.000
+411	Int1	A	2	49	A deed showing courage or skill is—		1 a fright	2 an adventure	3 an event	4 a feat	4	feat	1	2003-06-12 17:53:40.000	1	2010-11-09 12:38:15.000
+412	Int1	A	2	50	To work very hard is to—		5 employ	6 toil	7 succeed	8 serve	6	toil	1	2003-06-12 17:53:40.000	1	2010-11-09 12:38:15.000
+413	Int1	B	1	1	To come to a  complete stop is to—		1 drag	2 halt	3 delay	4 waver	2	halt	1	2003-06-13 12:38:23.000	1	2010-11-09 12:38:15.000
+414	Int1	B	1	2	When you bother someone while he is working, you are—		5 disagreeing	6 interfering	7 relieving	8 insulting	6	interfering	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+415	Int1	B	1	3	Animals that spend the winter in a deep sleep are—		1 lazy	2 unconscious	3 napping	4 hibernating	4	hibernating	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+416	Int1	B	1	4	A legend is an old—		5 law	6 castle	7 story	8 song	7	legend	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+417	Int1	B	1	5	To remove your money from a bank is to—		1 deposit it	2 save it	3 locate it	4 withdraw It	4	withdraw	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+418	Int1	B	1	6	A small stream may be called a—		5 pond	6 canal	7 brook	8 marsh	7	brook	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+419	Int1	B	1	7	Something that is moist is—		1 damp	2 cold	3 moldy	4 magic	1	moist	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+420	Int1	B	1	8	A moan is a sound of—		5 progress	6 encouragement	7 pain	8 cheer	7	moan	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+421	Int1	B	1	9	Someone who has run away from his duty is a—		1 sprinter	2 deserter	3 fledgling	4 hero	2	deserter	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+422	Int1	B	1	10	A future event is something that—		5 cannot happen	6 is happening	7 has happened	8 will happen	8	future	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+423	Int1	B	1	11	An infected wound is—		1 fresh	2 healed	3 diseased	4 exhausted	3	infected	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+424	Int1	B	1	12	When animals feed on growing grass, they—		5 graze	6 prowl	7 gnaw	8 shrink	5	graze	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+425	Int1	B	1	13	A frightened person who acts in an unreasonabie manner is—		1 sensible	2 panicky	3 courageous	4 calm	2	panicky	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+426	Int1	B	1	14	An otter is a type of—		5 sofa	6 furniture	7 animal	8 cloth	7	offer	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+427	Int1	B	1	15	If a father lectures his son, he ia probably—		1 defending him	2 flattering him	3 advising him	4 teasing him	3	advise	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+428	Int1	B	1	16	To move quickly or suddenly is to—		5 propel	6 walk	7 dart	8 slide	7	dart	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+429	Int1	B	1	17	A very slow-moving mass of ice Is—		1 an icicle	2 a galaxy	3 a blizzard	4 a glacier	4	glacier	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+430	Int1	B	1	18	A person who is cruel or harsh is—		5 unkind	6 humane	7 selfish	8 devoted	5	cruel	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+431	Int1	B	1	19	A thud is a kind of—		1 tool	2 sound	3 flower	4 drink	2	thud	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+432	Int1	B	1	20	A thing that is hard to get is—		5 plentiful	6 common	7 scarce	8 sensitive	7	scarce	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+433	Int1	B	1	21	When a person makes a statement about something he has seen, he is—		1 Imagining	2 electing	3 questioning	4 testifying	4	testify	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+434	Int1	B	1	22	To expand something is to—		5 explain it	6 stretch it	7 break it	8 erase it	6	expand	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+435	Int1	B	2	23	Something that attracts iron is—		1 magnified	2 ironical	3 magnificent	4 magnetic	4	magnetic	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+436	Int1	B	2	24	The height of a city above sea level is its—		5 excavation	6 escalation	7 elevation	8 population	7	elevation	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+437	Int1	B	2	25	A skin-covered craft paddled by the Eskimos is a—		1 kayak	2 canoe	3 barge	4 chump	1	kayak	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+438	Int1	B	2	26	The passing along of information is—		5 delay	6 communication	7 debate	8 judgment	6	communication	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+439	Int1	B	2	27	The result of a multiplication is a—		1 factor	2 multiplier	3 multiplicand	4 product	4	product	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+440	Int1	B	2	28	If something is ideal, it is—		5 improved	6 settled	7 undesirable	8 perfect	8	ideal	1	2003-06-13 12:38:24.000	1	2010-11-09 12:38:15.000
+441	Int1	B	2	29	Your reflection in a mirror is—		1 a picture	2 an image	3 a shadow	4 a fragment	2	reflection	1	2003-06-13 12:38:25.000	1	2010-11-09 12:38:15.000
+442	Int1	B	2	30	To go out of your usual way is to—		5 skip	6 sway	7 detour	8 speed	7	detour	1	2003-06-13 12:38:25.000	1	2010-11-09 12:38:15.000
+443	Int1	B	2	31	A plant or animal that lives in or on another living thing is a—		1 parapet	2 servant	3 host	4 parasite	4	parasite	1	2003-06-13 12:38:25.000	1	2010-11-09 12:38:15.000
+444	Int1	B	2	32	A massive house is—		5 important	6 lively	7 large	8 vulgar	7	massive	1	2003-06-13 12:38:25.000	1	2010-11-09 12:38:15.000
+445	Int1	B	2	33	If your behavior is fitting, it is—		1 appropriate	2 indecent	3 improper	4 gentle	1	behavior	1	2003-06-13 12:38:25.000	1	2010-11-09 12:38:15.000
+446	Int1	B	2	34	Something colorless ia—		5 drab	6 exciting	7 amusing	8 vivid	5	drab	1	2003-06-13 12:38:25.000	1	2010-11-09 12:38:15.000
+447	Int1	B	2	35	A board that has become curved or twisted is—		1 wrangled	2 warped	3 wrought	4 shrunken	2	warped	1	2003-06-13 12:38:25.000	1	2010-11-09 12:38:15.000
+448	Int1	B	2	36	A man who is a credit to his community has a good—		5 bank-account	6 reputation	7 business	8 agent	6	reputation	1	2003-06-13 12:38:25.000	1	2010-11-09 12:38:15.000
+449	Int1	B	2	37	if I he cost of living Is mounting, it is—		1 climbing	2 reversing	3 decreasing	4 leveling	1	mounting	1	2003-06-13 12:38:25.000	1	2010-11-09 12:38:15.000
+450	Int1	B	2	38	Generous treatment of guests is known as—		5 hospitality	6 company	7 boredom	8 genius	5	hospitality	1	2003-06-13 12:38:25.000	1	2010-11-09 12:38:15.000
+451	Int1	B	2	39	A device used to clamp something tightly is a—		1 vise	2 gear	3 harness	4 thimble	1	vise	1	2003-06-13 12:38:25.000	1	2010-11-09 12:38:15.000
+452	Int1	B	2	40	An underground chamber is a—		5 crevice	6 cavern	7 receptacle	8 safe	6	cavern	1	2003-06-13 12:38:25.000	1	2010-11-09 12:38:15.000
+453	Int1	B	2	41	Many people who are retired receive money from—		1 heirs	2 pensions	3 salaries	4 generators	2	pension	1	2003-06-13 12:38:25.000	1	2010-11-09 12:39:14.000
+454	Int1	B	2	42	The zones on a map are—		5 continents	6 cities	7 divisions	8 oceans	7	zone	1	2003-06-13 12:38:25.000	1	2010-11-09 12:39:14.000
+455	Int1	B	2	43	A car kept in good condition is—		1 maintained	2 abused	3 impaired	4 retrieved	1	maintain	1	2003-06-13 12:38:25.000	1	2010-11-09 12:39:14.000
+456	Int1	B	2	44	A student who stays away from school without permission is—		5 present	6 vacant	7 truant	8 rude	7	truant	1	2003-06-13 12:38:25.000	1	2010-11-09 12:39:14.000
+457	Int1	B	2	45	Manual labor is done with—		1 motors	2 tractors	3 machines	4 hands	4	manual labor	1	2003-06-13 12:38:25.000	1	2010-11-09 12:39:14.000
+458	Int1	B	2	46	If a request is granted, it is—		5 allowed	6 considered	7 offered	8 refused	5	granted	1	2003-06-13 12:38:25.000	1	2010-11-09 12:39:14.000
+459	Int1	B	2	47	To navigate a ship is to—		1 inspect it	2 guide it	3 dock it	4 load it	2	navigate	1	2003-06-13 12:38:25.000	1	2010-11-09 12:39:15.000
+460	Int1	B	2	48	The top officer In the navy is the—		5 captain	6 general	7 vice-admiral	8 admiral	8	admiral	1	2003-06-13 12:38:25.000	1	2010-11-09 12:39:15.000
+461	Int1	B	2	49	A picture painted directly on a wall Is called		1 statue	2 tapestry	3 mosaic	4 mural	4	mural	1	2003-06-13 12:38:25.000	1	2010-11-09 12:39:15.000
+462	Int1	B	2	50	To favor one person over another is to be—		5 neutral	6 partial	7 impersonal	8 formal	6	partial	1	2003-06-13 12:38:25.000	1	2010-11-09 12:39:15.000
+463	Int2	A	1	1	If something cannot be seen, it is—		1 obvious	2 invisible	3 blind	4 present	2	invisible	1	2003-06-13 13:55:05.000	1	2010-11-15 09:35:27.000
+464	Int2	A	1	2	A sale where things go to the person who offers the most money is—		5 a gallery	6 a bazaar	7 an auction	8 a lottery	7	auction	1	2003-06-13 13:55:05.000	1	2010-11-15 09:35:27.000
+465	Int2	A	1	3	A person with knowledge and good judgment is—		1 wise	2 sly	3 kind	4 famous	1	knowledge	1	2003-06-13 13:55:05.000	1	2010-11-15 09:35:27.000
+466	Int2	A	1	4	The search for the cause of an accident is the—		5 discovery	6 guilt	7 investigation	8 blame	7	cause	1	2003-06-13 13:55:05.000	1	2010-11-15 09:35:27.000
+467	Int2	A	1	5	If something is a cinch to do, it is—		1 worthless	2 hard	3 empty	4 easy	4	cinch	1	2003-06-13 13:55:05.000	1	2010-11-15 09:35:27.000
+468	Int2	A	1	6	A private teacher is—		5 an apprentice	6 an inspector	7 a tutor	8 an impostor	7	private	1	2003-06-13 13:55:05.000	1	2010-11-15 09:35:27.000
+469	Int2	A	1	7	A person who makes cloth on a loom is called a—		1 puritan	2 weaver	3 cobbler	4 tailor	2	loom	1	2003-06-13 13:55:05.000	1	2010-11-15 09:35:27.000
+470	Int2	A	1	8	A bleak day is—		5 pleasant	6 clear	7 exciting	8 dreary	8	bleak	1	2003-06-13 13:55:05.000	1	2010-11-15 09:35:27.000
+471	Int2	A	1	9	A person consults a lawyer to get—		1 licensed	2 paid	3 arrested	4 advice	4	consult	1	2003-06-13 13:55:05.000	1	2010-11-15 09:35:27.000
+472	Int2	A	1	10	A wet, soft, swampy area is a—		5 seacoast	6 marsh	7 lagoon	8 volcano	6	marsh	1	2003-06-13 13:55:05.000	1	2010-11-15 09:35:27.000
+473	Int2	A	1	11	A betrayer is—		1 unfaithful	2 loyal	3 courageous	4 brutal	1	betrayer	1	2003-06-13 13:55:05.000	1	2010-11-15 09:35:27.000
+474	Int2	A	1	12	A person legally responsible for another person is called a—		5 defender	6 watchman	7 manager	8 guardian	8	legal	1	2003-06-13 13:55:05.000	1	2010-11-15 09:35:27.000
+475	Int2	A	1	13	A lapel is a part of a person's—		1 coat	2 car	3 house	4 hat	1	lapel	1	2003-06-13 13:55:05.000	1	2010-11-15 09:35:27.000
+476	Int2	A	1	14	A chamber is a kind of—		5 store	6 room	7 barn	8 garage	6	chamber	1	2003-06-13 13:55:05.000	1	2010-11-15 09:35:27.000
+477	Int2	A	1	15	To order someone not to do something is to—		1 disrupt him	2 banish him	3 obey him	4 forbid him	4	forbid	1	2003-06-13 13:55:06.000	1	2010-11-15 09:35:27.000
+478	Int2	A	1	16	To enter a country with armed forces is to—		5 dismiss it	6 detract it	7 invade it	8 concede it	7	invade	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+479	Int2	A	1	17	To bring food into a country from another country is to—		1 seize it	2 import it	3 access it	4 export it	2	import	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+480	Int2	A	1	18	Lines that run in the same direction and are always the same distance apart are—		5 parallel	6 equal	7 intercepting	8 contrasting	5	parallel	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+481	Int2	A	1	19	A box that is longer than it is wide is—		1 crooked	2 triangular	3 square	4 oblong	4	oblong	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+482	Int2	A	1	20	An exact measurement would be without—		5 accuracy	6 truth	7 error	8 precision	7	exact	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+483	Int2	A	1	21	Money paid to rescue a captive is called a—		1 commission	2 fine	3 ransom	4 hostage	3	rescue	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+484	Int2	A	1	22	A larva is a very young form of—		5 child	6 plant	7 insect	8 chicken	7	larva	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+485	Int2	A	2	23	If you are in sympathy with someone, you—		1 dislike him	2 agree with him	3 doubt him	4 ignore him	2	sympathy	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+486	Int2	A	2	24	To be independent is to be free of another's—		5 control	6 obedience	7 violence	8 choice	5	independent	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+487	Int2	A	2	25	If a thing is reflected, it is—		1 lit up	2 corrected	3 thrown back	4 absorbed	3	reflected	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+488	Int2	A	2	26	A person who has been kept from having or doing things is—		5 detached	6 privileged	7 benefited	8 deprived	8	deprived	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+489	Int2	A	2	27	A person who wanders from place to place is—		1 an immigrant	2 a nomad	3 an alien	4 a hermit	2	wander	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+490	Int2	A	2	28	A device for straining solids out of liquids is a—		5 mauler	6 mixer	7 filter	8 blender	7	strain	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+491	Int2	A	2	29	A person who keeps working at something until it is finished is—		1 persistent	2 abrupt	3 eternal	4 ridiculous	1	persistent	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+492	Int2	A	2	30	After something is divided, the parts are called—		5 opponents	6 arrangements	7 segments	8 dissections	7	segments	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+493	Int2	A	2	31	To settle a dispute by having both sides yield something is to—		1 confer	2 compromise	3 conform	4 confront	2	yield	1	2003-06-13 13:55:06.000	1	2010-11-15 09:36:28.000
+494	Int2	A	2	32	To forfeit your freedom is to—		5 publish it	6 defend it	7 lose it	8 gain it	7	forfeit	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:47.000
+495	Int2	A	2	33	A situation that causes deep concern is a—		1 hunch	2 hindrance	3 principle	4 predicament	4	situation	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:47.000
+496	Int2	A	2	34	A historian is likely to—		5 salute	6 record	7 compute	8 tell jokes	6	historian	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:47.000
+497	Int2	A	2	35	A desolate area is—		1 cultivated	2 barren	3 developed	4 popular	2	desolate	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:47.000
+498	Int2	A	2	36	If something is likely to happen, it is—		5 probable	6 certain	7 dangerous	8 likeable	5	probable	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:47.000
+499	Int2	A	2	37	An example of a textile is—		1 brick	2 cloth	3 tile	4 library	2	textile	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:47.000
+500	Int2	A	2	38	A vivid image Is very—		5 large	6 clear	7 valuable	8 blurred	6	vivid	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:47.000
+501	Int2	A	2	39	A play in which actors do not speak is called a—		1 pantomime	2 slapstick	3 monologue	4 skit	1	pantomime	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:47.000
+502	Int2	A	2	40	A bitter feeling of anger and disgust is called—		5 scorn	6 impatience	7 a scowl	8 fear	5	disgust	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:47.000
+503	Int2	A	2	41	A person who seems perfect to you is your—		1 companion	2 identity	3 ideal	4 twin	3	perfect	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:47.000
+504	Int2	A	2	42	The outside of something is its—		5 exposure	6 interior	7 ulterior	8 exterior	8	outside	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:47.000
+505	Int2	A	2	43	An iron block on which to hammer metal is—		1 a chisel	2 an armory	3 an anvil	4 a lathe	3	hammer	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:47.000
+506	Int2	A	2	44	To withstand pain or misfortune is to—		5 despise	6 endure	7 undertake	8 diminish	6	misfortune	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:48.000
+507	Int2	A	2	45	To wade across a stream is to—		1 swim it	2 drift it	3 shoot it	4 ford it	4	wade	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:48.000
+508	Int2	A	2	46	The soft tissue that contains blood vessels and fills most bones is the—		5 cholesterol	6 auricle	7 marrow	8 muscle	7	tissue	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:48.000
+509	Int2	A	2	47	If you don't care which side wins, you are—		1 uncertain	2 neutral	3 dissatisfied	4 biased	2	neutral	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:48.000
+510	Int2	A	2	48	A terrible experience is—		5 an ordeal	6 a formality	7 an adventure	8 an accomplishment	5	terrible	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:48.000
+511	Int2	A	2	49	The old man was attacked by an unknown—		1 ally	2 spy	3 confederate	4 assailant	4	attack	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:48.000
+512	Int2	A	2	50	To withdraw from an organization is to—		5 criticize	6 revert	7 deceive	8 secede	8	withdraw	1	2003-06-13 13:55:06.000	1	2010-11-15 09:37:48.000
+513	Int2	B	1	1	To enclose something on all sides is to—		1 collect it	2 surround it	3 load it	4 delete it	2	NULL	1	2003-06-13 14:22:55.000	1	2003-06-13 14:22:55.000
+514	Int2	B	1	2	Someone who is reliable is—		5 variable	6 dishonest	7 trustworthy	8 relentless	7	NULL	1	2003-06-13 14:22:55.000	1	2003-06-13 14:22:55.000
+515	Int2	B	1	3	To supply land with water by means of canals, pipes, or flooding is to—		1 irrigate	2 sprinkle	3 spray	4 initiate	1	NULL	1	2003-06-13 14:22:55.000	1	2003-06-13 14:22:55.000
+516	Int2	B	1	4	A person who corrects and prepares something to be published is—		5 an attendant	6 a bookie	7 an editor	8 an operator	7	NULL	1	2003-06-13 14:22:55.000	1	2003-06-13 14:22:55.000
+517	Int2	B	1	5	Something used to guide liquid into a bottle is called a—		1 dipper	2 chute	3 cup	4 funnel	4	NULL	1	2003-06-13 14:22:55.000	1	2003-06-13 14:22:55.000
+518	Int2	B	1	6	Zinc is a type of—		5 thread	6 animal	7 metal	8 personality	7	NULL	1	2003-06-13 14:22:55.000	1	2003-06-13 14:22:55.000
+519	Int2	B	1	7	A fully grown person is—		1 monstrous	2 mature	3 special	4 creative	2	NULL	1	2003-06-13 14:22:55.000	1	2003-06-13 14:22:55.000
+520	Int2	B	1	8	A large amount of something is—		5 futility	6 a deficit	7 a default	8 an abundance	8	NULL	1	2003-06-13 14:22:55.000	1	2003-06-13 14:22:55.000
+521	Int2	B	1	9	When you flee from something, you—		1 float by	2 remain	3 investigate	4 run away	4	NULL	1	2003-06-13 14:22:55.000	1	2003-06-13 14:22:55.000
+522	Int2	B	1	10	A rapid is a place In a river where the current is—		5 wide	6 fast	7 gentle	8 slippery	6	NULL	1	2003-06-13 14:22:55.000	1	2003-06-13 14:22:55.000
+523	Int2	B	1	11	A contract to rent property for a specified length of time is called a—		1 lease	2 debt	3 tax	4 premise	1	NULL	1	2003-06-13 14:22:55.000	1	2003-06-13 14:22:55.000
+524	Int2	B	1	12	A piece of the mainland that juts out into water is called—		5 a moat	6 an island	7 a plateau	8 a peninsula	8	NULL	1	2003-06-13 14:22:55.000	1	2003-06-13 14:22:55.000
+525	Int2	B	1	13	A very small piece of matter is a—		1 particle	2 mess	3 measure	4 spot	1	NULL	1	2003-06-13 14:22:55.000	1	2003-06-13 14:22:55.000
+526	Int2	B	1	14	An eroded field has been—		5 freshly plowed	6 worn away	7 fertilized	8 watered	6	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+527	Int2	B	1	15	Plants that are used to make medicine or seasoning are called—		1 seasons	2 pills	3 shrubs	4 herbs	4	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+528	Int2	B	1	16	The edge of a cup is called the—		5 hook	6 saucer	7 brim	8 handle	7	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+529	Int2	B	1	17	A great number of people is called a—		1 composite	2 multitude	3 solitude	4 magnitude	2	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+530	Int2	B	1	18	An uneasy manner is—		5 awkward	6 graceful	7 natural	8 fickle	5	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+531	Int2	B	1	19	A person's woes are his—		1 joy	2 hobbies	3 achievements	4 troubles	4	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+532	Int2	B	1	20	The hot, damp region of the earth near the equator is known as—		5 Greenland	6 the South	7 the tropics	8 longitude	7	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+533	Int2	B	1	21	Something remarkable is—		1 oral	2 indistinct	3 unusual	4 casual	3	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+534	Int2	B	1	22	A person who keeps books on money received and paid out is—		5 a teller	6 a cashier	7 an accountant	8 an auditor	7	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+535	Int2	B	2	23	A person who is left alone and helpless on an island is—		1 withdrawn	2 marooned	3 surrendered	4 wounded	2	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+536	Int2	B	2	24	A strong desire for success, fame, or power is—		5 ambition	6 sloth	7 genius	8 ruthlessness	5	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+537	Int2	B	2	25	The highest ranking naval officer is called—		1 a commander	2 a general	3 an admiral	4 a first mate	3	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+538	Int2	B	2	26	A law that does what is intended is—		5 impeded	6 obsolete	7 futile	8 effective	8	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+539	Int2	B	2	27	A prosperous person is—		1 careful	2 wealthy	3 powerful	4 plump	2	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+540	Int2	B	2	28	Things in the country are—		5 urban	6 cosmopolitan	7 rural	8 metropolitan	7	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+541	Int2	B	2	29	An elementary idea is—		1 simple	2 lengthy	3 novel	4 universal	1	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+542	Int2	B	2	30	Something very important and necessary is—		5 needless	6 incidental	7 essential	8 subordinate	7	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+543	Int2	B	2	31	A person who is loyal is—		1 thoughtful	2 faithful	3 truthful	4 selfish	2	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+544	Int2	B	2	32	Two things joined together are—		5 duplicated	6 detached	7 united	8 identical	7	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+545	Int2	B	2	33	Something that is large at one end and becomes gradually smaller is—		1 round	2 slim	3 narrow	4 tapered	4	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+546	Int2	B	2	34	A person mainly interested in literary activities enjoys—		5 museums	6 reading	7 sports	8 music	6	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+547	Int2	B	2	35	A conspicuous building is easily—		1 cleaned	2 seen	3 built	4 rented	2	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+548	Int2	B	2	36	One who flees his own country to escape persecution is a—		5 refugee	6 migrant	7 renegade	8 peasant	5	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+549	Int2	B	2	37	To light up a building is to—		1 fumigate it	2 illuminate it	3 eliminate it	4 erect It	2	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+550	Int2	B	2	38	A sweet liquid made by plants is called—		5 honey	6 nectar	7 pollen	8 syrup	6	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+551	Int2	B	2	39	Debris can also be called—		1 rubbish	2 draft	3 deception	4 debts	1	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+552	Int2	B	2	40	A person who received property after the death of its owner is called—		5 an heir	6 a relative	7 a descendant	8 a patron	5	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+553	Int2	B	2	41	An enterprising young man is—		1 cultivated	2 indifferent	3 venturesome	4 entertaining	3	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+554	Int2	B	2	42	When you are used as a subject for an experiment, you are a—		5 bystander	6 researcher	7 student	8 guinea pig	8	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+555	Int2	B	2	43	A celebrated person is—		1 cheerful	2 happy	3 famous	4 dangerous	3	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+556	Int2	B	2	44	An extremely tiny plant or animal is called a-		5 mole	6 microbe	7 molecule	8 nucleus	6	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+557	Int2	B	2	45	A person whose movements are quick and light is—		1 eager	2 restless	3 clumsy	4 nimble	4	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+558	Int2	B	2	46	To praise means to—		5 forgive	6 mistreat	7 acclaim	8 abuse	7	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+559	Int2	B	2	47	A place where money is coined is a—		1 bank	2 mint	3 press	4 factor	2	NULL	1	2003-06-13 14:22:56.000	1	2003-06-13 14:22:56.000
+560	Int2	B	2	48	An orator is a—		5 speaker	6 poet	7 musician	8 organizer	5	NULL	1	2003-06-13 14:22:57.000	1	2003-06-13 14:22:57.000
+561	Int2	B	2	49	Something that warns of a future event is—		1 a theory	2 a map	3 an image	4 an omen	4	NULL	1	2003-06-13 14:22:57.000	1	2003-06-13 14:22:57.000
+562	Int2	B	2	50	An alliance is formed by nations with common—		5 borders	6 leaders	7 governments	8 interests	8	NULL	1	2003-06-13 14:22:57.000	1	2003-06-13 14:22:57.000
+563	Adv	A	1	1	When you have a disease, you are —		1 rich	2 lazy	3 calm	4 sick	4	disease	1	2003-06-13 14:42:39.000	1	2010-11-16 08:52:48.000
+564	Adv	A	1	2	To be eligible is to be—		5 unworthy	6 elusive	7 desired	8 qualified	8	eligible	1	2003-06-13 14:42:39.000	1	2010-11-16 08:52:48.000
+565	Adv	A	1	3	When you are in isolation, you have—		1 privacy	2 freedom	3 hospitality	4 luxury	1	isolate	1	2003-06-13 14:42:39.000	1	2010-11-16 08:52:48.000
+566	Adv	A	1	4	A narrator is a person who —		5 sails	6 talks	7 drives	8 flies	6	narrator	1	2003-06-13 14:42:39.000	1	2010-11-16 08:52:48.000
+567	Adv	A	1	5	A gnarled tree is —		1 straight	2 dead	3 twisted	4 smooth	3	gnarled	1	2003-06-13 14:42:39.000	1	2010-11-16 08:52:48.000
+568	Adv	A	1	6	A person who enters a country in order to settle there is called —		5 a wayfarer	6 a wanderer	7 an itinerant	8 an immigrant	8	settle	1	2003-06-13 14:42:39.000	1	2010-11-16 08:52:48.000
+569	Adv	A	1	7	Disorderly mobs can cause a great deal of —		1 tranquility	2 commotion	3 quiescence	4 placidity	2	disorderly	1	2003-06-13 14:42:39.000	1	2010-11-16 08:52:48.000
+570	Adv	A	1	8	Something intolerable is —		5 joyful	6 variable	7 unbearable	8 intriguing	7	intolerable	1	2003-06-13 14:42:39.000	1	2010-11-16 08:52:48.000
+571	Adv	A	1	9	The first part of microscope, micro-, means —		1 far	2 large	3 look	4 tiny	4	micro	1	2003-06-13 14:42:39.000	1	2010-11-16 08:52:48.000
+572	Adv	A	1	10	A global policy is one that considers the —		5 universe	6 goal	7 world	8 glory	7	global	1	2003-06-13 14:42:39.000	1	2010-11-16 08:52:48.000
+573	Adv	A	1	11	One of four equal parts is a —		1 quarter	2 half	3 third	4 circle	1	quarter	1	2003-06-13 14:42:39.000	1	2010-11-16 08:52:48.000
+574	Adv	A	1	12	A component of something is a —		5 part	6 group	7 theme	8 model	5	component	1	2003-06-13 14:42:39.000	1	2010-11-16 08:52:48.000
+575	Adv	A	2	13	A petrified individual is —		1 ignorant	2 scared	3 aged	4 polite	2	petrified	1	2003-06-13 14:42:39.000	1	2010-11-16 08:52:48.000
+576	Adv	A	2	14	A raucous sound is —		5 soft	6 hoarse	7 beautiful	8 melodious	6	raucous	1	2003-06-13 14:42:39.000	1	2010-11-16 08:52:48.000
+577	Adv	A	2	15	To come out into the open is to —		1 emerge	2 rectify	3 vanish	4 approach	1	emerge	1	2003-06-13 14:42:40.000	1	2010-11-16 08:52:48.000
+578	Adv	A	2	16	A capsized boat has been —		5 defeated	6 overturned	7 shortened	8 launched	6	capsize	1	2003-06-13 14:42:40.000	1	2010-11-16 08:52:48.000
+579	Adv	A	2	17	A judicious decision is made —		1 quickly	2 wisely	3 foolishly	4 cleverly	2	judicious	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+580	Adv	A	2	18	The last part of export, -port, means to —		5 donate	6 mail	7 sell	8 carry	8	port	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+581	Adv	A	2	19	An articulate person speaks —		1 slowly	2 indistinctly	3 clearly	4 emotionally	3	articulate	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+582	Adv	A	2	20	Successful inventors usually have much —		5 investment	6 ingenuity	7 indifference	8 infliction	6	inventor	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+583	Adv	A	2	21	If you are deluded, you are —		1 included	2 preserved	3 misled	4 informed	3	delude	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+584	Adv	A	2	22	A conclave is a private—		5 meeting	6 concert	7 auction	8 business	5	conclave	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+585	Adv	A	2	23	The frequency of a sound determines its —		1 treble	2 volume	3 pitch	4 harmony	3	frequency	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+586	Adv	A	2	24	Fruitless efforts are —		5 fortunate	6 ineffectual	7 profitable	8 intentional	6	fruitless	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+587	Adv	A	3	25	An apple tree which bears a great deal of fruit is —		1 barren	2 withered	3 pruned	4 prolific	4	bear	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+588	Adv	A	3	26	A succulent piece of food is —		5 cooked	6 raw	7 juicy	8 spoiled	7	succulent	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+589	Adv	A	3	27	Malicious remarks are —		1 spiteful	2 funny	3 beneficent	4 sympathetic	1	malicious	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+590	Adv	A	3	28	Devastated land has been —		5 made fertile	6 laid waste	7 planted	8 plowed	6	devastate	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+591	Adv	A	3	29	Something is supplanted when it is —		1 discarded	2 moved	3 replaced	4 buried	3	supplant	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+592	Adv	A	3	30	A substance composed of two or more metals is called —		5 a diversion	6 a base	7 an alloy	8 a contrast	7	substance	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+593	Adv	A	3	31	Somnolence refers to—		1 recreation	2 money	3 sleep	4 honesty	3	somnolence	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+594	Adv	A	3	32	To ponder means to —		5 beat	6 beg	7 hock	8 think	8	ponder	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+595	Adv	A	3	33	Animals which live in or on other animals are —		1 parasitic	2 carnivorous	3 coniferous	4 herbivorous	1	parasite	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+596	Adv	A	3	34	A smug person is —		5 suspicious	6 self-satisfied	7 friendly	8 unhappy	6	smug	1	2003-06-13 14:42:40.000	1	2010-11-16 08:53:52.000
+597	Adv	A	3	35	The word catastrophe is associated with a great —		1 fortune	2 success	3 calamity	4 feat	3	catastrophe	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:16.000
+598	Adv	A	3	36	Tedious work is —		5 difficult	6 interesting	7 technical	8 tiresome	8	tedious	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:16.000
+599	Adv	A	4	37	An inept person is usually —		1 efficient	2 incompetent	3 infallible	4 infamous	2	inept	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:16.000
+600	Adv	A	4	38	A brusque reply is —		5 abrupt	6 correct	7 incomplete	8 brief	5	brusque	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:16.000
+601	Adv	A	4	39	An impediment is —		1 an implement	2 a remedy	3 a guide	4 a hindrance	4	impediment	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:16.000
+602	Adv	A	4	40	A contemplative person is —		5 thoughtful	6 sad	7 cautious	8 disliked	5	contemplate	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:17.000
+603	Adv	A	4	41	An audacious person is —		1 lonely	2 bold	3 fearful	4 active	2	audacious	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:17.000
+604	Adv	A	4	42	An avid reader .is a person who reads —		5 inadequately	6 little	7 slowly	8 much	8	avid	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:17.000
+605	Adv	A	4	43	To be exhilarated is to be—		1 dejected	2 satiated	3 expendable	4 stimulated	4	exhilarated	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:17.000
+606	Adv	A	4	44	Anomalous situations are highly —		5 invigorating	6 irregular	7 recommended	8 dangerous	6	anomalous	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:17.000
+607	Adv	A	4	45	A commodious house is —		1 uncomfortable	2 cramped	3 spacious	4 boxlike	3	commodious	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:17.000
+608	Adv	A	4	46	An obstreperous boy is —		5 pleasant	6 resentful	7 timid	8 unruly	8	obstreperous	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:17.000
+609	Adv	A	4	47	Loud and fast talk is a verbal —		1 image	2 definition	3 barrage	4 proposition	3	verbal	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:17.000
+610	Adv	A	4	48	An imperceptible change is —		5 unnoticed	6 drastic	7 impractical	8 permissible	5	imperceptible	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:17.000
+611	Adv	A	5	49	If gas is inert, it is —		1 enclosed	2 natural	3 inactive	4 explosive	3	intert	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:17.000
+612	Adv	A	5	50	An ecstatic person feels extremely —		5 solitary	6 thrilled	7 suspicious	8 depressed	6	ecstatic	1	2003-06-13 14:42:40.000	1	2010-11-16 08:56:17.000
+613	Adv	B	1	1	A graveyard can also be called a —		1 dome	2 memory	3 funeral	4 cemetery	4	graveyard	1	2003-06-30 16:54:22.000	1	2010-11-16 08:56:17.000
+614	Adv	B	1	2	The person responsible for an accident —		5 aided it	6 ignored it	7 overlooked it	8 caused it	8	responsible	1	2003-06-30 16:54:22.000	1	2010-11-16 08:56:17.000
+615	Adv	B	1	3	A parent who is not strict is —		1 lenient	2 poor	3 happy	4 severe	1	strict	1	2003-06-30 16:54:22.000	1	2010-11-16 08:56:17.000
+616	Adv	B	1	4	A yacht is a boat used for —		5 freight	6 pleasure	7 towing	8 warfare	6	yacht	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+617	Adv	B	1	5	A scrawny boy is —		1 scared	2 soiled	3 skinny	4 tricky	3	scrawny	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+618	Adv	B	1	6	A town's water supply is usually stored in —		5 tubs	6 tributaries	7 jars	8 reservoirs	8	supply	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+619	Adv	B	1	7	A desolate countryside is —		1 colorful	2 deserted	3 friendly	4 cheerful	2	desolate	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+620	Adv	B	1	8	To hoist is to —		5 dig	6 fold	7 raise	8 repair	7	hoist	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+621	Adv	B	1	9	An increase in speed is called —		1 restraint	2 retardation	3 obstruction	4 acceleration	4	accel	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+622	Adv	B	1	10	A sinister person is—		5 attractive	6 charming	7 evil	8 saintly	7	sinister	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+623	Adv	B	1	11	When money goes from person to person, it is—		1 circulated	2 changed	3 saved	4 purchased	1	circulate	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+624	Adv	B	1	12	The first part of phonograph, phono-, means —		5 sound	6 round	7 music	8 turn	5	phonograph	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+625	Adv	B	2	13	If your education is prolonged, it is —		1 decreased	2 extended	3 finished	4 difficult	2	education	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+626	Adv	B	2	14	A glee club is a group of people who —-		5 compete	6 sing	7 cheer	8 travel	6	glee	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+627	Adv	B	2	15	A scathing comment is —		1 hurtful	2 soothing	3 thoughtful	4 encouraging	1	scathing	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+628	Adv	B	2	16	A competent person is—		5 feeble	6 capable	7 lonely	8 unsure	6	competent	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+629	Adv	B	2	17	A tranquil lake is —		1 deep	2 calm	3 agitated	4 cold	2	tranquil	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+630	Adv	B	2	18	When you attain something, you—		5 retain it	6 sustain it	7 contain it	8 obtain it	8	attain	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+631	Adv	B	2	19	To have an option means to have —		1 a sale	2 an opinion	3 a choice	4 a duty	3	option	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+632	Adv	B	2	20	A tortuous road is always —		5 dark	6 twisting	7 monotonous	8 picturesque	6	torture	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+633	Adv	B	2	21	An infuriated person is—		1 unfriendly	2 funny	3 angry	4 influential	3	infuriate	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+634	Adv	B	2	22	A carpenter's tool used to bore holes is —		5 an auger	6 afile	7 a plane	8 achisel	5	carpenter	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+635	Adv	B	2	23	Jovial people are—		1 lonely	2 unhappy	3 merry	4 wealthy	3	jovial	1	2003-06-30 16:54:23.000	1	2010-11-16 08:56:17.000
+636	Adv	B	2	24	An erratic schedule is —		5 decisive	6 uncertain	7 dependable	8 obsolete	6	erratic	1	2003-06-30 16:54:23.000	1	2010-11-16 09:22:33.000
+637	Adv	B	3	25	A ruthless person is —		1 friendly	2 illiterate	3 successful	4 pitiless	4	ruthless	1	2003-06-30 16:54:23.000	1	2010-11-16 09:22:33.000
+638	Adv	B	3	26	An arrogant person is —		5 afraid	6 tired	7 proud	8 kind	7	arrogant	1	2003-06-30 16:54:23.000	1	2010-11-16 09:22:33.000
+639	Adv	B	3	27	A beacon is a —		1 light	2 concert	3 minister	4 crutch	1	beacon	1	2003-06-30 16:54:23.000	1	2010-11-16 09:22:33.000
+640	Adv	B	3	28	A body chemical which activates certain processes is a—		5 protein	6 hormone	7 vitamin	8 mineral	6	chemical	1	2003-06-30 16:54:23.000	1	2010-11-16 09:22:33.000
+641	Adv	B	3	29	When steam is converted to water, it is —		1 compressed	2 evaporated	3 condensed	4 boiled	3	convert	1	2003-06-30 16:54:23.000	1	2010-11-16 09:22:33.000
+642	Adv	B	3	30	A vigorous individual is —		5 vigilant	6 weak	7 strong	8 sickly	7	vigorous	1	2003-06-30 16:54:23.000	1	2010-11-16 09:22:33.000
+643	Adv	B	3	31	If you give an inane reply to a question, your answer is —		1 correct	2 astute	3 silly	4 relevant	3	inane	1	2003-06-30 16:54:23.000	1	2010-11-16 09:22:33.000
+644	Adv	B	3	32	A sage individual is —		5 touchy	6 old	7 testy	8 wise	8	sage	1	2003-06-30 16:54:23.000	1	2010-11-16 09:22:33.000
+645	Adv	B	3	33	If you are circumspect, you are —		1 cautious	2 honest	3 bold	4 powerful	1	circumspect	1	2003-06-30 16:54:23.000	1	2010-11-16 09:22:33.000
+646	Adv	B	3	34	A taut piece of wire is —		5 coiled	6 tight	7 useless	8 rusty	6	taut	1	2003-06-30 16:54:23.000	1	2010-11-16 09:22:33.000
+647	Adv	B	3	35	When you have a query, you —		1 regret	2 struggle	3 question	4 forgive	3	query	1	2003-06-30 16:54:23.000	1	2010-11-16 09:22:33.000
+648	Adv	B	3	36	To be humiliated is to be—		5 envied	6 hated	7 shunned	8 mortified	8	humiliate	1	2003-06-30 16:54:23.000	1	2010-11-16 09:22:33.000
+649	Adv	B	4	37	The last part of quadruped, -ped, means —		1 teach	2 foot	3 insect	4 stand	2	quadrupe	1	2003-06-30 16:54:24.000	1	2010-11-16 09:22:33.000
+650	Adv	B	4	38	A procession of people is a —		5 cavalcade	6 cavalier	7 faction	8 refraction	5	procession	1	2003-06-30 16:54:24.000	1	2010-11-16 09:22:33.000
+651	Adv	B	4	39	Something repulsive is —		1 forbidding	2 pleasant	3 repetitive	4 repellent	4	repulsive	1	2003-06-30 16:54:24.000	1	2010-11-16 09:22:33.000
+652	Adv	B	4	40	A simple home is —		5 unpretentious	6 pompous	7 ostentatious	8 magnificent	5	pretentious	1	2003-06-30 16:54:24.000	1	2010-11-16 09:22:33.000
+653	Adv	B	4	41	Pain that comes and goes is —		1 terminal	2 intermittent	3 continuous	4 permanent	2	intermittent	1	2003-06-30 16:54:24.000	1	2010-11-16 09:22:33.000
+654	Adv	B	4	42	Submerged objects are —		5 defective	6 revealed	7 sublime	8 covered	8	submerge	1	2003-06-30 16:54:24.000	1	2010-11-16 09:22:33.000
+655	Adv	B	4	43	To be absolved is to be—		1 impoverished	2 accused	3 abused	4 released	4	absolve	1	2003-06-30 16:54:24.000	1	2010-11-16 09:22:33.000
+656	Adv	B	4	44	Something is an incentive for you when it is —		5 dangerous	6 encouraging	7 flammable	8 humble	6	incentive	1	2003-06-30 16:54:24.000	1	2010-11-16 09:22:33.000
+657	Adv	B	4	45	When you make an analogy, you make —		1 an analysis	2 a reservation	3 a comparison	4 an enlargement	3	analogy	1	2003-06-30 16:54:24.000	1	2010-11-16 09:22:33.000
+658	Adv	B	4	46	The distance around any piece of land is its —		5 acreage	6 area	7 radius	8 perimeter	8	perimeter	1	2003-06-30 16:54:24.000	1	2010-11-16 09:22:33.000
+659	Adv	B	4	47	A nocturnal trip is always made —		1 in summer	2 at sunrise	3 at night	4 in winter	3	nocturnal	1	2003-06-30 16:54:24.000	1	2010-11-16 09:22:33.000
+660	Adv	B	4	48	An affluent person is—		5 wealthy	6 afraid	7 jubilant	8 obnoxious	5	affluent	1	2003-06-30 16:54:24.000	1	2010-11-16 09:22:33.000
+661	Adv	B	5	49	Regression in a patient means that he is —		1 stabilizing	2 improving	3 worsening	4 recovering	3	regression	1	2003-06-30 16:54:24.000	1	2010-11-16 09:22:33.000
+662	Adv	B	5	50	An apathetic attitude is one of —		5 familiarity	6 indifference	7 apprehension	8 eagerness	6	apathetic	1	2003-06-30 16:54:24.000	1	2010-11-16 09:22:33.000
+
+(541 row(s) affected)
+

@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
-import { TasksCollection } from '/imports/db/TasksCollection';
+import { TasksCollection, GatherFacts } from '/imports/db/Collections';
 import '/imports/api/tasksMethods';
 import '/imports/api/tasksPublications';
 
@@ -35,4 +35,11 @@ Meteor.startup(() => {
     ].forEach(taskText => insertTask(taskText, user))
   }
 
+  loadGatherFacts();
+
 });
+
+const loadGatherFacts = function(){
+  // If not defined - create gather facts collection
+  console.log('jones44',GatherFacts.find().count());
+};
