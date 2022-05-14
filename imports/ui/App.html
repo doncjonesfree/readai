@@ -19,29 +19,9 @@
               User: {{getUser.username}}
             </div>
 
-            {{> form }}
-
-            <div class="filter">
-              <button id="hide-completed-button">
-                {{#if hideCompleted}}
-                  Show All
-                {{else}}
-                  Hide Completed
-                {{/if}}
-              </button>
-            </div>
-
             {{ #if isLoading }}
               <div class="loading">loading...</div>
             {{/if}}
-
-            <ul>
-                {{#each tasks}}
-                  {{> task}}
-                {{/each}}
-            </ul>
-
-            <a href="#" id="update_data">update data</a> data={{ data }}
 
             {{> Template.dynamic template=main}}
 
@@ -50,11 +30,4 @@
           {{ /if }}
         </div>
     </div>
-</template>
-
-<template name="form">
-    <form class="task-form">
-        <input type="text" name="text" placeholder="Type to add new tasks" />
-        <button type="submit">Add Task</button>
-    </form>
 </template>
