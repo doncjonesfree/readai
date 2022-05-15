@@ -1,19 +1,12 @@
 import { check } from 'meteor/check';
-import { TasksCollection } from '/imports/db/Collections';
+import { TasksCollection, GatherFacts, GatherFactsAnswers } from '/imports/db/Collections';
 
 Meteor.methods({
-  'tasks.insert'(text) {
-    check(text, String);
-
-    if (!this.userId) {
-      throw new Meteor.Error('Not authorized.');
-    }
-
-    TasksCollection.insert({
-      text,
-      createdAt: new Date,
-      userId: this.userId,
-    })
+  'loadGatherFacts'() {
+    let retObj = {};
+    retObj.GatherFacts = GatherFacts.find().fetch();
+    retObj.GatherFactsAnswers = GatherFactsAnswers.find().fetch();
+    return retObj;
   },
 
   'tasks.remove'(taskId) {

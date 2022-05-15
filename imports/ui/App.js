@@ -5,7 +5,11 @@ import { ReactiveDict } from 'meteor/reactive-dict';
 import './App.html';
 import "./Login.js";
 import "./Router.js";
-import "./Lists_show_page.html"; //
+import "./Lists_show_page.html";
+import "./Home.html";
+import "./Home.js";
+import "./Edit.html";
+import "./Edit.js";
 
 const IS_LOADING_STRING = "isLoading";
 

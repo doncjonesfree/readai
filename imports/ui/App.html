@@ -1,33 +1,16 @@
 <body>
-    {{> mainContainer }}
+  <header>
+      <div class="app-bar">
+         <div class="app-header">
+             <h1>📝️ My Reading Tutor</h1>
+         </div>
+      </div>
+  </header>
+
 </body>
 
 <template name="mainContainer">
-    <div class="app">
-        <header>
-          <div class="app-bar">
-             <div class="app-header">
-                 <h1>📝️ My Reading Tutor</h1>
-             </div>
-          </div>
-        </header>
-
-        <div class="main">
-          {{#if isUserLogged}}
-
-            <div class="user">
-              User: {{getUser.username}}
-            </div>
-
-            {{ #if isLoading }}
-              <div class="loading">loading...</div>
-            {{/if}}
-
-            {{> Template.dynamic template=main}}
-
-          {{ else }}
-            {{> login }}
-          {{ /if }}
-        </div>
-    </div>
+  <div class="main">
+    {{> Template.dynamic template=main}}
+  </div>
 </template>
