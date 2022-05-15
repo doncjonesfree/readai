@@ -16,7 +16,28 @@ body {
 }
 
 .loading {
-  border: 1px solid red;
+  border: 1px solid #b22222;
+}
+
+.rpt_flex_heading {
+  display: flex;
+  font-weight: bold;
+  border-bottom: 2px solid black;
+  margin-top: 10px;
+  padding: 2px 0 2px 8px;
+}
+.rpt_flex {
+  display: flex;
+  padding: 2px 0 2px 8px;
+  border-radius: .25em;
+}
+
+.rpt_highlight { background-color: #dcdcdc; }
+
+.error {
+  display: inline-block;
+  color: red;
+  font-weight: bold;
 }
 
 .input_short {

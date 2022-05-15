@@ -9,6 +9,31 @@ export const numbersOnly = function(arg) {
   return op.join('');
 };
 
+export const makeList = function( recs, field, field1 ){
+  // Make a list of a single field within list of recs
+  let list = [];
+  for ( let i=0; i < recs.length; i++ ) {
+    const r = recs[i];
+    const v = r[ field ];
+    if ( v && list.indexOf(v) < 0 ) list.push(v);
+  }
+  if ( list.length === 0 && typeof(field1) !== 'undefined' ) list.push(field1);
+  return list;
+}
+
+export const focus = function(id,count){
+  if ( ! count ) count = 0;
+  if ( $(id).length ) {
+    $(id).focus();
+  } else if ( count > 10 ) {
+    console.log('focus timed out ',id);
+  } else {
+    Meteor.setTimeout(function(){
+      focus(id,count+1);
+    },200);
+  }
+};
+
 export const isNumber = function(c){
   const numbers = '1234567890';
   return numbers.indexOf(c) >= 0;

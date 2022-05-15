@@ -37,3 +37,4 @@ https://cloud-guide.meteor.com/triggers.html - auto scaling documentation
 meteor add ostrio:flow-router-extra -- https://guide.meteor.com/routing.html#client-side
 meteor add kadira:blaze-layout - to go to route
 meteor add session
+meteor add liyu:sprintfjs

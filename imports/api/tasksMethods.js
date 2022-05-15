@@ -1,11 +1,16 @@
 import { check } from 'meteor/check';
 import { TasksCollection, GatherFacts, GatherFactsAnswers } from '/imports/db/Collections';
+import * as lib from './lib';
 
 Meteor.methods({
-  'loadGatherFacts'() {
+  'loadGatherFacts'( src ) {
     let retObj = {};
-    retObj.GatherFacts = GatherFacts.find().fetch();
-    retObj.GatherFactsAnswers = GatherFactsAnswers.find().fetch();
+    retObj.GatherFacts = GatherFacts.find(src).fetch();
+    console.log('jones7',src,retObj.GatherFacts.length);
+    if ( retObj.GatherFacts.length > 0 ) {
+      const list = lib.makeList( retObj.GatherFacts, 'LessonNum' );
+      retObj.GatherFactsAnswers = GatherFactsAnswers.find({ LessonNum: { $in: list }}).fetch();
+    }
     return retObj;
   },
 
