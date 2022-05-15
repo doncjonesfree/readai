@@ -1,4 +1,21 @@
 <template name="Edit">
   <button id="home">Home</button>
-  <button id="edit_gather_facts">Gather Facts</button>
+
+  {{ #if mode1 }}
+    <button id="edit_gather_facts">Gather Facts</button>
+  {{ /if }}
+
+  {{ #if mode2 }}
+    <button id="change_mode" data="1">Back</button>
+    Code <input type="text" id="gs_start" class="input_short gf_src" data="Code">
+    Color <input type="text" class="input_short gf_src" data="Color">
+    GradeLevel <input type="text" class="input_short gf_src" data="GradeLevel">
+    LessonNum <input type="text" class="input_short gf_src" data="LessonNum">
+    Number <input type="text" class="input_short gf_src" data="Number">
+    <button id="gs_search">Search</button>
+
+
+
+
+  {{ /if }}
 </template>
