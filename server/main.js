@@ -182,28 +182,33 @@ const loadGatherFactsAnswers = function(){
 
   let list = []; // list of records
 
+  let nextHeading = -1;
   const makeObject = function(headings,line){
     let obj = {};
     const ignore = ['CB','CDT','MB','MDT'];
     if ( lib.verifyInteger(line[0] )) {
+      // start of lesson
+      let lastHeading = -1;
       for ( let i=0; i < headings.length; i++ ) {
         const h = headings[i];
         let v = line[i];
         if ( typeof(v) === 'string') v = v.trim();
         if ( lib.verifyInteger(v) ) v = lib.int(v);
         if ( lib.verifyFloat(v) ) v = lib.float(v);
+        lastHeading = 0;
         if ( v && ignore.indexOf(h) < 0 ) obj[h] = v;
       }
+      nextHeading = lastHeading + 1;
       list.push(obj);
     } else {
       // add to previous value
-      const ix = list.length - 1;
-      if ( ix < 0 ) console.log('Error in line 134 main.js');
-      if ( ix >= 0 ) {
+      if ( nextHeading >= 0 ) {
+        const ix = list.length - 1;
         obj = list[ix];
-        for ( let i=5; i < headings.length; i++ ) {
+        for ( let i=nextHeading; i < headings.length; i++ ) {
+        // while ( true ) { // left off here
           const h = headings[i];
-          let v = line[i-5];
+          let v = line[i-nextHeading];
           if ( typeof(v) === 'string') v = v.trim();
           if ( lib.verifyInteger(v) ) v = lib.int(v);
           if ( lib.verifyFloat(v) ) v = lib.float(v);
@@ -221,25 +226,27 @@ const loadGatherFactsAnswers = function(){
     return obj;
   };
 
+  // GatherFactsAnswers.remove({}); // remove all
   if ( ! GatherFactsAnswers.find().count() ) {
     // const fullPath = Assets.absoluteFilePath('rpt/gatherfacts.rpt');
     const fullPath = Assets.absoluteFilePath('txt/gatherfactsanswers.txt');
 
     let contents = fs.readFileSync(fullPath, 'binary').split('\n');
-    let headings = [];
-    for ( let i=0; i < contents.length; i++ ) {
-      const raw = contents[i];
+    const headings = contents[0].split('\t');
+    console.log('jones233a',contents[0].split('\t'));
+    let found = false;
+    for ( let i=1; i < contents.length; i++ ) {
+      const raw = contents[i].replace(/\r/g,'');
       const line = raw.split('\t');
-      if ( i === 0 ) {
-        headings = line;
-      } else {
-        makeObject(headings,line); // adds to list array
-      }
+      if ( lib.int(line[0]) === 135 ) found = true;
+      if ( lib.int(line[0]) === 136 ) found = false;
+      if ( found ) console.log('jones233b',line);
+      makeObject(headings,line); // adds to list array
     }
-    for ( let i=0; i < list.length; i++ ) {
-      GatherFactsAnswers.insert(list[i]);
-    }
-    console.log('GatherFactsAnswers loaded, %s lessons',list.length);
+    // for ( let i=0; i < list.length; i++ ) {
+    //   GatherFactsAnswers.insert(list[i]);
+    // }
+    // console.log('GatherFactsAnswers loaded, %s lessons',list.length);
   }
 };
 
