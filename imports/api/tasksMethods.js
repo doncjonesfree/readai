@@ -6,7 +6,6 @@ Meteor.methods({
   'loadGatherFacts'( src ) {
     let retObj = {};
     retObj.GatherFacts = GatherFacts.find(src).fetch();
-    console.log('jones7',src,retObj.GatherFacts.length);
     if ( retObj.GatherFacts.length > 0 ) {
       const list = lib.makeList( retObj.GatherFacts, 'LessonNum' );
       retObj.GatherFactsAnswers = GatherFactsAnswers.find({ LessonNum: { $in: list }}).fetch();

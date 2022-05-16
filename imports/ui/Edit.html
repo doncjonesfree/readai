@@ -11,7 +11,7 @@
       Code <input type="text" id="gs_start" class="input_short gf_src" data="Code" data2="text" value="{{ Code}}">
       &nbsp; Color <input type="text" class="input_short gf_src" data="Color" data2="text" value="{{ Color}}">
       &nbsp; Grade Level <input type="text" class="input_short gf_src" data="GradeLevel" data2="float" value="{{ GradeLevel}}">
-      &nbsp; Question # <input type="text" class="input_short gf_src" data="Number" data2="integer" value="{{ Number}}">
+      &nbsp; Number <input type="text" class="input_short gf_src" data="Number" data2="integer" value="{{ Number}}">
       &nbsp; <button id="gf_search">Search</button>
       {{ #if error }}
       &nbsp; <div class="error">{{ error }}</div>
@@ -19,24 +19,58 @@
     {{ /with }}
 
     {{ #if gatherfacts }}
-      <div class="rpt_flex_heading" style="width: 50%;">
+      <div class="rpt_flex_heading" style="width: 70%;">
         <div class="gf_code">Code</div>
         <div class="gf_color">Color</div>
         <div class="gf_gradelevel">Grade</div>
-        <div class="gf_number">Question #</div>
+        <div class="gf_number">Number</div>
+        <div class="gf_paragraph">Lesson</div>
         <div class="gf_options">Options</div>
       </div>
       {{ #each gatherfacts }}
-        <div class="rpt_flex {{ cls }}" style="width: 50%;">
+        <div class="rpt_flex {{ cls }}" style="width: 70%;">
           <div class="gf_code">{{ Code }}</div>
           <div class="gf_color">{{ Color }}</div>
           <div class="gf_gradelevel">{{ GradeLevel }}</div>
           <div class="gf_number">{{ Number }}</div>
+          <div class="gf_paragraph">{{ Paragraph }}</div>
           <div class="gf_options">
-            <a href="#" class="gf_edit" data="{{ LessonNum }}_{{ Number }}">edit</a>
+            <a href="#" class="gf_edit" data="{{ Code }}_{{ Color }}_{{ LessonNum }}_{{ Number }}">edit</a>
           </div>
         </div>
       {{ /each }}
     {{ /if }}
   {{ /if }}
+
+  <div class="popup" id="gf_popup">
+    <div class="popup_inside">
+      <div class="popup_title">Gathering Facts</div>
+      <button id="popup_close" data="gf_popup">Close</button>
+      {{ #with edit_gf_lesson }}
+        {{ #with lesson }}
+        Code: {{ Code }}
+        &nbsp; Color: {{ Color }}
+        &nbsp; Grade Level: {{ GradeLevel }}
+        &nbsp; Number: {{ Number }}
+
+        <textarea id="edit_paragraph">{{ Paragraph }}</textarea>
+
+        <div class="show_paragraph">{{{ Paragraph }}}</div>
+        {{ /with }}
+
+        {{ #each list }}
+          <div class="label_flex">
+            <div class="label">{{ label }}</div>
+            <div class="value">
+              {{ #if html }}
+                {{{ html }}}
+              {{ else }}
+                {{ value }}
+              {{ /if }}
+            </div>
+          </div>
+        {{ /each }}
+      {{ /with }}
+    </div>
+  </div>
 </template>

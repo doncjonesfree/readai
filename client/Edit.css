@@ -1,5 +1,6 @@
-.gf_code { width: 20%; }
-.gf_color { width: 20%; }
-.gf_gradelevel { width: 20%; }
-.gf_number { width: 20%; }
-.gf_options { width: 20%; }
+.gf_code { width: 10%; }
+.gf_color { width: 15%; }
+.gf_gradelevel { width: 10%; }
+.gf_number { width: 10%; }
+.gf_paragraph { width: 50%; overflow: hidden; padding-right: 1em; }
+.gf_options { width: 5%; }

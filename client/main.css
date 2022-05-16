@@ -15,6 +15,51 @@ body {
   font-size: 14px;
 }
 
+.popup {
+  display: none;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,.4);
+}
+
+.popup_inside {
+  border: 2px solid black;
+  border-radius: .5em;
+  padding: 30px;
+  margin: 5% 10% 0 10%;
+  background-color: white;
+  max-height: 80%;
+  overflow: scroll;
+}
+
+.popup_title {
+  font-size: 2em;
+  margin-bottom: .5em;
+}
+
+#edit_paragraph {
+  margin-top: 1em;
+  width: 90%;
+  padding: .5em;
+  min-height: 8em;
+}
+
+.show_paragraph {
+  border: 1px solid gray;
+  border-radius: .5em;
+  width: 90%;
+  padding: 1em;
+  font-size: 1.4em;
+  margin-top: 1em;
+}
+
+.label_flex { display: flex; font-size: 1.2em; width: 50%; margin-top: .5em; }
+.label { width: 30%; text-align: right; padding-right: 1em; color: gray; }
+.value { width: 70%; }
+
 .loading {
   border: 1px solid #b22222;
 }
@@ -30,6 +75,7 @@ body {
   display: flex;
   padding: 2px 0 2px 8px;
   border-radius: .25em;
+  height: 1.2em;
 }
 
 .rpt_highlight { background-color: #dcdcdc; }
@@ -198,6 +244,11 @@ header {
 
 .login-form > div > button {
   background-color: #62807e;
+}
+
+input {
+  font-size: 1em;
+  width: 20em;
 }
 
 .user {

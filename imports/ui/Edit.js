@@ -20,6 +20,37 @@ Template.Edit.helpers({
   mode1() { return get('mode') === 1 },
   mode2() { return get('mode') === 2 },
   gf_search() { return get('gf_search')},
+  edit_gf_lesson(){
+
+    const inputHtml = function(obj, field){
+      return sprintf('<input type="text" class="edit_gf_text" value="%s" data="%s">',obj[field],field);
+    };
+
+    let op = get('edit_gf_lesson');
+    op.answers.sort( function(a,b){
+      if ( a.QuestionNum < b.QuestionNum ) return -1;
+      if ( a.QuestionNum > b.QuestionNum ) return 1;
+      return 0;
+    });
+    op.list = [];
+    for ( let i=0; i < op.answers.length; i++ ) {
+      const a = op.answers[i];
+      op.list.push( { label: 'Question #', value: a.QuestionNum } );
+      op.list.push( { label: 'Question', html: inputHtml(a,'Question') } );
+      for ( let i2=1; i2 < 1000; i2++ ) {
+        const n = sprintf('Answer%s',i2);
+        const v = a[n];
+        if ( v ) {
+          op.list.push( { label: n, html: inputHtml(a,n) } );
+        } else {
+          break;
+        }
+      }
+      op.list.push( { label: 'Correct', html: inputHtml(a,'Correct') } );
+    }
+    console.log('jones51',op);
+    return op;
+  },
   gatherfacts() {
     const gatherfacts = get('gatherfacts');
     gatherfacts.GatherFacts.sort( function(a,b){
@@ -112,11 +143,52 @@ const searchGatherFacts = function(e){
   }
 };
 
+const getGfLessonGivenKey = function(key){
+  const sKey = key.split('_');
+  const Code = sKey[0];
+  const Color = sKey[1];
+  const LessonNum = lib.int(sKey[2]);
+  const Number = lib.int(sKey[3]);
+  let list = get('gatherfacts').GatherFacts;
+  let ret = {};
+  for ( let i=0; i < list.length; i++ ) {
+    const g = list[i];
+    if ( g.Code == Code && g.Color === Color && g.LessonNum === LessonNum && g.Number === Number ) {
+      ret.lesson = g;
+      break;
+    }
+  }
+  if ( ret.lesson ) {
+    ret.answers = [];
+    list = get('gatherfacts').GatherFactsAnswers;
+    for ( let i=0; i < list.length; i++ ) {
+      const g = list[i];
+      if ( g.LessonNum === LessonNum ) {
+        ret.answers.push(g);
+      }
+    }
+  }
+  return ret;
+};
+
 Template.Edit.events({
+  'click #popup_close'(e){
+    const id = sprintf('#%s',$(e.currentTarget).attr('data'));
+    $(id).hide();
+  },
+  'change #edit_paragraph'(e){
+    let edit_gf_lesson = get('edit_gf_lesson');
+    edit_gf_lesson.lesson.Paragraph = $('#edit_paragraph').val();
+    set('edit_gf_lesson',edit_gf_lesson);
+  },
   'click .gf_edit'(e){
-    const data = $(e.currentTarget).attr('data').split('_');
-    const LessonNum = lib.int(data[0]);
-    const Number = lib.int(data[1]);
+    e.preventDefault();
+    const key = $(e.currentTarget).attr('data');
+    const ret = getGfLessonGivenKey(key);
+    if ( ret.lesson && ret.answers ) {
+      set('edit_gf_lesson',ret);
+      $('#gf_popup').show();
+    }
   },
   'click #gf_search'(e){
     e.preventDefault();
