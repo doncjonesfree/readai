@@ -3,6 +3,25 @@ import { TasksCollection, GatherFacts, GatherFactsAnswers } from '/imports/db/Co
 import * as lib from './lib';
 
 Meteor.methods({
+  'updateCollection'( changes ){
+    let retObj = { success: true, updates: 0 };
+    for ( let i=0; i < changes.length; i++ ) {
+      const c = changes[i];
+      switch ( c.collection) {
+        case 'GatherFactsAnswers':
+        GatherFactsAnswers.update(c.id, { $set: c.doc });
+        retObj.updates += 1;
+        break;
+
+        case 'GatherFacts':
+        GatherFacts.update(c.id, { $set: c.doc });
+        retObj.updates += 1;
+        break;
+      }
+    }
+    if ( retObj.updates === 0 ) retObj.success = false;
+    return retObj;
+  },
   'loadGatherFacts'( src ) {
     let retObj = {};
     retObj.GatherFacts = GatherFacts.find(src).fetch();

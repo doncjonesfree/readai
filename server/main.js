@@ -183,20 +183,27 @@ const loadGatherFactsAnswers = function(){
   let list = []; // list of records
 
   let nextHeading = -1;
-  const makeObject = function(headings,line){
+  const makeObject = function( headings, line, debug ){
+    const fixValue = function( arg ){
+      let v = arg;
+      if ( typeof(v) === 'undefined') v = '';
+      if ( lib.verifyInteger(v) ) v = lib.int(v);
+      if ( lib.verifyFloat(v) ) v = lib.float(v);
+      return v;
+    };
+
     let obj = {};
-    const ignore = ['CB','CDT','MB','MDT'];
+    const ignore = []; // ['CB','CDT','MB','MDT'];
     if ( lib.verifyInteger(line[0] )) {
       // start of lesson
       let lastHeading = -1;
-      for ( let i=0; i < headings.length; i++ ) {
+      for ( let i=0; i < line.length; i++ ) {
         const h = headings[i];
-        let v = line[i];
-        if ( typeof(v) === 'string') v = v.trim();
-        if ( lib.verifyInteger(v) ) v = lib.int(v);
-        if ( lib.verifyFloat(v) ) v = lib.float(v);
-        lastHeading = 0;
-        if ( v && ignore.indexOf(h) < 0 ) obj[h] = v;
+        let v = fixValue( line[i] );
+        if ( ignore.indexOf(h) < 0 ) {
+          obj[h] = v;
+          lastHeading = i;
+        }
       }
       nextHeading = lastHeading + 1;
       list.push(obj);
@@ -206,24 +213,34 @@ const loadGatherFactsAnswers = function(){
         const ix = list.length - 1;
         obj = list[ix];
         for ( let i=nextHeading; i < headings.length; i++ ) {
-        // while ( true ) { // left off here
           const h = headings[i];
-          let v = line[i-nextHeading];
-          if ( typeof(v) === 'string') v = v.trim();
-          if ( lib.verifyInteger(v) ) v = lib.int(v);
-          if ( lib.verifyFloat(v) ) v = lib.float(v);
-          if ( v ) {
-            if ( i === 5 ) {
-              obj.Paragraph += v;
-            } else {
-              if ( v && ignore.indexOf(h) < 0 ) obj[h] = v;
-            }
-          }
+          let v = fixValue( line[i-nextHeading] );
+          if ( ignore.indexOf(h) < 0 ) obj[h] = v;
         }
         list[ix] = obj;
       }
     }
     return obj;
+  };
+
+  const fix = function(){
+    // fix bad entries
+    for ( let i=0; i < list.length; i++ ) {
+      let l = list[i];
+      if ( ! l.Answer1 ) {
+        l.Answer1 = l.Answer2;
+        l.Answer2 = l.Answer3;
+        l.Answer3 = l.Answer4;
+        l.Answer4 = l.Answer5;
+        l.Answer5 = l.Answer6;
+        l.Answer6 = l.Correct;
+        l.Correct = l.CB;
+      }
+      delete l.CB;
+      delete l.CDT;
+      delete l.MB;
+      delete l.MDT;
+    }
   };
 
   // GatherFactsAnswers.remove({}); // remove all
@@ -233,20 +250,20 @@ const loadGatherFactsAnswers = function(){
 
     let contents = fs.readFileSync(fullPath, 'binary').split('\n');
     const headings = contents[0].split('\t');
-    console.log('jones233a',contents[0].split('\t'));
-    let found = false;
+    let debug = false;
     for ( let i=1; i < contents.length; i++ ) {
       const raw = contents[i].replace(/\r/g,'');
       const line = raw.split('\t');
-      if ( lib.int(line[0]) === 135 ) found = true;
-      if ( lib.int(line[0]) === 136 ) found = false;
-      if ( found ) console.log('jones233b',line);
-      makeObject(headings,line); // adds to list array
+      if ( lib.int(line[0]) === 135 && ! debug ) debug = true;
+      if ( lib.int(line[0]) === 136 ) debug = false;
+      makeObject(headings,line,debug); // adds to list array
     }
-    // for ( let i=0; i < list.length; i++ ) {
-    //   GatherFactsAnswers.insert(list[i]);
-    // }
-    // console.log('GatherFactsAnswers loaded, %s lessons',list.length);
+    fix();
+
+    for ( let i=0; i < list.length; i++ ) {
+      GatherFactsAnswers.insert(list[i]);
+    }
+    console.log('GatherFactsAnswers loaded, %s lessons',list.length);
   }
 };
 
@@ -263,7 +280,7 @@ const loadGatherFacts = function(){
       for ( let i=0; i < headings.length; i++ ) {
         const h = headings[i];
         let v = line[i];
-        if ( typeof(v) === 'string') v = v.trim();
+        if ( typeof(v) === 'undefined') v = '';
         if ( lib.verifyInteger(v) ) v = lib.int(v);
         if ( lib.verifyFloat(v) ) v = lib.float(v);
         if ( v && ignore.indexOf(h) < 0 ) obj[h] = v;
@@ -295,6 +312,7 @@ const loadGatherFacts = function(){
     return obj;
   };
 
+  // GatherFacts.remove({}); // remove all
   if ( ! GatherFacts.find().count() ) {
     // const fullPath = Assets.absoluteFilePath('rpt/gatherfacts.rpt');
     const fullPath = Assets.absoluteFilePath('txt/gatherfacts.txt');

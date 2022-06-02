@@ -9,6 +9,10 @@ export const numbersOnly = function(arg) {
   return op.join('');
 };
 
+export const hasOwnProperty = function (data, key) {
+  return Object.prototype.hasOwnProperty.call(data, key);
+};
+
 export const makeList = function( recs, field, field1 ){
   // Make a list of a single field within list of recs
   let list = [];
