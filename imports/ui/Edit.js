@@ -9,7 +9,7 @@ const set = function(n,v) {
 };
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
-Template.Edit.onCreated(function HomeOnCreated() {
+Template.Edit.onCreated(function EditOnCreated() {
   setd('mode',1);
   setd('gf_search',{});
   setd('gatherfacts',{ GatherFacts: [] });
@@ -151,6 +151,30 @@ const searchGatherFacts = function(e){
       }
     });
   }
+};
+
+const getGfLessonGivenId = function(id){
+  let list = get('gatherfacts').GatherFacts;
+  let ret = {};
+  for ( let i=0; i < list.length; i++ ) {
+    const g = list[i];
+    if ( g._id === id ) {
+      ret.lesson = g;
+      break;
+    }
+  }
+  if ( ret.lesson ) {
+    const LessonNum = ret.lesson.LessonNum
+    ret.answers = [];
+    list = get('gatherfacts').GatherFactsAnswers;
+    for ( let i=0; i < list.length; i++ ) {
+      const g = list[i];
+      if ( g.LessonNum === LessonNum ) {
+        ret.answers.push(g);
+      }
+    }
+  }
+  return ret;
 };
 
 const getGfLessonGivenKey = function(key){
@@ -316,6 +340,19 @@ Template.Edit.events({
     edit_gf_lesson.lesson.changed = true;
     set('edit_gf_lesson',edit_gf_lesson);
   },
+  'click #gf_edit_from_popup'(e){
+    e.preventDefault();
+    const lesson = Session.get('GFLesson_lesson');
+    const id = lesson.lesson._id;
+    const ret = getGfLessonGivenId(id);
+    console.log('jones347a id=%s',id,ret);
+    console.log('jones347b',lesson);
+    if ( ret.lesson && ret.answers ) {
+      set('edit_gf_lesson',ret);
+      $('#gf_lesson_popup').hide();
+      $('#gf_popup').show();
+    }
+  },
   'click .gf_edit'(e){
     e.preventDefault();
     const key = $(e.currentTarget).attr('data');
@@ -323,6 +360,17 @@ Template.Edit.events({
     if ( ret.lesson && ret.answers ) {
       set('edit_gf_lesson',ret);
       $('#gf_popup').show();
+    }
+  },
+  'click .gf_lesson'(e){
+    e.preventDefault();
+    const id = $(e.currentTarget).attr('data');
+    const ret = getGfLessonGivenId(id);
+    console.log('jones332',ret);
+    if ( ret.lesson && ret.answers ) {
+      // set up for other template
+      Session.set('GFLesson_lesson',ret);
+      $('#gf_lesson_popup').show();
     }
   },
   'click #gf_search'(e){

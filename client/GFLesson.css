@@ -1,0 +1,28 @@
+.gf_question_wrapper {
+  border: 1px solid gray;
+  border-radius: .5em;
+  padding: 0em 1em 1em 1em;
+}
+.gf_question { margin-top: 1em; margin-bottom: .25em; }
+.gf_answer {
+  display: flex;
+  margin-left: 2em;
+}
+
+.gf_lesson_code {
+  color: gray;
+  font-style: italic;
+  width: 100%;
+}
+
+.gf_lesson_paragraph {
+  font-size: 1.4em;
+  margin: 1em 0 0 0;
+}
+
+.gf_lesson_answer_left {
+  width: 50%;
+  border: 1px solid red;
+  width: 5em;
+}
+.gf_lesson_answer_right { width: 50%; }

@@ -9,6 +9,12 @@ export const numbersOnly = function(arg) {
   return op.join('');
 };
 
+export const numberToLetter = function(n){
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  if ( n <= 26 ) return letters.substr(n-1,1);
+  return 'Z';
+};
+
 export const hasOwnProperty = function (data, key) {
   return Object.prototype.hasOwnProperty.call(data, key);
 };

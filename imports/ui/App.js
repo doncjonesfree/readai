@@ -10,6 +10,8 @@ import "./Home.html";
 import "./Home.js";
 import "./Edit.html";
 import "./Edit.js";
+import "./GFLesson.html";
+import "./GFLesson.js";
 
 const IS_LOADING_STRING = "isLoading";
 

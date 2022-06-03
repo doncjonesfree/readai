@@ -1,0 +1,23 @@
+<template name="GFLesson">
+  <h1>Gather Facts Lesson</h1>
+  {{ #with lesson }}
+    <div class="gf_lesson_code">
+      {{ Code }} {{ Color }}  #{{ Number }}
+    </div>
+    <div class="gf_lesson_paragraph">
+      {{{ Paragraph }}}
+    </div>
+    <br><br>
+    <div class="gf_question_wrapper">
+      {{ #each question }}
+        <div class="gf_question">{{ Question }}</div>
+        {{ #each list }}
+          <div class="gf_answer">
+            <div class="gf_lesson_answer_left">{{{ checkbox }}}</div>
+            <div class="gf_lesson_answer_right">{{ answer }}</div>
+          </div>
+        {{ /each}}
+      {{ /each }}
+    </div>
+  {{ /with }}
+</template>

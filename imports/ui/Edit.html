@@ -19,7 +19,7 @@
     {{ /with }}
 
     {{ #if gatherfacts }}
-      <div class="rpt_flex_heading" style="width: 70%;">
+      <div class="rpt_flex_heading" style="width: 80%;">
         <div class="gf_code">Code</div>
         <div class="gf_color">Color</div>
         <div class="gf_gradelevel">Grade</div>
@@ -28,7 +28,7 @@
         <div class="gf_options">Options</div>
       </div>
       {{ #each gatherfacts }}
-        <div class="rpt_flex {{ cls }}" style="width: 70%;">
+        <div class="rpt_flex {{ cls }}" style="width: 80%;">
           <div class="gf_code">{{ Code }}</div>
           <div class="gf_color">{{ Color }}</div>
           <div class="gf_gradelevel">{{ GradeLevel }}</div>
@@ -36,11 +36,21 @@
           <div class="gf_paragraph">{{ Paragraph }}</div>
           <div class="gf_options">
             <a href="#" class="gf_edit" data="{{ Code }}_{{ Color }}_{{ LessonNum }}_{{ Number }}">edit</a>
+            |
+            <a href="#" class="gf_lesson" data="{{ _id }}">lesson</a>
           </div>
         </div>
       {{ /each }}
     {{ /if }}
   {{ /if }}
+
+  <div class="popup" id="gf_lesson_popup">
+    <div class="popup_inside">
+      <button id="popup_close" data="gf_lesson_popup">Close</button>
+      <button id="gf_edit_from_popup">Edit</button>
+      {{> GFLesson }}
+    </div>
+  </div>
 
   <div class="popup" id="gf_popup">
     <div class="popup_inside">
