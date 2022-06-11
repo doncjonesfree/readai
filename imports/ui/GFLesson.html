@@ -7,17 +7,17 @@
     <div class="gf_lesson_paragraph">
       {{{ Paragraph }}}
     </div>
-    <br><br>
-    <div class="gf_question_wrapper">
-      {{ #each question }}
-        <div class="gf_question">{{ Question }}</div>
-        {{ #each list }}
-          <div class="gf_answer">
-            <div class="gf_lesson_answer_left">{{{ checkbox }}}</div>
-            <div class="gf_lesson_answer_right">{{ answer }}</div>
-          </div>
-        {{ /each}}
-      {{ /each }}
-    </div>
   {{ /with }}
+
+  <br><br>
+  <div class="gf_question_wrapper">
+    {{ #each question }}
+      <div class="gf_question">{{ Question }}</div>
+      {{ #each list }}
+        <div class="gf_answer">
+          {{{ checkbox }}} {{ answer }}
+        </div>
+      {{ /each}}
+    {{ /each }}
+  </div>
 </template>

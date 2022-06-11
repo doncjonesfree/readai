@@ -6,7 +6,7 @@
 .gf_question { margin-top: 1em; margin-bottom: .25em; }
 .gf_answer {
   display: flex;
-  margin-left: 2em;
+  margin-left: 1em;
 }
 
 .gf_lesson_code {
@@ -20,9 +20,6 @@
   margin: 1em 0 0 0;
 }
 
-.gf_lesson_answer_left {
-  width: 50%;
-  border: 1px solid red;
-  width: 5em;
+.gf_chk_answer {
+  width: 2em;
 }
-.gf_lesson_answer_right { width: 50%; }

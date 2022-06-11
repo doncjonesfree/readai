@@ -8,7 +8,6 @@ const set = function(n,v) {
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
 Template.GFLesson.onCreated(function GFLessonOnCreated() {
-  console.log('jones9',get('lesson'));
 });
 
 const formatGFParagraph = function( p ){
@@ -44,17 +43,19 @@ Template.GFLesson.helpers({
       let op = [];
       for ( let i=0; i < l.answers.length; i++ ) {
         const a = l.answers[i];
-        console.log('jones47a',a);
         let o = { Question: sprintf('Question #%s  %s',a.QuestionNum,a.Question), list: [] };
         for ( let n=1; n <= 100; n++ ) {
           const txt = a[ sprintf('Answer%s',n)];
           if ( ! txt ) break;
-          const html = sprintf('<input type="checkbox" class="gf_chk_answer" data="%s">',n);
-          o.list.push( { checkbox: html, answer: sprintf('%s. %s', lib.numberToLetter(n), txt) } );
+          let checked = '';
+          if ( a.selected === n) {
+            checked = 'checked';
+          }
+          const html = sprintf('<input type="checkbox" class="gf_chk_answer" data="%s" data2="%s" %s>',i,n,checked);
+          o.list.push( { checkbox: html, answer: sprintf('%s. %s', lib.numberToLetter(n), txt) } ); //
         }
         op.push(o);
       }
-      console.log('jones47b',op);
       return op;
     }
     return '';
@@ -63,6 +64,14 @@ Template.GFLesson.helpers({
 });
 
 Template.GFLesson.events({
+  'change .gf_chk_answer': function(e){
+    const i = $(e.currentTarget).attr('data'); // question #
+    const a = $(e.currentTarget).attr('data2'); // answer #
+    let l = get('lesson');
+    let answer = l.answers[i];
+    answer.selected = lib.int(a);
+    set('lesson',l);
+  },
   'click #gf_save': function(e){
     e.preventDefault();
     const wait = '...';

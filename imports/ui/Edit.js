@@ -148,9 +148,25 @@ const searchGatherFacts = function(e){
         set('gatherfacts',{ GatherFacts: [] });
       } else {
         set('gatherfacts',results);
+        jones(results);
       }
     });
   }
+};
+
+const jones = function(obj){
+  // see if queer comes up again -
+  let count = 0;
+  for ( let i=0; i < obj.GatherFacts.length; i++ ) {
+    const gf = obj.GatherFacts[i];
+    let p = gf.Paragraph;
+    if ( p ) {
+      if ( p.toLowerCase().indexOf('queer') >= 0 ) {
+        count += 1;
+      }
+    }
+  }
+  console.log('jones162b queer count',count);
 };
 
 const getGfLessonGivenId = function(id){
@@ -345,8 +361,6 @@ Template.Edit.events({
     const lesson = Session.get('GFLesson_lesson');
     const id = lesson.lesson._id;
     const ret = getGfLessonGivenId(id);
-    console.log('jones347a id=%s',id,ret);
-    console.log('jones347b',lesson);
     if ( ret.lesson && ret.answers ) {
       set('edit_gf_lesson',ret);
       $('#gf_lesson_popup').hide();
@@ -366,7 +380,6 @@ Template.Edit.events({
     e.preventDefault();
     const id = $(e.currentTarget).attr('data');
     const ret = getGfLessonGivenId(id);
-    console.log('jones332',ret);
     if ( ret.lesson && ret.answers ) {
       // set up for other template
       Session.set('GFLesson_lesson',ret);
