@@ -34,3 +34,19 @@
 .gf_chk_answer {
   width: 2em;
 }
+
+#dictionary_overlay {
+  display: none;
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  width: 20%;
+  padding: 20px 20px 20px 20px;
+  height: 30px;
+  border: 3px solid black;
+  border-radius: .5em;
+  text-align: center;
+  font-size: 1.4em;
+  background-color: #dcdcdc;
+  cursor: pointer;
+}

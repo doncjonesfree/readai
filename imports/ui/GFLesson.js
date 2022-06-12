@@ -16,7 +16,7 @@ export const DictionaryLookup = function( word, callback ){
     if ( err ) {
       console.log('Error in GFLessons.js line 17',err);
     }
-    console.log('jones16',results);
+    callback(results);
   });
 };
 
@@ -120,6 +120,9 @@ Template.GFLesson.helpers({
     }
     return '';
   },
+  word(){
+    return get('word');
+  },
   question() {
     let l = get('lesson');
     if ( l && l.answers ) {
@@ -147,6 +150,14 @@ Template.GFLesson.helpers({
 });
 
 Template.GFLesson.events({
+  'click .lesson_word': function(e){
+    const word = $(e.currentTarget).html();
+    set('word',word);
+    $('#dictionary_overlay').show();
+    DictionaryLookup( word, function(results){
+      console.log('jones152b',results);
+    });
+  },
   'click #gf_lesson_paragraph': function(e){
     const txt = $(e.currentTarget).val();
   },
