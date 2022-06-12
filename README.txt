@@ -38,3 +38,5 @@ meteor add ostrio:flow-router-extra -- https://guide.meteor.com/routing.html#cli
 meteor add kadira:blaze-layout - to go to route
 meteor add session
 meteor add liyu:sprintfjs
+
+meteor add fetch -- replaces https

@@ -2,7 +2,21 @@ import { check } from 'meteor/check';
 import { TasksCollection, GatherFacts, GatherFactsAnswers } from '/imports/db/Collections';
 import * as lib from './lib';
 
+var Future = Npm.require("fibers/future");
+import { fetch, Headers } from "meteor/fetch";
+
 Meteor.methods({
+  'DictionaryLookup'( word ){
+    let future=new Future();
+    const url = sprintf('https://api.dictionaryapi.dev/api/v2/entries/en/%s',word);
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => future.return( data));
+
+    return future.wait();
+
+  },
   'updateCollection'( changes ){
     let retObj = { success: true, updates: 0 };
     for ( let i=0; i < changes.length; i++ ) {

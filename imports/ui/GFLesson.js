@@ -8,10 +8,90 @@ const set = function(n,v) {
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
 Template.GFLesson.onCreated(function GFLessonOnCreated() {
+
 });
 
-const formatGFParagraph = function( p ){
+export const DictionaryLookup = function( word, callback ){
+  Meteor.call('DictionaryLookup', word , function(err,results){
+    if ( err ) {
+      console.log('Error in GFLessons.js line 17',err);
+    }
+    console.log('jones16',results);
+  });
+};
+
+const lettersEtc = "abcdefghijklmnopqrstuvwxya'";
+const partOfWord = function(c){
+  return lettersEtc.indexOf(c.toLowerCase()) >= 0;
+};
+
+const addDivsForLongerWords = function(arg){
+  const semiComing = function(w,ix){
+    // true if a semi colon is coming soon - like in &quot;
+    for ( let i=ix; i < w.length; i++ ) {
+      const c = w.substr(i,1);
+      if ( c === ';') {
+        if ( i - ix < 6 ) return true;
+        return false;
+      }
+    }
+    return false;
+  };
+
+  const breakUpWord = function(w){
+    let before = [];
+    let word = [];
+    let after = [];
+    let waitForSemi = false;
+    for ( let i=0; i < w.length; i++ ) {
+      let c = w.substr(i,1);
+      if ( waitForSemi ) {
+        before.push(c);
+        if ( c === ';' ) waitForSemi = false;
+        continue;
+      }
+      if ( c === '&' && semiComing(w,i+1) && word.length === 0 ) {
+        waitForSemi = true;
+        before.push(c);
+        continue;
+      }
+      if ( partOfWord(c) && after.length === 0 ) {
+        word.push(c);
+      } else if ( word.length > 0 ) {
+        after.push(c);
+      } else {
+        before.push(c);
+      }
+    }
+    before = before.join('');
+    after = after.join('');
+    word = word.join('');
+    return { before: before, word: word, after: after };
+  };
+
+  let p = arg.replace(/\n/g,' ');
+  let list = p.split(' ');
+  let op = [];
+  for ( let i=0; i < list.length; i++ ) {
+    let w = list[i];
+    let obj = breakUpWord(w);
+    if ( obj.word.length >= 2 ) {
+      if ( obj.word ) {
+        op.push(sprintf('%s<div class="lesson_word">%s</div>%s',obj.before,obj.word,obj.after));
+      } else {
+        op.push(obj.before);
+      }
+    } else {
+      op.push(w);
+    }
+  }
+  return op.join(' ');
+};
+
+const formatGFParagraph = function( arg ){
+  let p = arg;
   const first = p.trim().split(' ')[0];
+  const special = '@@@';
   if ( first === '1.') {
     // we have a numbered list of choices
     let op = [];
@@ -22,9 +102,12 @@ const formatGFParagraph = function( p ){
       if ( ix2 < 0 ) ix2 = p.length;
       op.push( p.substr(ix, ix2 - ix));
     }
-    return op.join('<br><br>');
-  } else {
+    p = op.join(special); // unusual string
+    p = addDivsForLongerWords(p);
+    p = p.replace(/@@@/g,'<br><br>');
     return p;
+  } else {
+    return addDivsForLongerWords(p);
   }
 };
 
@@ -64,6 +147,9 @@ Template.GFLesson.helpers({
 });
 
 Template.GFLesson.events({
+  'click #gf_lesson_paragraph': function(e){
+    const txt = $(e.currentTarget).val();
+  },
   'change .gf_chk_answer': function(e){
     const i = $(e.currentTarget).attr('data'); // question #
     const a = $(e.currentTarget).attr('data2'); // answer #
