@@ -12,10 +12,10 @@
   <br><br>
   <div class="gf_question_wrapper">
     {{ #each question }}
-      <div class="gf_question">{{ Question }}</div>
+      <div class="gf_question">{{{ Question }}}</div>
       {{ #each list }}
         <div class="gf_answer">
-          {{{ checkbox }}} {{ answer }}
+          {{{ checkbox }}} {{{ answer }}}
         </div>
       {{ /each}}
     {{ /each }}

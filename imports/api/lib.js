@@ -9,34 +9,6 @@ export const numbersOnly = function(arg) {
   return op.join('');
 };
 
-export const playAudioFile = function(fileName){
-  // left off here 
-  // https://stackoverflow.com/questions/11330917/how-to-play-a-mp3-using-javascript#11331165
-  //Create the audio tag
-  var soundFile = document.createElement("audio");
-  soundFile.preload = "auto";
-
-  //Load the sound file (using a source element for expandability)
-  var src = document.createElement("source");
-  src.src = fileName + ".mp3";
-  soundFile.appendChild(src);
-
-  //Load the audio tag
-  //It auto plays as a fallback
-  soundFile.load();
-  soundFile.volume = 0.000000;
-  soundFile.play();
-
-  //Plays the sound
-  function play() {
-     //Set the current time for the audio file to the beginning
-     soundFile.currentTime = 0.01;
-     soundFile.volume = volume;
-
-     //Due to a bug in Firefox, the audio needs to be played after a delay
-     setTimeout(function(){soundFile.play();},1);
-  }};
-
 export const numberToLetter = function(n){
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   if ( n <= 26 ) return letters.substr(n-1,1);

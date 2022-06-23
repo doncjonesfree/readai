@@ -40,3 +40,5 @@ meteor add session
 meteor add liyu:sprintfjs
 
 meteor add fetch -- replaces https
+
+meteor add bojicas:howler2 -- to play audio files -- https://github.com/goldfire/howler.js/tree/2.0

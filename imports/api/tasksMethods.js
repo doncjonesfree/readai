@@ -4,15 +4,27 @@ import * as lib from './lib';
 
 var Future = Npm.require("fibers/future");
 import { fetch, Headers } from "meteor/fetch";
+const fs = require('fs');
 
 Meteor.methods({
   'DictionaryLookup'( word ){
     let future=new Future();
-    const url = sprintf('https://api.dictionaryapi.dev/api/v2/entries/en/%s',word);
 
-    fetch(url)
-      .then(response => response.json())
-      .then(data => future.return( data));
+    try {
+      let lcWord = word.toLowerCase();
+      if ( lcWord === 'its') lcWord = 'itsadjective';
+      lcWord = lcWord.replace(/'/g,'');
+      const fullPath = Assets.absoluteFilePath( sprintf('audio/%s.mp3',lcWord) );
+      const url = sprintf('http://localhost:3000/audio/%s.mp3',lcWord);
+      future.return( [ { phonetics: [ { audio: url } ] } ]);
+    } catch(e){
+      const url = sprintf('https://api.dictionaryapi.dev/api/v2/entries/en/%s',word);
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => future.return( data));
+    }
+
 
     return future.wait();
 

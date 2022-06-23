@@ -365,6 +365,7 @@ Template.Edit.events({
       set('edit_gf_lesson',ret);
       $('#gf_lesson_popup').hide();
       $('#gf_popup').show();
+      lib.playAudioFile('Buckeye');
     }
   },
   'click .gf_edit'(e){
