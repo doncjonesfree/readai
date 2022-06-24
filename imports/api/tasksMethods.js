@@ -13,6 +13,7 @@ Meteor.methods({
     try {
       let lcWord = word.toLowerCase();
       if ( lcWord === 'its') lcWord = 'itsadjective';
+      if ( lcWord === "i'll") lcWord = 'i_ll';
       lcWord = lcWord.replace(/'/g,'');
       const fullPath = Assets.absoluteFilePath( sprintf('audio/%s.mp3',lcWord) );
       const url = sprintf('http://localhost:3000/audio/%s.mp3',lcWord);
