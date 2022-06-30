@@ -10,9 +10,12 @@
     {{ #with gf_search }}
       Code <input type="text" id="gs_start" class="input_short gf_src" data="Code" data2="text" value="{{ Code}}">
       &nbsp; Color <input type="text" class="input_short gf_src" data="Color" data2="text" value="{{ Color}}">
-      &nbsp; Grade Level <input type="text" class="input_short gf_src" data="GradeLevel" data2="float" value="{{ GradeLevel}}">
       &nbsp; Number <input type="text" class="input_short gf_src" data="Number" data2="integer" value="{{ Number}}">
+      &nbsp; Grade Level <input type="text" class="input_short gf_src" data="GradeLevel" data2="float" value="{{ GradeLevel}}">
       &nbsp; <button id="gf_search">Search</button>
+      {{ #if local }}
+        &nbsp; <button id="gf_test_sounds">Test Sounds</button>
+      {{ /if }}
       {{ #if error }}
       &nbsp; <div class="error">{{ error }}</div>
       {{ /if }}

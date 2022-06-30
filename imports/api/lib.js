@@ -1,3 +1,139 @@
+export const formatGFParagraph = function( arg ){
+  let p = arg;
+  const first = p.trim().split(' ')[0];
+  const special = '@@@';
+  if ( first === '1.') {
+    // we have a numbered list of choices
+    let op = [];
+    for ( let n=1; n < 1000; n++ ) {
+      const ix = p.indexOf( sprintf('%s.',n));
+      if ( ix < 0 ) break;
+      let ix2 = p.indexOf( sprintf('%s.',n+1));
+      if ( ix2 < 0 ) ix2 = p.length;
+      op.push( p.substr(ix, ix2 - ix));
+    }
+    p = op.join(special); // unusual string
+    p = addDivsForLongerWords(p);
+    p = p.replace(/@@@/g,'<br><br>');
+    return p;
+  } else {
+    return addDivsForLongerWords(p);
+  }
+};
+
+export const listWordsFromGFParagraph = function( arg ){
+  let p = formatGFParagraph( arg );
+  // each word we care about has class="lesson_word" in a div around it
+  let ix = p.indexOf('class="lesson_word"')
+  let obj = {}; // words found
+  let count = 0;
+  while ( ix >= 0 && p.length > 0 ) {
+    // <div class="lesson_word">ran</div>
+    count += 1;
+    if ( count > 1000) {
+      console.log('listWordsFromGFParagraph infinite loop');
+      break;
+    }
+    let found = false;
+    let word = [];
+    let lastIx = ix;
+    for ( let i=ix+10; i < p.length; i++ ) {
+      lastIx = i;
+      const c = p.substr(i,1);
+      if ( found && c === '<') {
+        break;
+      } else if ( found ) {
+        word.push(c);
+      } else if ( c === '>' ) {
+        found = true;
+        word = [];
+      }
+    }
+    if ( word.length > 0 ) {
+      word = word.join('').toLowerCase();
+      if ( ! obj[word]) obj[word] = true;
+    }
+    p = p.substr(lastIx);
+    ix = p.indexOf('class="lesson_word"')
+  }
+  let list = [];
+  for ( let w in obj ) {
+    if ( hasOwnProperty(obj,w)) {
+      list.push(w);
+    }
+  }
+  return list;
+};
+
+const lettersEtc = "abcdefghijklmnopqrstuvwxya'";
+const partOfWord = function(c){
+  return lettersEtc.indexOf(c.toLowerCase()) >= 0;
+};
+
+export const addDivsForLongerWords = function(arg){
+  const semiComing = function(w,ix){
+    // true if a semi colon is coming soon - like in &quot;
+    for ( let i=ix; i < w.length; i++ ) {
+      const c = w.substr(i,1);
+      if ( c === ';') {
+        if ( i - ix < 6 ) return true;
+        return false;
+      }
+    }
+    return false;
+  };
+
+  const breakUpWord = function(w){
+    let before = [];
+    let word = [];
+    let after = [];
+    let waitForSemi = false;
+    for ( let i=0; i < w.length; i++ ) {
+      let c = w.substr(i,1);
+      if ( waitForSemi ) {
+        before.push(c);
+        if ( c === ';' ) waitForSemi = false;
+        continue;
+      }
+      if ( c === '&' && semiComing(w,i+1) && word.length === 0 ) {
+        waitForSemi = true;
+        before.push(c);
+        continue;
+      }
+      if ( partOfWord(c) && after.length === 0 ) {
+        word.push(c);
+      } else if ( word.length > 0 ) {
+        after.push(c);
+      } else {
+        before.push(c);
+      }
+    }
+    before = before.join('');
+    after = after.join('');
+    word = word.join('');
+    return { before: before, word: word, after: after };
+  };
+
+  if ( ! arg ) arg = '';
+  let p = arg.replace(/\n/g,' ');
+  let list = p.split(' ');
+  let op = [];
+  for ( let i=0; i < list.length; i++ ) {
+    let w = list[i];
+    let obj = breakUpWord(w);
+    if ( obj.word.length >= 2 ) {
+      if ( obj.word ) {
+        op.push(sprintf('%s<div class="lesson_word">%s</div>%s',obj.before,obj.word,obj.after));
+      } else {
+        op.push(obj.before);
+      }
+    } else {
+      op.push(w);
+    }
+  }
+  return op.join('&nbsp;');
+};
+
 export const numbersOnly = function(arg) {
   // returns just the numbers in the given string
   let op = [];

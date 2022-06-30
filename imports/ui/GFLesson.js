@@ -23,102 +23,11 @@ export const DictionaryLookup = function( word, callback ){
   });
 };
 
-const lettersEtc = "abcdefghijklmnopqrstuvwxya'";
-const partOfWord = function(c){
-  return lettersEtc.indexOf(c.toLowerCase()) >= 0;
-};
-
-const addDivsForLongerWords = function(arg){
-  const semiComing = function(w,ix){
-    // true if a semi colon is coming soon - like in &quot;
-    for ( let i=ix; i < w.length; i++ ) {
-      const c = w.substr(i,1);
-      if ( c === ';') {
-        if ( i - ix < 6 ) return true;
-        return false;
-      }
-    }
-    return false;
-  };
-
-  const breakUpWord = function(w){
-    let before = [];
-    let word = [];
-    let after = [];
-    let waitForSemi = false;
-    for ( let i=0; i < w.length; i++ ) {
-      let c = w.substr(i,1);
-      if ( waitForSemi ) {
-        before.push(c);
-        if ( c === ';' ) waitForSemi = false;
-        continue;
-      }
-      if ( c === '&' && semiComing(w,i+1) && word.length === 0 ) {
-        waitForSemi = true;
-        before.push(c);
-        continue;
-      }
-      if ( partOfWord(c) && after.length === 0 ) {
-        word.push(c);
-      } else if ( word.length > 0 ) {
-        after.push(c);
-      } else {
-        before.push(c);
-      }
-    }
-    before = before.join('');
-    after = after.join('');
-    word = word.join('');
-    return { before: before, word: word, after: after };
-  };
-
-  let p = arg.replace(/\n/g,' ');
-  let list = p.split(' ');
-  let op = [];
-  for ( let i=0; i < list.length; i++ ) {
-    let w = list[i];
-    let obj = breakUpWord(w);
-    if ( obj.word.length >= 2 ) {
-      if ( obj.word ) {
-        op.push(sprintf('%s<div class="lesson_word">%s</div>%s',obj.before,obj.word,obj.after));
-      } else {
-        op.push(obj.before);
-      }
-    } else {
-      op.push(w);
-    }
-  }
-  return op.join('&nbsp;');
-};
-
-const formatGFParagraph = function( arg ){
-  let p = arg;
-  const first = p.trim().split(' ')[0];
-  const special = '@@@';
-  if ( first === '1.') {
-    // we have a numbered list of choices
-    let op = [];
-    for ( let n=1; n < 1000; n++ ) {
-      const ix = p.indexOf( sprintf('%s.',n));
-      if ( ix < 0 ) break;
-      let ix2 = p.indexOf( sprintf('%s.',n+1));
-      if ( ix2 < 0 ) ix2 = p.length;
-      op.push( p.substr(ix, ix2 - ix));
-    }
-    p = op.join(special); // unusual string
-    p = addDivsForLongerWords(p);
-    p = p.replace(/@@@/g,'<br><br>');
-    return p;
-  } else {
-    return addDivsForLongerWords(p);
-  }
-};
-
 Template.GFLesson.helpers({
   lesson() {
     let l = get('lesson');
     if ( l && l.lesson ) {
-      l.lesson.Paragraph = formatGFParagraph( l.lesson.Paragraph );
+      l.lesson.Paragraph = lib.formatGFParagraph( l.lesson.Paragraph );
       return l.lesson;
     }
     return '';
@@ -132,7 +41,7 @@ Template.GFLesson.helpers({
       let op = [];
       for ( let i=0; i < l.answers.length; i++ ) {
         const a = l.answers[i];
-        const q2 = addDivsForLongerWords( a.Question );
+        const q2 = lib.addDivsForLongerWords( a.Question );
         let o = { Question: sprintf('Question #%s  %s',a.QuestionNum,q2), list: [] };
         for ( let n=1; n <= 100; n++ ) {
           const txt = a[ sprintf('Answer%s',n)];
@@ -142,7 +51,7 @@ Template.GFLesson.helpers({
             checked = 'checked';
           }
           const html = sprintf('<input type="checkbox" class="gf_chk_answer" data="%s" data2="%s" %s>',i,n,checked);
-          const txt2 = addDivsForLongerWords(txt);
+          const txt2 = lib.addDivsForLongerWords(txt);
 
           o.list.push( { checkbox: html, answer: sprintf('%s.&nbsp;%s', lib.numberToLetter(n), txt2 ) } ); //
         }
@@ -185,7 +94,6 @@ const playSound = function(results, callback){
 const playSoundList = function( list, ix, callback ){
   if ( ix < list.length ) {
     const url = list[ix];
-    console.log('jones195',url);
     let sound = new Howl( { src: url });
     sound.on('end',function(){
       Meteor.setTimeout(function(){

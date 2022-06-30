@@ -19,6 +19,9 @@ Template.Edit.helpers({
   mode0() { return get('mode') === 0 },
   mode1() { return get('mode') === 1 },
   mode2() { return get('mode') === 2 },
+  local() {
+    return Meteor.isDevelopment;
+  },
   gf_search() { return get('gf_search')},
   edit_gf_lesson(){
 
@@ -62,18 +65,7 @@ Template.Edit.helpers({
     return op;
   },
   gatherfacts() {
-    const gatherfacts = get('gatherfacts');
-    gatherfacts.GatherFacts.sort( function(a,b){
-      if ( a.Code < b.Code ) return -1;
-      if ( a.Code > b.Code ) return 1;
-      if ( a.GradeLevel < b.GradeLevel ) return -1;
-      if ( a.GradeLevel > b.GradeLevel ) return 1;
-      if ( a.Color.toLowerCase() < b.Color.toLowerCase() ) return -1;
-      if ( a.Color.toLowerCase() > b.Color.toLowerCase() ) return 1;
-      if ( a.Number < b.Number ) return -1;
-      if ( a.Number > b.Number ) return 1;
-      return 0;
-    });
+    const gatherfacts = loadGatherFacts();
 
     for ( let i=0; i < gatherfacts.GatherFacts.length; i++ ) {
       let g = gatherfacts.GatherFacts[i];
@@ -337,7 +329,61 @@ const updateGatherFacts = function( changes ){
   set('gatherfacts',gatherfacts);
 };
 
+const loadGatherFacts = function(){
+  const gatherfacts = get('gatherfacts');
+  gatherfacts.GatherFacts.sort( function(a,b){
+    if ( a.Code < b.Code ) return -1;
+    if ( a.Code > b.Code ) return 1;
+    if ( a.GradeLevel < b.GradeLevel ) return -1;
+    if ( a.GradeLevel > b.GradeLevel ) return 1;
+    if ( a.Color.toLowerCase() < b.Color.toLowerCase() ) return -1;
+    if ( a.Color.toLowerCase() > b.Color.toLowerCase() ) return 1;
+    if ( a.Number < b.Number ) return -1;
+    if ( a.Number > b.Number ) return 1;
+    return 0;
+  });
+  return gatherfacts;
+};
+
+const testSounds = function(){
+  // run through current lessons and test all sounds
+  const gatherfacts = loadGatherFacts();
+  let words = {};
+
+  const addToWords = function(list){
+    for ( let i=0; i < list.length; i++ ) {
+      const w = list[i];
+      if ( ! words[w] ) words[w] = true;
+    }
+  };
+
+  for ( let i=0; i < gatherfacts.GatherFacts.length; i++ ) {
+    const gf = gatherfacts.GatherFacts[i];
+    const p1 = gf.Paragraph;
+    addToWords( lib.listWordsFromGFParagraph(p1) );
+    for ( let i2=0; i2 < gatherfacts.GatherFactsAnswers.length; i2++ ) {
+      const a = gatherfacts.GatherFactsAnswers[i2];
+      if ( a.LessonNum === gf.LessonNum ) {
+        for ( let answer=1; answer < 1000; answer++ ) {
+          const k = sprintf('Answer%s',answer);
+          if ( typeof(a[k]) === 'undefined') break;
+          const v = a[k].trim();
+          if ( v ) {
+            addToWords( lib.listWordsFromGFParagraph(v) );
+          }
+        }
+        addToWords( lib.listWordsFromGFParagraph(a.Question) );
+      }
+    }
+    break; // jones -- left off here - auto check all word sounds 
+  }
+  console.log('jones381',words);
+};
+
 Template.Edit.events({
+  'click #gf_test_sounds': function(e){
+    testSounds();
+  },
   'click #gf_save': function(e){
     e.preventDefault();
     const wait = '...';
