@@ -5,6 +5,26 @@
     <button id="edit_gather_facts">Gather Facts</button>
   {{ /if }}
 
+  {{ #if mode3 }}
+    {{ #with testWord }}
+      <button id="test_word_ok">OK</button>
+      <div id="test_word_wrapper">
+        <div class="lesson_word">{{ word }}</div>
+      </div>
+      <button class="test_word_skip" data="1">Skip</button>
+      <button class="test_word_skip" data="-1">Back</button>
+      {{ #if ok }}
+        <div id="test_already_ok">already OK</div>
+        <button id="test_word_not_ok">Not OK</button>
+      {{ else }}
+        <button id="test_word_get_recording">Get Recording</button>
+        <button id="test_word_search">Search</button>
+      {{ /if }}
+      <button id="test_word_save_changes">Save Changes</button>
+      &nbsp; {{ message }}
+    {{ /with }}
+  {{ /if }}
+
   {{ #if mode2 }}
     <button id="change_mode" data="1">Back</button>
     {{ #with gf_search }}
@@ -15,6 +35,7 @@
       &nbsp; <button id="gf_search">Search</button>
       {{ #if local }}
         &nbsp; <button id="gf_test_sounds">Test Sounds</button>
+        &nbsp; <button id="gf_reload_all_words">Reload All Words</button>
       {{ /if }}
       {{ #if error }}
       &nbsp; <div class="error">{{ error }}</div>

@@ -5,6 +5,7 @@ Template.Home.onCreated(function HomeOnCreated() {
 
 Template.Home.events({
   'click #edit_lessons'() {
-    FlowRouter.go('Edit'); //
+    Session.set('edit_mode',1);
+    FlowRouter.go('Edit');
   },
 });

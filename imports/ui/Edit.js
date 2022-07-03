@@ -9,16 +9,62 @@ const set = function(n,v) {
 };
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
+let allWords = [];
+
 Template.Edit.onCreated(function EditOnCreated() {
+  // mode:
+  // 1 = just show Gather Facts Button
+  // 2 = search for given lesson
+  // 3 = test each word in audio
   setd('mode',1);
   setd('gf_search',{});
   setd('gatherfacts',{ GatherFacts: [] });
 });
 
+const refresh = function(arg){
+  const n = sprintf('refresh_%s',arg);
+  let v = get(n);
+  if ( typeof(v) === 'undefined') v = 0;
+  set(n,v+1);
+};
+
+const getRefresh = function(arg){
+  const n = sprintf('refresh_%s',arg);
+  return get(n);
+};
+
 Template.Edit.helpers({
   mode0() { return get('mode') === 0 },
   mode1() { return get('mode') === 1 },
   mode2() { return get('mode') === 2 },
+  mode3() { return get('mode') === 3 },
+  testWord(){
+    const dmy = getRefresh('testWord');
+    let obj = {};
+    let testWord = get('testWord');
+    obj.ix = testWord.ix;
+    if ( ! allWords || allWords.length === 0 ) {
+      loadAllWords( function(){
+        refresh('testWord');
+      });
+      obj.word = 'loading...';
+    } else if ( allWords[ obj.ix ] ){
+      obj.word = allWords[ obj.ix ].word;
+      obj.ok = false;
+      if ( allWords[ obj.ix ].ok ) obj.ok = true;
+    } else {
+      obj.word = 'Error...';
+    }
+    obj.message = sprintf('%s of %s',obj.ix,allWords.length);
+    if ( allWords[ obj.ix ] && allWords[ obj.ix ].gf_id ) {
+      const lesson = getGfLessonGivenId(allWords[ obj.ix ].gf_id);
+      if ( lesson && lesson.lesson ) {
+        const l = lesson.lesson;
+        obj.message = sprintf('%s %s %s %s',obj.message,l.Code,l.Color,l.Number);
+      }
+    }
+    return obj;
+  },
   local() {
     return Meteor.isDevelopment;
   },
@@ -140,13 +186,13 @@ const searchGatherFacts = function(e){
         set('gatherfacts',{ GatherFacts: [] });
       } else {
         set('gatherfacts',results);
-        jones(results);
+        queerTest(results);
       }
     });
   }
 };
 
-const jones = function(obj){
+const queerTest = function(obj){
   // see if queer comes up again -
   let count = 0;
   for ( let i=0; i < obj.GatherFacts.length; i++ ) {
@@ -158,7 +204,7 @@ const jones = function(obj){
       }
     }
   }
-  console.log('jones162b queer count',count);
+  console.log('queer count',count);
 };
 
 const getGfLessonGivenId = function(id){
@@ -345,42 +391,237 @@ const loadGatherFacts = function(){
   return gatherfacts;
 };
 
-const testSounds = function(){
-  // run through current lessons and test all sounds
+const saveAllWordsTemp = function( specialWord ){
+  // run through current lessons and save all unique words in a file
+  // only run this once, then the allWords.txt file is saved
+  // If specialWord is specified we are just looking for where this word is located
   const gatherfacts = loadGatherFacts();
   let words = {};
+  let wordCount = 0;
+  let currentLesson = '';
+  let specialList = [];
 
-  const addToWords = function(list){
+  const addToWords = function(list,gf){
     for ( let i=0; i < list.length; i++ ) {
       const w = list[i];
-      if ( ! words[w] ) words[w] = true;
+      if ( specialWord ) {
+        if ( w.indexOf('something') >= 0 ) console.log('jones400b',w,gf);
+        if ( w === specialWord ) {
+          specialList.push(gf);
+        }
+      }
+
+      if ( ! words[w] ) {
+        words[w] = { word: w, gf_id: gf._id }; // saves first id of gather facts that has this word
+        wordCount += 1;
+      }
     }
   };
 
   for ( let i=0; i < gatherfacts.GatherFacts.length; i++ ) {
     const gf = gatherfacts.GatherFacts[i];
+    currentLesson = gf;
     const p1 = gf.Paragraph;
-    addToWords( lib.listWordsFromGFParagraph(p1) );
+    addToWords( lib.listWordsFromGFParagraph(p1), gf );
     for ( let i2=0; i2 < gatherfacts.GatherFactsAnswers.length; i2++ ) {
       const a = gatherfacts.GatherFactsAnswers[i2];
       if ( a.LessonNum === gf.LessonNum ) {
         for ( let answer=1; answer < 1000; answer++ ) {
           const k = sprintf('Answer%s',answer);
           if ( typeof(a[k]) === 'undefined') break;
-          const v = a[k].trim();
+          let v = a[k];
+          if ( typeof(v) === 'string') v = v.trim();
           if ( v ) {
-            addToWords( lib.listWordsFromGFParagraph(v) );
+            addToWords( lib.listWordsFromGFParagraph(v), gf );
           }
         }
-        addToWords( lib.listWordsFromGFParagraph(a.Question) );
+        addToWords( lib.listWordsFromGFParagraph(a.Question), gf );
       }
     }
-    break; // jones -- left off here - auto check all word sounds 
   }
-  console.log('jones381',words);
+  if ( specialWord ) {
+    return specialList;
+  } else {
+    loadAllWords(function(){
+      // Update allWords with any changes
+      let newWords = []; // new list of all words
+      for ( let i=0; i < allWords.length; i++ ) {
+        let o = allWords[i];
+        if ( words[ o.word ] ) {
+          newWords.push(o);
+          words[ o.word ].found = true;
+        }
+      }
+      for ( let w in words ){
+        if ( lib.hasOwnProperty(words,w)) {
+          if ( ! words[w].found ) {
+            console.log('New Word Added:',words[w]);
+            newWords.push( words[w] );
+          }
+        }
+      }
+      allWords = newWords;
+      saveAllWordsFile(function(){
+        console.log('allWords file saved %s words.',allWords.length);
+      });
+    });
+  }
+};
+
+const testSounds = function(){
+  loadAllGatherFacts( function(){
+    loadAllWords( function(){
+      setd('testWord', { ix: 0 } ); // ix of current word
+      set('mode',3);
+    });
+  });
+};
+
+const loadAllWords = function(callback){
+  Meteor.call('getFile', 'allWords.txt', function(err,results){
+    if ( err ) {
+      console.log('Error: Edit.js line 438',err);
+    } else {
+      allWords = results;
+      allWords.sort( function(a,b){
+        if ( a.word < b.word ) return -1;
+        if ( a.word > b.word ) return 1;
+        return 0;
+      });
+      callback();
+    }
+  });
+};
+
+const saveAllWordsFile = function( callback ){
+  const tmp = JSON.stringify(allWords);
+  Meteor.call('saveFile', 'allWords.txt',tmp, function(err,results){
+    if ( err ) {
+      console.log('Error: Edit.js line 461',err);
+    }
+    console.log('saveAllWordsFile, %s words',allWords.length);
+    if ( callback ) callback();
+  });
+};
+
+const testWordSearch = function(e){
+  // find out where the word is used
+  const wait = '...';
+  const html = $(e.currentTarget).html();
+  if ( html === wait ) return;
+  let testWord = get('testWord');
+  const ix = testWord.ix;
+  const word = allWords[ix];
+
+  // Load all gather facts
+  $(e.currentTarget).html(wait);
+  loadAllGatherFacts( function(){
+    $(e.currentTarget).html(html);
+    const matches = saveAllWordsTemp( word );
+    console.log('jones486',word,matches);
+  });
+};
+
+const loadAllGatherFacts = function( callback ){
+  let src = {};
+  Meteor.call('loadGatherFacts', src, function(err,results){
+    if ( err ) {
+      console.log('Error: Edit.js line 508',err);
+    } else if ( results.GatherFacts.length === 0 ) {
+      console.log('Error: Edit.js line 510','No records found');
+    } else {
+      set('gatherfacts',results);
+      callback();
+    }
+  });
 };
 
 Template.Edit.events({
+  'click #gf_reload_all_words': function(e){
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( html === wait ) return;
+    $(e.currentTarget).html(wait);
+    loadAllGatherFacts( function(){
+      saveAllWordsTemp();
+      $(e.currentTarget).html(html);
+    });
+  },
+  'click #test_word_search': function(e){
+    testWordSearch(e);
+  },
+  'click #test_word_get_recording': function(e){
+    // assume a recording has been made - put the recording where it belongs
+    if ( Meteor.isDevelopment ) {
+      let testWord = get('testWord');
+      const ix = testWord.ix;
+      const word = allWords[ix].word;
+      const wait = '...';
+      const html = $(e.currentTarget).html();
+      if ( html === wait ) return;
+      $(e.currentTarget).html(wait);
+      Meteor.call('getWordRecording', word, function(err,results){
+        $(e.currentTarget).html(html);
+        if ( err ) {
+          console.log('Error: Edit.js line 491',err);
+        } else {
+          refresh('testWord');
+        }
+      });
+    } else {
+      const html = $(e.currentTarget).html();
+      $(e.currentTarget).html('Dev Mode Only');
+      Meteor.setTimeout(function(){
+        $(e.currentTarget).html(html);
+      },500);
+    }
+  },
+  'click #test_word_save_changes': function(e){
+    // save changes in allWords.txt file
+    wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    $(e.currentTarget).html(wait);
+    saveAllWordsFile(function(){
+      Meteor.setTimeout(function(){
+        $(e.currentTarget).html(html);
+        refresh('testWord');
+      },500);
+    });
+  },
+  'click #test_word_ok': function(e){
+    // sound is ok as is
+    let testWord = get('testWord');
+    const ix = testWord.ix;
+    allWords[ix].ok = true;
+    testWord.ix += 1;
+    set('testWord',testWord);
+  },
+  'click #test_word_not_ok': function(e){
+    // sound is ok as is
+    let testWord = get('testWord');
+    const ix = testWord.ix;
+    allWords[ix].ok = false;
+    refresh('testWord');
+  },
+  'click .test_word_skip': function(e){
+    const v = lib.int( $(e.currentTarget).attr('data'));
+    let testWord = get('testWord');
+    testWord.ix = Math.max(0,testWord.ix + v);
+    if ( v > 0 ) {
+      // skip to next word that is not ok
+      while ( testWord.ix < allWords.length ) {
+        if ( ! allWords[ testWord.ix ].ok ) break;
+        testWord.ix += 1;
+      }
+    }
+    set('testWord',testWord);
+  },
+  'click .lesson_word': function(e){
+    const word = $(e.currentTarget).html();
+    lib.lookupAndPlay( pre, e, word, function(){
+    })
+  },
   'click #gf_test_sounds': function(e){
     testSounds();
   },

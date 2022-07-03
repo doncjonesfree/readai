@@ -7,6 +7,80 @@ import { fetch, Headers } from "meteor/fetch";
 const fs = require('fs');
 
 Meteor.methods({
+  'getWordRecording'( word ){
+    // Get recording just made from ~/Downloads
+    const mp3Only = function(list){
+      let op = [];
+      for ( let i=0; i < list.length; i++ ) {
+        const n = list[i];
+        if ( n.substr(n.length - 4,4) === '.mp3') op.push(n);
+      }
+      return op;
+    };
+    const allNumbers = function(v){
+      const list = '1234567890._mp';
+      for ( let i=0; i < v.length; i++ ) {
+        const c = v.substr(i,1);
+        if ( list.indexOf(c) < 0 ) return false;
+      }
+      return true;
+    };
+    const getTarget = function(){
+      for ( let i=0; i < retObj.readdir.length; i++ ) {
+        const n = retObj.readdir[i];
+        if ( allNumbers(n) ) return n;
+      }
+      return '';
+    };
+
+    const createFile = function(){
+      // rename current file 
+      if ( retObj.target ) {
+        retObj.oldPath = sprintf('%s/%s',retObj.path, retObj.target);
+        retObj.newPath = sprintf('%s/%s.mp3',retObj.path, retObj.word);
+        fs.renameSync(retObj.oldPath, retObj.newPath)
+
+        retObj.fromPath = retObj.newPath;
+        retObj.toPath = sprintf('/Users/donjones/meteor/read/public/audio/%s.mp3',retObj.word);
+        fs.copyFileSync( retObj.fromPath, retObj.toPath );
+
+        retObj.toPath2 = sprintf('/Users/donjones/meteor/read/private/audio/%s.mp3',retObj.word);
+        fs.copyFileSync( retObj.fromPath, retObj.toPath2 );
+      }
+    };
+
+    let retObj = { word: word };
+    const path = '/Users/donjones/Downloads';
+    retObj.path = path;
+    retObj.readdir = mp3Only( fs.readdirSync(path) );
+    retObj.target = getTarget();
+    createFile();
+
+    return retObj;
+  },
+  'getFile'( fileName ){
+    // get file from private assets
+    let path,fullPath;
+    if (Meteor.isDevelopment) {
+      path = '/Users/donjones/meteor/read/private/dummy.txt';
+    } else {
+      path = Assets.absoluteFilePath('dummy.txt');
+    }
+    fullPath = path.replace('dummy.txt',fileName);
+    return JSON.parse( fs.readFileSync(fullPath) );
+  },
+  'saveFile'( fileName, data ){
+    // save file in private assets
+    let path,fullPath;
+    if (Meteor.isDevelopment) {
+      path = '/Users/donjones/meteor/read/private/dummy.txt';
+    } else {
+      path = Assets.absoluteFilePath('dummy.txt');
+    }
+    fullPath = path.replace('dummy.txt',fileName);
+    fs.writeFileSync(fullPath,data);
+    return fullPath;
+  },
   'DictionaryLookup'( word ){
     let future=new Future();
 

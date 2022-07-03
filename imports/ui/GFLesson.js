@@ -6,22 +6,11 @@ const set = function(n,v) {
   Session.set(pre + n,v)
 };
 
-let SoundInProgress = false;
-
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
 Template.GFLesson.onCreated(function GFLessonOnCreated() {
 
 });
-
-export const DictionaryLookup = function( word, callback ){
-  Meteor.call('DictionaryLookup', word , function(err,results){
-    if ( err ) {
-      console.log('Error in GFLessons.js line 17',err);
-    }
-    callback(results);
-  });
-};
 
 Template.GFLesson.helpers({
   lesson() {
@@ -64,72 +53,12 @@ Template.GFLesson.helpers({
   mode1() { return get('mode') === 1 },
 });
 
-const playSound = function(results, callback){
-  let list = [];
-  for ( let i2=0; i2 < results.length; i2++ ) {
-    let url = '';
-    const r = results[i2];
-    if ( r && r.phonetics && r.phonetics.length > 0) {
-      for ( let i=0; i < r.phonetics.length; i++ ) {
-        const p = r.phonetics[i];
-        if ( p.audio ) {
-          if ( ! url ) {
-            url = p.audio;
-          } else if ( p.audio.indexOf('-us.') > 0 ) {
-            url = p.audio;
-            break;
-          }
-        }
-      }
-    }
-    if ( url && list.indexOf(url) < 0 ) list.push(url);
-  }
-  Meteor.setTimeout(function(){
-    playSoundList( list, 0, function(){
-      callback();
-    });
-  },100);
-};
-
-const playSoundList = function( list, ix, callback ){
-  if ( ix < list.length ) {
-    const url = list[ix];
-    let sound = new Howl( { src: url });
-    sound.on('end',function(){
-      Meteor.setTimeout(function(){
-        playSoundList( list, ix+1, callback );
-      },100);
-    });
-    sound.play();
-  } else {
-    callback();
-  }
-};
-
-const lookupAndPlay = function( e, word, callback, count ){
-  if ( ! count ) count = 0;
-  if ( SoundInProgress && count < 4 ) {
-    Meteor.setTimeout(function(){
-      lookupAndPlay( e, word, callback, count + 1 );
-    },1000);
-  } else {
-    SoundInProgress = true;
-    set('word',word);
-    if ( word === "can't") word = 'cant';
-    // $('#dictionary_overlay').show();
-    DictionaryLookup( word, function(results){
-      playSound(results, function(){
-        callback();
-      });
-    });
-  }
-};
 
 Template.GFLesson.events({
   'click .lesson_word': function(e){
     let word = $(e.currentTarget).html();
-    lookupAndPlay( e, word, function(){
-      SoundInProgress = false;
+    lib.lookupAndPlay( pre, e, word, function(){
+      if ( Meteor.isDevelopment ) console.log('Done playing ',word);
     });
   },
   'click #gf_lesson_paragraph': function(e){

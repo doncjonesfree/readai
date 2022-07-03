@@ -1,5 +1,6 @@
 export const formatGFParagraph = function( arg ){
   let p = arg;
+  if ( typeof(p) === 'number') p = p.toString();
   const first = p.trim().split(' ')[0];
   const special = '@@@';
   if ( first === '1.') {
@@ -21,7 +22,95 @@ export const formatGFParagraph = function( arg ){
   }
 };
 
+let SoundInProgress = false;
+export const lookupAndPlay = function( pre, e, word, callback, count ){
+  if ( ! count ) count = 0;
+  if ( SoundInProgress && count < 4 ) {
+    Meteor.setTimeout(function(){
+      lookupAndPlay( pre, e, word, callback, count + 1 );
+    },1000);
+  } else {
+    SoundInProgress = true;
+    Session.set(sprintf('%s%s',pre,word));
+    if ( word === "can't") word = 'cant';
+    // $('#dictionary_overlay').show();
+    DictionaryLookup( word, function(results){
+      playSound(results, function(){
+        SoundInProgress = false;
+        callback();
+      });
+    });
+  }
+};
+
+const playSound = function(results, callback){
+  let list = [];
+  for ( let i2=0; i2 < results.length; i2++ ) {
+    let url = '';
+    const r = results[i2];
+    if ( r && r.phonetics && r.phonetics.length > 0) {
+      for ( let i=0; i < r.phonetics.length; i++ ) {
+        const p = r.phonetics[i];
+        if ( p.audio ) {
+          if ( ! url ) {
+            url = p.audio;
+          } else if ( p.audio.indexOf('-us.') > 0 ) {
+            url = p.audio;
+            break;
+          }
+        }
+      }
+    }
+    if ( url && list.indexOf(url) < 0 ) list.push(url);
+  }
+  Meteor.setTimeout(function(){
+    playSoundList( list, 0, function(){
+      callback();
+    });
+  },100);
+};
+
+const playSoundList = function( list, ix, callback ){
+  if ( ix < list.length ) {
+    const url = list[ix];
+    let sound = new Howl( { src: url });
+    sound.on('end',function(){
+      Meteor.setTimeout(function(){
+        playSoundList( list, ix+1, callback );
+      },100);
+    });
+    sound.play();
+  } else {
+    callback();
+  }
+};
+
+
+export const DictionaryLookup = function( word, callback ){
+  Meteor.call('DictionaryLookup', word , function(err,results){
+    if ( err ) {
+      console.log('Error in GFLessons.js line 17',err);
+    }
+    callback(results);
+  });
+};
+
 export const listWordsFromGFParagraph = function( arg ){
+
+  const removeBadCharacters = function(arg){
+    // given a word - remove any characters that cannot be part of the word
+    // example: 'Hammerstein
+    let w = arg;
+    const badList = ["'", '"'];
+    // quote as first or last character can't be correct
+    for ( let i=0; i < badList.length; i++ ) {
+      const c = badList[i];
+      if ( w.substr(0,1) === c) w = w.substring(1);
+      if ( w.substr( w.length-1,1) === c) w = w.substr(0,w.length-1);
+    }
+    return w;
+  };
+
   let p = formatGFParagraph( arg );
   // each word we care about has class="lesson_word" in a div around it
   let ix = p.indexOf('class="lesson_word"')
@@ -50,7 +139,7 @@ export const listWordsFromGFParagraph = function( arg ){
       }
     }
     if ( word.length > 0 ) {
-      word = word.join('').toLowerCase();
+      word = removeBadCharacters( word.join('').toLowerCase() );
       if ( ! obj[word]) obj[word] = true;
     }
     p = p.substr(lastIx);

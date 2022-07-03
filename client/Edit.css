@@ -5,3 +5,19 @@
 .gf_paragraph { width: 50%; overflow: hidden; padding-right: 1em; }
 .gf_options { width: 12%; }
 .edit_gf_text { width: 50em !important; }
+
+#test_word_wrapper {
+  display: inline-block;
+  padding: .5em;
+  border: 1px solid gray;
+  border-radius: .5em;
+  width: 20em;
+  font-weight: bold;
+  margin-right: 2em;
+}
+
+#test_already_ok {
+  display: inline-block;
+  color: green;
+  font-weight: bold;
+}
