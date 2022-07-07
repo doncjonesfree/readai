@@ -43,6 +43,8 @@ Template.Edit.helpers({
     let obj = {};
     let testWord = get('testWord');
     obj.ix = testWord.ix;
+    obj.ok_count = '';
+    if ( testWord.ok_count ) obj.ok_count = testWord.ok_count;
     if ( ! allWords || allWords.length === 0 ) {
       loadAllWords( function(){
         refresh('testWord');
@@ -63,6 +65,8 @@ Template.Edit.helpers({
         obj.message = sprintf('%s %s %s %s',obj.message,l.Code,l.Color,l.Number);
       }
     }
+    console.log('jones67a',testWord);
+    console.log('jones67b',obj);
     return obj;
   },
   local() {
@@ -556,17 +560,19 @@ Template.Edit.events({
       let testWord = get('testWord');
       const ix = testWord.ix;
       const word = allWords[ix].word;
-      const wait = '...';
       const html = $(e.currentTarget).html();
+      const wait = 'Wait...';
       if ( html === wait ) return;
       $(e.currentTarget).html(wait);
       Meteor.call('getWordRecording', word, function(err,results){
-        $(e.currentTarget).html(html);
-        if ( err ) {
-          console.log('Error: Edit.js line 491',err);
-        } else {
-          refresh('testWord');
-        }
+        Meteor.setTimeout(function(){
+          $(e.currentTarget).html(html);
+          if ( err ) {
+            console.log('Error: Edit.js line 491',err);
+          } else {
+            refresh('testWord');
+          }
+        },1000);
       });
     } else {
       const html = $(e.currentTarget).html();
@@ -585,17 +591,27 @@ Template.Edit.events({
     saveAllWordsFile(function(){
       Meteor.setTimeout(function(){
         $(e.currentTarget).html(html);
+        let testWord = get('testWord');
+        testWord.ok_count = 0;
+        set('testWord',testWord);
         refresh('testWord');
       },500);
     });
   },
   'click #test_word_ok': function(e){
     // sound is ok as is
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    $(e.currentTarget).html(wait);
     let testWord = get('testWord');
     const ix = testWord.ix;
     allWords[ix].ok = true;
     testWord.ix += 1;
+    if ( ! testWord.ok_count ) testWord.ok_count = 0;
+    testWord.ok_count += 1;
     set('testWord',testWord);
+    $(e.currentTarget).html(html);
   },
   'click #test_word_not_ok': function(e){
     // sound is ok as is

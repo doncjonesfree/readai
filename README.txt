@@ -42,3 +42,10 @@ meteor add liyu:sprintfjs
 meteor add fetch -- replaces https
 
 meteor add bojicas:howler2 -- to play audio files -- https://github.com/goldfire/howler.js/tree/2.0
+
+// Look at google api text to speech - see if that is a solution
+https://www.youtube.com/watch?v=HSuwhalBGx0 - video on how to use it for npm
+https://www.npmjs.com/package/@google-cloud/text-to-speech - npm
+npm i @google-cloud/text-to-speech
+probably
+meteor npm install --save @google-cloud/text-to-speech
