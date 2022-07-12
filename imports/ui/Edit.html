@@ -13,14 +13,12 @@
       </div>
       <button class="test_word_skip" data="1">Skip</button>
       <button class="test_word_skip" data="-1">Back</button>
-      {{ #if ok }}
+      {{ #if google_ok }}
         <div id="test_already_ok">already OK</div>
         <button id="test_word_not_ok">Not OK</button>
-      {{ else }}
-        <button id="test_word_get_recording">Get Recording</button>
-        <button id="test_word_search">Search</button>
       {{ /if }}
       <button id="test_word_save_changes">Save Changes {{ ok_count }}</button>
+      <button id="test_create_all_words">Create All Words</button>
       &nbsp; {{ message }}
     {{ /with }}
   {{ /if }}

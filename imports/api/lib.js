@@ -22,6 +22,11 @@ export const formatGFParagraph = function( arg ){
   }
 };
 
+export const epoch = function() {
+    // ms since epoch
+    return new Date().getTime();
+};
+
 let SoundInProgress = false;
 export const lookupAndPlay = function( pre, e, word, callback, count ){
   if ( ! count ) count = 0;
@@ -33,14 +38,24 @@ export const lookupAndPlay = function( pre, e, word, callback, count ){
     SoundInProgress = true;
     Session.set(sprintf('%s%s',pre,word));
     if ( word === "can't") word = 'cant';
-    // $('#dictionary_overlay').show();
-    DictionaryLookup( word, function(results){
-      playSound(results, function(){
-        SoundInProgress = false;
-        callback();
-      });
+    googlePlaySound( word, function(){
+      SoundInProgress = false;
     });
+    // DictionaryLookup( word, function(results){
+    //   playSound(results, function(){
+    //     SoundInProgress = false;
+    //     callback();
+    //   });
+    // });
   }
+};
+
+export const googlePlaySound = function( word, callback ){
+  // assume word has an mp3 file without looking
+  const url = sprintf('/audio/%s.mp3',word.toLowerCase());
+  playSoundList( [ url ], 0, function(){
+    callback();
+  });
 };
 
 const playSound = function(results, callback){
@@ -212,7 +227,7 @@ export const addDivsForLongerWords = function(arg){
     let obj = breakUpWord(w);
     if ( obj.word.length >= 2 ) {
       if ( obj.word ) {
-        op.push(sprintf('%s<div class="lesson_word">%s</div>%s',obj.before,obj.word,obj.after));
+        op.push(sprintf('%s<div class="lesson_word" data="%s">%s</div>%s',obj.before,obj.word,obj.word,obj.after));
       } else {
         op.push(obj.before);
       }

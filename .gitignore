@@ -4,5 +4,8 @@ private/tmp
 
 # macOS
 .DS_Store
+.env
 local_settings.json
 settings.json
+googleapi.json
+

@@ -46,6 +46,7 @@ meteor add bojicas:howler2 -- to play audio files -- https://github.com/goldfire
 // Look at google api text to speech - see if that is a solution
 https://www.youtube.com/watch?v=HSuwhalBGx0 - video on how to use it for npm
 https://www.npmjs.com/package/@google-cloud/text-to-speech - npm
-npm i @google-cloud/text-to-speech
-probably
-meteor npm install --save @google-cloud/text-to-speech
+npm docs say: npm i @google-cloud/text-to-speech
+I used: meteor npm install --save @google-cloud/text-to-speech
+
+meteor add pauldowman:dotenv - store store things in environment variables, docs: https://atmospherejs.com/pauldowman/dotenv

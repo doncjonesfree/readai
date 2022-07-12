@@ -52,8 +52,8 @@ Template.Edit.helpers({
       obj.word = 'loading...';
     } else if ( allWords[ obj.ix ] ){
       obj.word = allWords[ obj.ix ].word;
-      obj.ok = false;
-      if ( allWords[ obj.ix ].ok ) obj.ok = true;
+      obj.google_ok = false;
+      if ( allWords[ obj.ix ].google_ok ) obj.google_ok = true;
     } else {
       obj.word = 'Error...';
     }
@@ -65,8 +65,6 @@ Template.Edit.helpers({
         obj.message = sprintf('%s %s %s %s',obj.message,l.Code,l.Color,l.Number);
       }
     }
-    console.log('jones67a',testWord);
-    console.log('jones67b',obj);
     return obj;
   },
   local() {
@@ -409,7 +407,6 @@ const saveAllWordsTemp = function( specialWord ){
     for ( let i=0; i < list.length; i++ ) {
       const w = list[i];
       if ( specialWord ) {
-        if ( w.indexOf('something') >= 0 ) console.log('jones400b',w,gf);
         if ( w === specialWord ) {
           specialList.push(gf);
         }
@@ -508,24 +505,6 @@ const saveAllWordsFile = function( callback ){
   });
 };
 
-const testWordSearch = function(e){
-  // find out where the word is used
-  const wait = '...';
-  const html = $(e.currentTarget).html();
-  if ( html === wait ) return;
-  let testWord = get('testWord');
-  const ix = testWord.ix;
-  const word = allWords[ix];
-
-  // Load all gather facts
-  $(e.currentTarget).html(wait);
-  loadAllGatherFacts( function(){
-    $(e.currentTarget).html(html);
-    const matches = saveAllWordsTemp( word );
-    console.log('jones486',word,matches);
-  });
-};
-
 const loadAllGatherFacts = function( callback ){
   let src = {};
   Meteor.call('loadGatherFacts', src, function(err,results){
@@ -540,6 +519,8 @@ const loadAllGatherFacts = function( callback ){
   });
 };
 
+let wordPlayBackBusy = 0;
+
 Template.Edit.events({
   'click #gf_reload_all_words': function(e){
     const wait = '...';
@@ -551,36 +532,15 @@ Template.Edit.events({
       $(e.currentTarget).html(html);
     });
   },
-  'click #test_word_search': function(e){
-    testWordSearch(e);
-  },
-  'click #test_word_get_recording': function(e){
-    // assume a recording has been made - put the recording where it belongs
-    if ( Meteor.isDevelopment ) {
-      let testWord = get('testWord');
-      const ix = testWord.ix;
-      const word = allWords[ix].word;
-      const html = $(e.currentTarget).html();
-      const wait = 'Wait...';
-      if ( html === wait ) return;
-      $(e.currentTarget).html(wait);
-      Meteor.call('getWordRecording', word, function(err,results){
-        Meteor.setTimeout(function(){
-          $(e.currentTarget).html(html);
-          if ( err ) {
-            console.log('Error: Edit.js line 491',err);
-          } else {
-            refresh('testWord');
-          }
-        },1000);
-      });
-    } else {
-      const html = $(e.currentTarget).html();
-      $(e.currentTarget).html('Dev Mode Only');
-      Meteor.setTimeout(function(){
-        $(e.currentTarget).html(html);
-      },500);
-    }
+  'click #test_create_all_words': function(e){
+    Meteor.call('createAllSingleWordAudio', allWords, function(err,results){
+      if ( err ) {
+        console.log('Error in Edit.js line 540',err);
+      } else {
+        console.log('createAllSingleWordAudio results',results);
+        console.log('createAllSingleWordAudio allWords',allWords);
+      }
+    });
   },
   'click #test_word_save_changes': function(e){
     // save changes in allWords.txt file
@@ -606,7 +566,7 @@ Template.Edit.events({
     $(e.currentTarget).html(wait);
     let testWord = get('testWord');
     const ix = testWord.ix;
-    allWords[ix].ok = true;
+    allWords[ix].google_ok = true;
     testWord.ix += 1;
     if ( ! testWord.ok_count ) testWord.ok_count = 0;
     testWord.ok_count += 1;
@@ -617,7 +577,7 @@ Template.Edit.events({
     // sound is ok as is
     let testWord = get('testWord');
     const ix = testWord.ix;
-    allWords[ix].ok = false;
+    allWords[ix].google_ok = false;
     refresh('testWord');
   },
   'click .test_word_skip': function(e){
@@ -627,16 +587,23 @@ Template.Edit.events({
     if ( v > 0 ) {
       // skip to next word that is not ok
       while ( testWord.ix < allWords.length ) {
-        if ( ! allWords[ testWord.ix ].ok ) break;
+        if ( ! allWords[ testWord.ix ].google_ok ) break;
         testWord.ix += 1;
       }
     }
     set('testWord',testWord);
   },
   'click .lesson_word': function(e){
-    const word = $(e.currentTarget).html();
-    lib.lookupAndPlay( pre, e, word, function(){
-    })
+    e.preventDefault();
+    const elapsed = lib.epoch() - wordPlayBackBusy;
+    if ( elapsed > 500 && wordPlayBackBusy >= 0 ) { // play if more than 1/2 second since last word
+      wordPlayBackBusy = -1;
+      const word = $(e.currentTarget).attr('data');
+      lib.googlePlaySound( word, function(){
+        console.log('Play %s finished',word);
+        wordPlayBackBusy = lib.epoch();
+      });
+    }
   },
   'click #gf_test_sounds': function(e){
     testSounds();

@@ -1,62 +1,76 @@
 import { check } from 'meteor/check';
-import { TasksCollection, GatherFacts, GatherFactsAnswers } from '/imports/db/Collections';
+import { TasksCollection, GatherFacts, GatherFactsAnswers, AudioFiles } from '/imports/db/Collections';
 import * as lib from './lib';
 
 var Future = Npm.require("fibers/future");
 import { fetch, Headers } from "meteor/fetch";
+
 const fs = require('fs');
+const util = require('util');
+const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
-  'getWordRecording'( word ){
-    // Get recording just made from ~/Downloads
-    const mp3Only = function(list){
-      let op = [];
-      for ( let i=0; i < list.length; i++ ) {
-        const n = list[i];
-        if ( n.substr(n.length - 4,4) === '.mp3') op.push(n);
-      }
-      return op;
-    };
-    const allNumbers = function(v){
-      const list = '1234567890._mp';
-      for ( let i=0; i < v.length; i++ ) {
-        const c = v.substr(i,1);
-        if ( list.indexOf(c) < 0 ) return false;
-      }
-      return true;
-    };
-    const getTarget = function(){
-      for ( let i=0; i < retObj.readdir.length; i++ ) {
-        const n = retObj.readdir[i];
-        if ( allNumbers(n) ) return n;
-      }
-      return '';
-    };
+  'createAllSingleWordAudio'( allWords ){
+    // Create audio file for all single words given
+    let future=new Future();
 
-    const createFile = function(){
-      // rename current file 
-      if ( retObj.target ) {
-        retObj.oldPath = sprintf('%s/%s',retObj.path, retObj.target);
-        retObj.newPath = sprintf('%s/%s.mp3',retObj.path, retObj.word);
-        fs.renameSync(retObj.oldPath, retObj.newPath)
+    let count = 0;
+    const makeAudio = function(ix, callback){
+      if ( ix < allWords.length ) {
+        const word = allWords[ix].word;
+        recs = AudioFiles.find( { word: word }).fetch();
+        if ( recs.length === 0 ) {
+          // need to create this word
 
-        retObj.fromPath = retObj.newPath;
-        retObj.toPath = sprintf('/Users/donjones/meteor/read/public/audio/%s.mp3',retObj.word);
-        fs.copyFileSync( retObj.fromPath, retObj.toPath );
-
-        retObj.toPath2 = sprintf('/Users/donjones/meteor/read/private/audio/%s.mp3',retObj.word);
-        fs.copyFileSync( retObj.fromPath, retObj.toPath2 );
+          // Max 11 requests per minute allowed from google
+          Meteor.setTimeout(function(){
+            console.log('Creating mp3 for "%s" %s of %s',word,ix+1,allWords.length);
+            googleCreateMp3(word);
+            count += 1;
+            makeAudio(ix+1, callback);
+          },6000);
+        } else {
+          makeAudio(ix+1, callback);
+        }
+      } else {
+        callback();
       }
     };
+    makeAudio(8380, function(){
+      future.return( { success: true, count: count } );
+    });
 
-    let retObj = { word: word };
-    const path = '/Users/donjones/Downloads';
-    retObj.path = path;
-    retObj.readdir = mp3Only( fs.readdirSync(path) );
-    retObj.target = getTarget();
-    createFile();
+    return future.wait();
+  },
+  'googlePlaySound'( word ){
+    // If word sound already exists, return the url, else create the mp3 and return the url
+    const recs = AudioFiles.find( { word: word }).fetch();
+    if ( recs.length > 0 ) return recs[0]; // jones = temporary
 
-    return retObj;
+    googleCreateMp3(word);
+  },
+  'textToSpeech'( text ){ // deprecated
+    const client = new textToSpeech.TextToSpeechClient();
+
+    // const process.env.MY_VAR = "Hello world";
+    // console.log('MY_VAR=',process.env.MY_VAR);
+
+    async function convertTextToMp3(){
+      const request = {
+        input: { text: text },
+        voice: { languageCode:'en-US', ssmlGender:'NEUTRAL'},
+        audioConfig:{ audioEncoding:'MP3'}
+      }
+      const [response] = await client.synthesizeSpeech(request);
+
+      const writeFile = util.promisify(fs.writeFile);
+
+      await writeFile("/Users/donjones/meteor/read/public/output.mp3",response.audioContent,'binary');
+
+      console.log('Text to speech has completed');
+    };
+    convertTextToMp3();
+    return google;
   },
   'getFile'( fileName ){
     // get file from private assets
@@ -168,3 +182,29 @@ Meteor.methods({
     });
   }
 });
+
+const googleCreateMp3 = function(word){
+  // Create mp3 file and store results in audio collection
+  // create the mp3 file
+  const client = new textToSpeech.TextToSpeechClient();
+
+  async function convertTextToMp3(){
+    const request = {
+      input: { text: word },
+      voice: { languageCode:'en-US', ssmlGender:'NEUTRAL'},
+      audioConfig:{ audioEncoding:'MP3'}
+    }
+    const [response] = await client.synthesizeSpeech(request);
+
+    const writeFile = util.promisify(fs.writeFile);
+
+    const fullPath = sprintf("/Users/donjones/meteor/read/public/audio/%s.mp3",word);
+    await writeFile( fullPath,response.audioContent,'binary');
+  };
+  convertTextToMp3();
+  const doc = { word: word, url: sprintf('/audio/%s.mp3',word)};
+  if ( AudioFiles.find( { word: word }).fetch().length === 0 ) {
+    // Only insert if not alread in the collection
+    AudioFiles.insert(doc); // make a note so we don't have to generate this word again
+  }
+};
