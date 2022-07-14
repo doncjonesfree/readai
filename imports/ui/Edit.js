@@ -532,6 +532,16 @@ Template.Edit.events({
       $(e.currentTarget).html(html);
     });
   },
+  'click #test_create_all_definitions': function(e){
+    Meteor.call('createDefinitionAudio', allWords, function(err,results){
+      if ( err ) {
+        console.log('Error in Edit.js line 538',err);
+      } else {
+        console.log('createDefinitionAudio results',results);
+        console.log('createDefinitionAudio allWords',allWords);
+      }
+    });
+  },
   'click #test_create_all_words': function(e){
     Meteor.call('createAllSingleWordAudio', allWords, function(err,results){
       if ( err ) {
