@@ -519,7 +519,8 @@ const loadAllGatherFacts = function( callback ){
   });
 };
 
-let wordPlayBackBusy = 0;
+let WordPlayBackBusy = 0;
+let PreviousWordPlayed = '';
 
 Template.Edit.events({
   'click #gf_reload_all_words': function(e){
@@ -602,18 +603,6 @@ Template.Edit.events({
       }
     }
     set('testWord',testWord);
-  },
-  'click .lesson_word': function(e){
-    e.preventDefault();
-    const elapsed = lib.epoch() - wordPlayBackBusy;
-    if ( elapsed > 500 && wordPlayBackBusy >= 0 ) { // play if more than 1/2 second since last word
-      wordPlayBackBusy = -1;
-      const word = $(e.currentTarget).attr('data');
-      lib.googlePlaySound( word, function(){
-        console.log('Play %s finished',word);
-        wordPlayBackBusy = lib.epoch();
-      });
-    }
   },
   'click #gf_test_sounds': function(e){
     testSounds();

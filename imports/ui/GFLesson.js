@@ -8,6 +8,9 @@ const set = function(n,v) {
 
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
+let WordPlayBackBusy = 0;
+let PreviousWordPlayed = '';
+
 Template.GFLesson.onCreated(function GFLessonOnCreated() {
 
 });
@@ -56,10 +59,23 @@ Template.GFLesson.helpers({
 
 Template.GFLesson.events({
   'click .lesson_word': function(e){
-    let word = $(e.currentTarget).html();
-    lib.lookupAndPlay( pre, e, word, function(){
-      if ( Meteor.isDevelopment ) console.log('Done playing ',word);
-    });
+    e.preventDefault();
+    const elapsed = lib.epoch() - WordPlayBackBusy;
+    const word = $(e.currentTarget).attr('data');
+    //if ( elapsed > 500 && WordPlayBackBusy >= 0 && PreviousWordPlayed !== word ) { // play if more than 1/2 second since last word
+    if ( elapsed > 250 && WordPlayBackBusy >= 0 ) { // play if more than 1/2 second since last word
+      console.log('jones611b elapsed=%s WordPlayBackBusy=%s PreviousWordPlayed=%s word=%s',elapsed,WordPlayBackBusy,PreviousWordPlayed,word);
+      PreviousWordPlayed = word;
+      WordPlayBackBusy = -1;
+      lib.googlePlaySound( word, function(){
+        console.log('Play %s finished',word);
+        WordPlayBackBusy = lib.epoch();
+      });
+    }
+    // let word = $(e.currentTarget).html();
+    // lib.lookupAndPlay( pre, e, word, function(){
+    //   if ( Meteor.isDevelopment ) console.log('Done playing ',word);
+    // });
   },
   'click #gf_lesson_paragraph': function(e){
     const txt = $(e.currentTarget).val();

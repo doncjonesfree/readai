@@ -187,7 +187,52 @@ export const addDivsForLongerWords = function(arg){
     return false;
   };
 
+  const breakUpQuotes = function(list){
+    // given &quot;Why, break that into two words
+    let op = [];
+    for ( let i=0; i < list.length; i++ ) {
+      let w = list[i];
+      const ix = w.indexOf('&quot;');
+      if ( ix < 0 ) {
+        // no quote to deal with
+        op.push(w);
+      } else {
+        let before = '';
+        if ( ix > 0 ) before = w.substr(0,ix); // word before the quote
+        let after = '';
+        if ( (ix+6) < w.length ) {
+          after = w.substring(ix+6);
+        }
+        if ( before && after ) {
+          op.push(before);
+          op.push( sprintf('&quot;%s',after));
+        } else {
+          op.push(w);
+        }
+      }
+    }
+    return op;
+  };
+
+  const clean = function(w){
+    // change <i>horns</i> to horns
+    const list = ['<i>','</i>','<b>','</b>'];
+    let op = w;
+    for ( let i=0; i < list.length; i++ ) {
+      const src = list[i];
+      op = op.replace(src,'');
+    }
+    return op;
+  };
+
   const breakUpWord = function(w){
+    // special case "<i>horns</i>"
+    const ix1 = w.indexOf('<i>');
+    const ix2 = w.indexOf('</i>');
+    if ( ix1 >= 0 && ix2 > 0 ) {
+      return { before: w.substr(0,ix1+3), word: w.substr(ix1+3, ix2 - ix1 - 3 ), after: w.substring(ix2) };
+    }
+
     let before = [];
     let word = [];
     let after = [];
@@ -219,15 +264,15 @@ export const addDivsForLongerWords = function(arg){
   };
 
   if ( ! arg ) arg = '';
-  let p = arg.replace(/\n/g,' ');
-  let list = p.split(' ');
+  let p = copy(arg).replace(/\n/g,' ');
+  let list = breakUpQuotes( p.split(' ') );
   let op = [];
   for ( let i=0; i < list.length; i++ ) {
     let w = list[i];
     let obj = breakUpWord(w);
     if ( obj.word.length >= 2 ) {
       if ( obj.word ) {
-        op.push(sprintf('%s<div class="lesson_word" data="%s">%s</div>%s',obj.before,obj.word,obj.word,obj.after));
+        op.push(sprintf('%s<div class="lesson_word" data="%s">%s</div>%s',obj.before,clean(obj.word),obj.word,obj.after));
       } else {
         op.push(obj.before);
       }
