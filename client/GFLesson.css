@@ -3,6 +3,22 @@
   display: inline-block;
 }
 
+.word_def {
+  display: none;
+  font-size: .7em;
+  border-radius: .25em;
+  padding: 0 .2em 0 .2em;
+  background-color: #336600;
+  color: white;
+  margin-left: .1em;
+  height: 1.3em;
+}
+
+.word_def:hover {
+  background-color: #339900;
+  cursor: pointer;
+}
+
 .lesson_word:hover {
   color: blue;
   cursor: pointer;

@@ -3,6 +3,7 @@ export const formatGFParagraph = function( arg ){
   if ( typeof(p) === 'number') p = p.toString();
   const first = p.trim().split(' ')[0];
   const special = '@@@';
+  let uniqueCount = 0;
   if ( first === '1.') {
     // we have a numbered list of choices
     let op = [];
@@ -14,11 +15,15 @@ export const formatGFParagraph = function( arg ){
       op.push( p.substr(ix, ix2 - ix));
     }
     p = op.join(special); // unusual string
-    p = addDivsForLongerWords(p);
+    const ret = addDivsForLongerWords(p,uniqueCount);
+    p = ret.op;
+    uniqueCount = p.uniqueCount;
     p = p.replace(/@@@/g,'<br><br>');
     return p;
   } else {
-    return addDivsForLongerWords(p);
+    const ret = addDivsForLongerWords(p,uniqueCount);
+    uniqueCount = p.uniqueCount;
+    return ret.op;
   }
 };
 
@@ -174,7 +179,7 @@ const partOfWord = function(c){
   return lettersEtc.indexOf(c.toLowerCase()) >= 0;
 };
 
-export const addDivsForLongerWords = function(arg){
+export const addDivsForLongerWords = function(arg, argUniqueCount){
   const semiComing = function(w,ix){
     // true if a semi colon is coming soon - like in &quot;
     for ( let i=ix; i < w.length; i++ ) {
@@ -267,12 +272,15 @@ export const addDivsForLongerWords = function(arg){
   let p = copy(arg).replace(/\n/g,' ');
   let list = breakUpQuotes( p.split(' ') );
   let op = [];
+  let uniqueCount = argUniqueCount; // differentiate between words so we can tell which word was clicked if same word is multiple times
   for ( let i=0; i < list.length; i++ ) {
     let w = list[i];
     let obj = breakUpWord(w);
     if ( obj.word.length >= 2 ) {
       if ( obj.word ) {
-        op.push(sprintf('%s<div class="lesson_word" data="%s">%s</div>%s',obj.before,clean(obj.word),obj.word,obj.after));
+        const cleanWord = clean(obj.word);
+        uniqueCount += 1;
+        op.push(sprintf('%s<div class="lesson_word" data="%s" data2="%s">%s</div>%s<div class="word_def" data="%s" data2="%s">D</div>',obj.before,cleanWord,uniqueCount,obj.word,obj.after,cleanWord,uniqueCount));
       } else {
         op.push(obj.before);
       }
@@ -280,7 +288,7 @@ export const addDivsForLongerWords = function(arg){
       op.push(w);
     }
   }
-  return op.join('&nbsp;');
+  return { op: op.join('&nbsp;'), uniqueCount: uniqueCount };
 };
 
 export const numbersOnly = function(arg) {

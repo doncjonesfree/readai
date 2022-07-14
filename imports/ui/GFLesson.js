@@ -29,11 +29,14 @@ Template.GFLesson.helpers({
   },
   question() {
     let l = get('lesson');
+    let uniqueCount = 0;
     if ( l && l.answers ) {
       let op = [];
       for ( let i=0; i < l.answers.length; i++ ) {
         const a = l.answers[i];
-        const q2 = lib.addDivsForLongerWords( a.Question );
+        const ret = lib.addDivsForLongerWords( a.Question, uniqueCount );
+        const q2 = ret.op;
+        uniqueCount = ret.uniqueCount;
         let o = { Question: sprintf('Question #%s  %s',a.QuestionNum,q2), list: [] };
         for ( let n=1; n <= 100; n++ ) {
           const txt = a[ sprintf('Answer%s',n)];
@@ -43,7 +46,9 @@ Template.GFLesson.helpers({
             checked = 'checked';
           }
           const html = sprintf('<input type="checkbox" class="gf_chk_answer" data="%s" data2="%s" %s>',i,n,checked);
-          const txt2 = lib.addDivsForLongerWords(txt);
+          const ret = lib.addDivsForLongerWords( txt, uniqueCount );
+          const txt2 = ret.op;
+          uniqueCount = ret.uniqueCount;
 
           o.list.push( { checkbox: html, answer: sprintf('%s.&nbsp;%s', lib.numberToLetter(n), txt2 ) } ); //
         }
@@ -56,6 +61,18 @@ Template.GFLesson.helpers({
   mode1() { return get('mode') === 1 },
 });
 
+const showDefinitionButton = function(word,uniqueCount){
+
+  $('.word_def').each(function(i, obj) {
+    const w = $(obj).attr('data');
+    const c = $(obj).attr('data2');
+    if ( w === word && c === uniqueCount ) {
+      $(obj).css('display','inline-block');
+    } else {
+      $(obj).css('display','none');
+    }
+  });
+};
 
 Template.GFLesson.events({
   'click .lesson_word': function(e){
@@ -64,12 +81,13 @@ Template.GFLesson.events({
     const word = $(e.currentTarget).attr('data');
     //if ( elapsed > 500 && WordPlayBackBusy >= 0 && PreviousWordPlayed !== word ) { // play if more than 1/2 second since last word
     if ( elapsed > 250 && WordPlayBackBusy >= 0 ) { // play if more than 1/2 second since last word
-      console.log('jones611b elapsed=%s WordPlayBackBusy=%s PreviousWordPlayed=%s word=%s',elapsed,WordPlayBackBusy,PreviousWordPlayed,word);
       PreviousWordPlayed = word;
       WordPlayBackBusy = -1;
       lib.googlePlaySound( word, function(){
         console.log('Play %s finished',word);
         WordPlayBackBusy = lib.epoch();
+        const uniqueCount = $(e.currentTarget).attr('data2');
+        showDefinitionButton(word,uniqueCount);
       });
     }
     // let word = $(e.currentTarget).html();
