@@ -118,12 +118,34 @@ Meteor.methods({
 
     return future.wait();
   },
-  'googlePlaySound'( word ){
-    // If word sound already exists, return the url, else create the mp3 and return the url
-    const recs = AudioFiles.find( { word: word }).fetch();
-    if ( recs.length > 0 ) return recs[0]; // jones = temporary
+  'wordExists'( arg ){
+    const word = arg.toLowerCase();
 
-    googleCreateMp3(word);
+    let retObj = { word: word, audio: false, definition: false };
+    const recs = AudioFiles.find({ word: word }).fetch();
+    if ( recs.length > 0 ) {
+      retObj.audio = true;
+      if ( recs[0].definition ) retObj.definition = true;
+    }
+
+    console.log('jones131',retObj);
+    return retObj;
+  },
+  'googlePlaySound'( arg ){
+    let word = arg;
+    // If word sound already exists, return the url, else create the mp3 and return the url
+    if ( word.substr(0,1) === '*') {
+      // actually we want the definition instead of the word
+      word = word.substring(1);
+      const recs = AudioFiles.find( { word: word }).fetch();
+      if ( recs.length > 0 ) return recs[0];
+      return '';
+    } else {
+      const recs = AudioFiles.find( { word: word }).fetch();
+      if ( recs.length > 0 ) return recs[0];
+
+      googleCreateMp3(word);
+    }
   },
   'textToSpeech'( text ){ // deprecated
     const client = new textToSpeech.TextToSpeechClient();

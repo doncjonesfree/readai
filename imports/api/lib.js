@@ -55,11 +55,26 @@ export const lookupAndPlay = function( pre, e, word, callback, count ){
   }
 };
 
-export const googlePlaySound = function( word, callback ){
+export const googlePlaySound = function( arg, callback ){
   // assume word has an mp3 file without looking
-  const url = sprintf('/audio/%s.mp3',word.toLowerCase());
+  let word = arg;
+  let url = sprintf('/audio/%s.mp3',word.toLowerCase());
+  if ( word.substr(0,1) === '*') {
+    // actually we want the definition, not the word itself
+    word = word.substring(1);
+    url = sprintf('/definition/%s.mp3',word.toLowerCase());
+  }
   playSoundList( [ url ], 0, function(){
     callback();
+  });
+};
+
+export const wordExists = function(word, callback){
+  Meteor.call('wordExists', word , function(err,results){
+    if ( err ) {
+      console.log('Error in lib.js line 76',err);
+    }
+    callback(results);
   });
 };
 
@@ -280,7 +295,7 @@ export const addDivsForLongerWords = function(arg, argUniqueCount){
       if ( obj.word ) {
         const cleanWord = clean(obj.word);
         uniqueCount += 1;
-        op.push(sprintf('%s<div class="lesson_word" data="%s" data2="%s">%s</div>%s<div class="word_def" data="%s" data2="%s">D</div>',obj.before,cleanWord,uniqueCount,obj.word,obj.after,cleanWord,uniqueCount));
+        op.push(sprintf('%s<div class="lesson_word" data="%s" data2="%s">%s</div><div class="word_def" data="%s" data2="%s">D</div>%s',obj.before,cleanWord,uniqueCount,obj.word,cleanWord,uniqueCount,obj.after));
       } else {
         op.push(obj.before);
       }

@@ -75,11 +75,30 @@ const showDefinitionButton = function(word,uniqueCount){
 };
 
 Template.GFLesson.events({
+  'click .word_def': function(e){
+    e.preventDefault();
+    let word = $(e.currentTarget).attr('data');
+    lib.wordExists(word, function(results){
+      if ( ! results || ! results.definition ) {
+        // no definition found
+        word = 'no_definition_found';
+      }
+      const elapsed = lib.epoch() - WordPlayBackBusy;
+      if ( elapsed > 250 && WordPlayBackBusy >= 0 ) { // play if more than 1/2 second since last word
+        PreviousWordPlayed = word;
+        WordPlayBackBusy = -1;
+        // * indicated play definition
+        lib.googlePlaySound( '*' + word, function(){
+          console.log('Play %s finished',word);
+          WordPlayBackBusy = lib.epoch();
+        });
+      }
+    });
+  },
   'click .lesson_word': function(e){
     e.preventDefault();
     const elapsed = lib.epoch() - WordPlayBackBusy;
     const word = $(e.currentTarget).attr('data');
-    //if ( elapsed > 500 && WordPlayBackBusy >= 0 && PreviousWordPlayed !== word ) { // play if more than 1/2 second since last word
     if ( elapsed > 250 && WordPlayBackBusy >= 0 ) { // play if more than 1/2 second since last word
       PreviousWordPlayed = word;
       WordPlayBackBusy = -1;
@@ -90,10 +109,6 @@ Template.GFLesson.events({
         showDefinitionButton(word,uniqueCount);
       });
     }
-    // let word = $(e.currentTarget).html();
-    // lib.lookupAndPlay( pre, e, word, function(){
-    //   if ( Meteor.isDevelopment ) console.log('Done playing ',word);
-    // });
   },
   'click #gf_lesson_paragraph': function(e){
     const txt = $(e.currentTarget).val();
