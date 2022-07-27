@@ -64,7 +64,6 @@ Meteor.methods({
               // Max 11 requests per minute allowed from google
               Meteor.setTimeout(function(){
                 console.log('Creating definition mp3 for "%s" %s of %s',word,ix+1,allWords.length);
-                console.log('jones67',list);
                 googleCreateMp3(word, list.join('\n\n'));
                 count += 1;
                 makeAudio(ix+1, callback);
@@ -128,7 +127,6 @@ Meteor.methods({
       if ( recs[0].definition ) retObj.definition = true;
     }
 
-    console.log('jones131',retObj);
     return retObj;
   },
   'googlePlaySound'( arg ){
