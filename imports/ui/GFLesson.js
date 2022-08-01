@@ -8,9 +8,6 @@ const set = function(n,v) {
 
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
-let WordPlayBackBusy = 0;
-let PreviousWordPlayed = '';
-
 Template.GFLesson.onCreated(function GFLessonOnCreated() {
 
 });
@@ -83,32 +80,19 @@ Template.GFLesson.events({
         // no definition found
         word = 'no_definition_found';
       }
-      const elapsed = lib.epoch() - WordPlayBackBusy;
-      if ( elapsed > 250 && WordPlayBackBusy >= 0 ) { // play if more than 1/2 second since last word
-        PreviousWordPlayed = word;
-        WordPlayBackBusy = -1;
-        // * indicated play definition
-        lib.googlePlaySound( '*' + word, function(){
-          console.log('Play %s finished',word);
-          WordPlayBackBusy = lib.epoch();
-        });
-      }
+      lib.googlePlaySound( '*' + word, function(){
+        console.log('%s definition finished playing',word);
+      });
     });
   },
   'click .lesson_word': function(e){
     e.preventDefault();
-    const elapsed = lib.epoch() - WordPlayBackBusy;
     const word = $(e.currentTarget).attr('data');
-    if ( elapsed > 250 && WordPlayBackBusy >= 0 ) { // play if more than 1/2 second since last word
-      PreviousWordPlayed = word;
-      WordPlayBackBusy = -1;
-      lib.googlePlaySound( word, function(){
-        console.log('Play %s finished',word);
-        WordPlayBackBusy = lib.epoch();
-        const uniqueCount = $(e.currentTarget).attr('data2');
-        showDefinitionButton(word,uniqueCount);
-      });
-    }
+    lib.googlePlaySound( word, function(){
+      console.log('Play %s finished',word);
+      const uniqueCount = $(e.currentTarget).attr('data2');
+      showDefinitionButton(word,uniqueCount);
+    });
   },
   'click #gf_lesson_paragraph': function(e){
     const txt = $(e.currentTarget).val();

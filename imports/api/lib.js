@@ -55,8 +55,12 @@ export const lookupAndPlay = function( pre, e, word, callback, count ){
   }
 };
 
+let SoundObj = '';
+
 export const googlePlaySound = function( arg, callback ){
   // assume word has an mp3 file without looking
+  // arg is a single word - but if * as first character, then we
+  // should play the definition, not the word.
   let word = arg;
   let url = sprintf('/audio/%s.mp3',word.toLowerCase());
   if ( word.substr(0,1) === '*') {
@@ -64,9 +68,18 @@ export const googlePlaySound = function( arg, callback ){
     word = word.substring(1);
     url = sprintf('/definition/%s.mp3',word.toLowerCase());
   }
-  playSoundList( [ url ], 0, function(){
-    callback();
+
+  if ( SoundObj ) SoundObj.stop(); // stop the previous sound
+
+  // play the sound
+  SoundObj = new Howl( { src: url });
+  SoundObj.on('end',function(){
+    Meteor.setTimeout(function(){
+      SoundObj = '';
+      callback();
+    },100);
   });
+  SoundObj.play();
 };
 
 export const wordExists = function(word, callback){
