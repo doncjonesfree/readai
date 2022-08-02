@@ -35,6 +35,7 @@ Template.GFLesson.helpers({
         const q2 = ret.op;
         uniqueCount = ret.uniqueCount;
         let o = { Question: sprintf('Question #%s  %s',a.QuestionNum,q2), list: [] };
+        if ( a.incorrect ) o.incorrect = true;
         for ( let n=1; n <= 100; n++ ) {
           const txt = a[ sprintf('Answer%s',n)];
           if ( ! txt ) break;
@@ -47,7 +48,7 @@ Template.GFLesson.helpers({
           const txt2 = ret.op;
           uniqueCount = ret.uniqueCount;
 
-          o.list.push( { checkbox: html, answer: sprintf('%s.&nbsp;%s', lib.numberToLetter(n), txt2 ) } ); //
+          o.list.push( { checkbox: html, answer: sprintf('%s.&nbsp;%s', lib.numberToLetter(n), txt2 ) } );
         }
         op.push(o);
       }
@@ -72,6 +73,49 @@ const showDefinitionButton = function(word,uniqueCount){
 };
 
 Template.GFLesson.events({
+  'click #gf_done': function(e){
+    let lesson = get('lesson');
+    let notAnswered = [];
+    let incorrect = [];
+    let previouslyIncorrect = [];
+    for ( let i=0; i < lesson.answers.length; i++ ) {
+      const a = lesson.answers[i];
+      if ( a.incorrect ) previouslyIncorrect.push( a.QuestionNum );
+      if ( a.selected ) {
+        if ( a.selected !== a.Correct ) {
+          incorrect.push( a.QuestionNum )
+          a.incorrect = true;
+        } else {
+          a.incorrect = false;
+        }
+      } else {
+        notAnswered.push( a.QuestionNum );
+      }
+    }
+    if ( notAnswered.length > 0 ) {
+      const word = 'answer_all_questions';
+      lib.googlePlaySound( word, function(){
+        console.log('%s finished playing',word);
+      });
+    } else if ( incorrect.length > 0 ) {
+      // at least one answer incorrect
+      set('lesson',lesson); // save incorrect flag so we can tell screen which ones to highlight
+      let word = 'review_incorrect';
+      if ( incorrect.length === 1 ) word = 'one_incorrect';
+      lib.googlePlaySound( word );
+    } else {
+      if ( previouslyIncorrect.length > 0 ) {
+        set('lesson',lesson); // save so we can clear incorrect
+      }
+      console.log('all answers correct');
+    }
+  },
+  'click #gf_help': function(e){
+    const word = 'gather_facts_help';
+    lib.googlePlaySound( word, function(){
+      console.log('%s finished playing',word);
+    });
+  },
   'click .word_def': function(e){
     e.preventDefault();
     let word = $(e.currentTarget).attr('data');

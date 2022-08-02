@@ -1,5 +1,9 @@
 <template name="GFLesson">
-  <h1>Gather Facts Lesson</h1>
+  <h1>
+    Gather Facts Lesson
+    <button id="gf_help">?</button>
+  </h1>
+
   {{ #with lesson }}
     <div class="gf_lesson_code">
       {{ Code }} {{ Color }}  #{{ Number }}
@@ -12,12 +16,23 @@
   <br><br>
   <div class="gf_question_wrapper">
     {{ #each question }}
-      <div class="gf_question">{{{ Question }}}</div>
-      {{ #each list }}
-        <div class="gf_answer">
-          {{{ checkbox }}} {{{ answer }}}
-        </div>
-      {{ /each}}
+      {{ #if incorrect }}
+        <div class="gf_question_incorrect">{{{ Question }}}</div>
+        {{ #each list }}
+          <div class="gf_answer_incorrect">
+            {{{ checkbox }}} {{{ answer }}}
+          </div>
+        {{ /each}}
+      {{ else }}
+        <div class="gf_question">{{{ Question }}}</div>
+        {{ #each list }}
+          <div class="gf_answer">
+            {{{ checkbox }}} {{{ answer }}}
+          </div>
+        {{ /each}}
+      {{ /if }}
     {{ /each }}
+    <br>
+    <button id="gf_done">Done</button>
   </div>
 </template>

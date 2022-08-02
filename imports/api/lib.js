@@ -76,7 +76,7 @@ export const googlePlaySound = function( arg, callback ){
   SoundObj.on('end',function(){
     Meteor.setTimeout(function(){
       SoundObj = '';
-      callback();
+      if ( callback ) callback();
     },100);
   });
   SoundObj.play();
