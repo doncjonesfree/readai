@@ -1,3 +1,27 @@
+.dc_list_flex_heading {
+  display: flex;
+  font-weight: bold;
+  border-bottom: 2px solid black;
+  margin: 1em 2% 0 2%;
+}
+.dc_list_flex {
+  display: flex;
+  height: 1.2em;
+  padding: .25em;
+  border-radius: .25em;
+  margin: 0 2% 0 2%;
+}
+.dc_list_flex:hover {
+  font-weight: bold;
+  background-color: #99CCFF;
+  cursor: pointer;
+}
+.dc_list_shape { width: 10%; }
+.dc_list_grade { width: 10%; }
+.dc_list_number { width: 10%; }
+.dc_list_qnum { width: 10%; }
+.dc_list_question { width: 60%; overflow: hidden; }
+
 .gf_code { width: 7%; }
 .gf_color { width: 15%; }
 .gf_gradelevel { width: 8%; }

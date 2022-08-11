@@ -3,6 +3,7 @@
 
   {{ #if mode1 }}
     <button id="edit_gather_facts">Gather Facts</button>
+    <button id="edit_draw_conclusions">Drawing Conclusions</button>
   {{ /if }}
 
   {{ #if mode3 }}
@@ -24,8 +25,40 @@
     {{ /with }}
   {{ /if }}
 
+  {{ #if mode4 }}
+    <button id="change_mode" data="1">Back</button>
+    Drawing Conclusions:
+    {{ #with dc_search }}
+      <select id="dc_select_grade">
+        <option value="">-- select Grade Level</option>
+        {{ #each GradeLevel }}
+          <option value="{{ GradeLevel }}">{{ GradeLevel }}</option>
+        {{ /each }}
+      </select>
+      {{ #if list }}
+        <div class="dc_list_flex_heading">
+          <div class="dc_list_shape">Shape</div>
+          <div class="dc_list_grade">Grade</div>
+          <div class="dc_list_number">Lesson #</div>
+          <div class="dc_list_qnum">Question #</div>
+          <div class="dc_list_question">Question</div>
+        </div>
+        {{ #each list }}
+        <div class="dc_list_flex {{ cls }}">
+          <div class="dc_list_shape">{{ shapeName }}</div>
+          <div class="dc_list_grade">{{ GradeLevel }}</div>
+          <div class="dc_list_number">{{ Number }}</div>
+          <div class="dc_list_qnum">{{ QuestionNum }}</div>
+          <div class="dc_list_question">{{ Question }}</div>
+        </div>
+        {{ /each }}
+      {{ /if }}
+    {{ /with }}
+  {{ /if }}
+
   {{ #if mode2 }}
     <button id="change_mode" data="1">Back</button>
+    Gather Facts:
     {{ #with gf_search }}
       Code <input type="text" id="gs_start" class="input_short gf_src" data="Code" data2="text" value="{{ Code}}">
       &nbsp; Color <input type="text" class="input_short gf_src" data="Color" data2="text" value="{{ Color}}">

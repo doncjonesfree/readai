@@ -1,5 +1,5 @@
 import { check } from 'meteor/check';
-import { TasksCollection, GatherFacts, GatherFactsAnswers, AudioFiles } from '/imports/db/Collections';
+import { TasksCollection, GatherFacts, GatherFactsAnswers, AudioFiles, DrawConclusions } from '/imports/db/Collections';
 import * as lib from './lib';
 
 var Future = Npm.require("fibers/future");
@@ -232,6 +232,33 @@ Meteor.methods({
     }
     if ( retObj.updates === 0 ) retObj.success = false;
     return retObj;
+  },
+  'dcGradeLevels'(){
+    let retObj = {};
+    const fields = { GradeLevel: 1 };
+    const recs = DrawConclusions.find({},{ fields: fields }).fetch();
+    let obj = {};
+    for ( let i=0; i < recs.length; i++ ) {
+      const r = recs[i];
+      if ( ! obj[ r.GradeLevel ] ) obj[ r.GradeLevel ] = 0;
+      obj[ r.GradeLevel ] += 1;
+    }
+    let op = [];
+    for ( let grade in obj ) {
+      if ( lib.hasOwnProperty(obj,grade)){
+        const v = obj[ grade ];
+        op.push( { GradeLevel: grade, count: v });
+      }
+    }
+    op.sort( function(a,b){
+      if ( lib.float(a.GradeLevel) < lib.float(b.GradeLevel) ) return -1;
+      if ( lib.float(a.GradeLevel) > lib.float(b.GradeLevel) ) return 1;
+      return 0;
+    });
+    return op;
+  },
+  'loadDrawConclusions'(GradeLevel){
+    return DrawConclusions.find({ GradeLevel: GradeLevel }, { sort: { Shape: 1, Number: 1, QuestionNum: 1 }}).fetch();
   },
   'loadGatherFacts'( src ) {
     let retObj = {};

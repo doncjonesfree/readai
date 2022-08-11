@@ -13,9 +13,10 @@ let allWords = [];
 
 Template.Edit.onCreated(function EditOnCreated() {
   // mode:
-  // 1 = just show Gather Facts Button
-  // 2 = search for given lesson
+  // 1 = just show Gather Facts Button and Draw conclusion buttons
+  // 2 = search for given gather facts lesson
   // 3 = test each word in audio
+  // 4 = search for draw conclusions lesson
   setd('mode',1);
   setd('gf_search',{});
   setd('gatherfacts',{ GatherFacts: [] });
@@ -33,11 +34,34 @@ const getRefresh = function(arg){
   return get(n);
 };
 
+const shapeName = function( Shape ){
+  if ( Shape === 'C') return 'Circle';
+  if ( Shape === 'D') return 'Diamond';
+  if ( Shape === 'S') return 'Square';
+  if ( Shape === 'T') return 'Triangle';
+  return Shape;
+};
+
 Template.Edit.helpers({
   mode0() { return get('mode') === 0 },
   mode1() { return get('mode') === 1 },
   mode2() { return get('mode') === 2 },
   mode3() { return get('mode') === 3 },
+  mode4() { return get('mode') === 4 },
+  dc_search(){
+    let dc_search = get('dc_search');
+    if ( ! dc_search ) return '';
+    if ( ! dc_search.GradeLevel ) dc_search.GradeLevel = [];
+    if ( ! dc_search.list ) dc_search.list = [];
+    if ( dc_search.list && dc_search.list.length > 0 ) {
+      for ( let i=0; i < dc_search.list.length; i++ ) {
+        let s = dc_search.list[i];
+        s.shapeName = shapeName( s.Shape );
+        if ( i % 2 === 1 ) s.cls = 'rpt_highlight';
+      }
+    }
+    return dc_search;
+  },
   testWord(){
     const dmy = getRefresh('testWord');
     let obj = {};
@@ -142,6 +166,27 @@ const checkError = function(arg,type){
     }
   }
   return { error: error, value: v };
+};
+
+const searchDrawConclusions = function(e, GradeLevel ){
+  const wait = '...';
+  const html = $(e.currentTarget).html();
+  if ( wait === html ) return;
+  $(e.currentTarget).html(wait);
+  let dc_search = get('dc_search');
+  if ( ! dc_search ) dc_search = {};
+  dc_search.src = GradeLevel;
+  Meteor.call('loadDrawConclusions', GradeLevel, function(err,results){
+    $(e.currentTarget).html(html);
+    if ( err ) {
+      console.log('Error: Edit.js line 161',err);
+      dc_search.error = 'Server Error!';
+      set('dc_search',dc_search);
+    } else {
+      dc_search.list = results;
+      set('dc_search',dc_search);
+    }
+  });
 };
 
 const searchGatherFacts = function(e){
@@ -523,6 +568,11 @@ let WordPlayBackBusy = 0;
 let PreviousWordPlayed = '';
 
 Template.Edit.events({
+  'change #dc_select_grade'(e){
+    e.preventDefault();
+    const GradeLevel = $(e.currentTarget).val();
+    if ( GradeLevel ) searchDrawConclusions(e, lib.float(GradeLevel));
+  },
   'click #gf_reload_all_words': function(e){
     const wait = '...';
     const html = $(e.currentTarget).html();
@@ -678,5 +728,20 @@ Template.Edit.events({
   'click #edit_gather_facts'(e){
     set('mode',2);
     lib.focus('#gs_start');
+  },
+  'click #edit_draw_conclusions'(e){
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    $(e.currentTarget).html(wait);
+    Meteor.call('dcGradeLevels', function(err,results){
+      $(e.currentTarget).html(html);
+      if ( err ) {
+        console.log('Error in Edit.js line 717',err);
+      } else {
+        set('dc_search', { GradeLevel: results } );
+        set('mode',4);
+      }
+    });
   },
 });
