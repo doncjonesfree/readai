@@ -12,6 +12,8 @@ import "./Edit.html";
 import "./Edit.js";
 import "./GFLesson.html";
 import "./GFLesson.js";
+import "./DCLesson.html";
+import "./DCLesson.js";
 
 const IS_LOADING_STRING = "isLoading";
 

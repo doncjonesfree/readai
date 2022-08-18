@@ -199,16 +199,10 @@ const checkError = function(arg,type){
   return { error: error, value: v };
 };
 
-const searchDrawConclusions = function(e, GradeLevel ){
-  const wait = '...';
-  const html = $(e.currentTarget).html();
-  if ( wait === html ) return;
-  $(e.currentTarget).html(wait);
+const loadDrawConclusions = function( e, html ){
   let dc_search = get('dc_search');
-  if ( ! dc_search ) dc_search = {};
-  dc_search.src = GradeLevel;
-  Meteor.call('loadDrawConclusions', GradeLevel, function(err,results){
-    $(e.currentTarget).html(html);
+  Meteor.call('loadDrawConclusions', dc_search.src, function(err,results){
+    if ( e ) $(e.currentTarget).html(html);
     if ( err ) {
       console.log('Error: Edit.js line 161',err);
       dc_search.error = 'Server Error!';
@@ -218,6 +212,19 @@ const searchDrawConclusions = function(e, GradeLevel ){
       set('dc_search',dc_search);
     }
   });
+};
+
+const searchDrawConclusions = function(e, GradeLevel ){
+  const wait = '...';
+  const html = $(e.currentTarget).html();
+  if ( wait === html ) return;
+  $(e.currentTarget).html(wait);
+  let dc_search = get('dc_search');
+  if ( ! dc_search ) dc_search = {};
+  dc_search.src = GradeLevel;
+  dc_search.error = '';
+  set('dc_search',dc_search);
+  loadDrawConclusions( e, html );
 };
 
 const searchGatherFacts = function(e){
@@ -636,6 +643,7 @@ Template.Edit.events({
         if ( err ) {
           console.log('Error in Edit.js line 245',err);
         }
+        loadDrawConclusions();
       });
     }
     $('#dc_popup').hide();
@@ -648,11 +656,6 @@ Template.Edit.events({
       set('edit_dc_lesson',ret);
       $('#dc_popup').show();
     }
-    console.log('jones573a',id,ret);
-  },
-  'click .dc_lesson'(e){
-    const id = $(e.currentTarget).attr('data');
-    console.log('jones573b',id);
   },
   'change #dc_select_grade'(e){
     e.preventDefault();
@@ -790,6 +793,16 @@ Template.Edit.events({
       // set up for other template
       Session.set('GFLesson_lesson',ret);
       $('#gf_lesson_popup').show();
+    }
+  },
+  'click .dc_lesson'(e){
+    e.preventDefault();
+    const id = $(e.currentTarget).attr('data');
+    const ret = getDcLessonGivenId(id);
+    if ( ret ) {
+      // set up for other template
+      Session.set('DCLesson_lesson',ret);
+      $('#dc_lesson_popup').show();
     }
   },
   'click #gf_search'(e){

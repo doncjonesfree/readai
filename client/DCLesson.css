@@ -1,0 +1,23 @@
+.dc_lesson_code {
+  margin: -.75em 0 .75em 0;
+  color: gray;
+  font-style: italic;
+  width: 100%;
+}
+
+.dc_lesson_question {
+  font-size: 1.2em;
+  margin-bottom: 1em;
+}
+.dc_lesson_answer_flex {
+  display: flex;
+  height: 1.5em;
+  width: 80%;
+  margin-left: -1em;
+}
+.dc_lesson_answer_chk {
+  width: 5%;
+  padding: 0;
+  margin: 0;
+}
+.dc_lesson_correct { width: 95%; }
