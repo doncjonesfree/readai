@@ -9,7 +9,7 @@
       {{ Shape }} {{ Number }}  #{{ QuestionNum }}
     </div>
     <div class="dc_lesson_question">
-      {{ Question }}
+      {{{ Question }}}
     </div>
     {{ #each answer }}
       <div class="dc_lesson_answer_flex">
@@ -17,7 +17,7 @@
           <input type="checkbox" class="dc_lesson_correct" data="{{ nbr }}">
         </div>
         <div class="dc_lesson_answer_txt">
-          {{ nbr }}. {{ text }}
+          {{ nbr }}. {{{ text }}}
         </div>
       </div>
     {{ /each }}
