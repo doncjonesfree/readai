@@ -48,6 +48,37 @@ Template.Edit.helpers({
   mode2() { return get('mode') === 2 },
   mode3() { return get('mode') === 3 },
   mode4() { return get('mode') === 4 },
+  edit_dc_lesson: function(){
+    const shapeName = function(s){
+      if ( s === 'C') return 'Circle';
+      if ( s === 'S') return 'Square';
+      if ( s === 'D') return 'Diamond';
+      if ( s === 'T') return 'Triangle';
+      return s;
+    };
+
+    let html;
+
+    let edit_dc_lesson = get('edit_dc_lesson');
+    if ( ! edit_dc_lesson ) return '';
+    let list = [];
+    const lesson = sprintf('%s #%s Question %s', shapeName(edit_dc_lesson.Shape),edit_dc_lesson.Number,edit_dc_lesson.QuestionNum);
+    list.push( { label: 'Lesson', name: '', value: lesson });
+    html = [];
+    html.push( sprintf('<textarea class="dc_textarea dc_data" data="%s">%s</textarea>','Question',edit_dc_lesson.Question))
+    list.push( { label: 'Question', name: 'Question', html: html.join('\n') });
+    for ( let i=1; i <= 4; i++ ) {
+      const n = sprintf('Answer%s',i);
+      html = [];
+      html.push( sprintf('<input type="text" class="dc_text dc_data" data="%s" value="%s">',n,edit_dc_lesson[n]))
+      list.push( { label: sprintf('Answer %s',i) , name: n, html: html.join('\n') });
+    }
+    html = [];
+    html.push( sprintf('<input type="text" class="dc_text_short dc_data" data="%s" value="%s">','Correct',edit_dc_lesson.Correct))
+    list.push( { label: 'Correct', name: 'Correct', html: html.join('\n') });
+    list.push( { label: 'Grade Level', name: 'GradeLevel', value: edit_dc_lesson.GradeLevel });
+    return list;
+  },
   dc_search(){
     let dc_search = get('dc_search');
     if ( ! dc_search ) return '';
@@ -564,10 +595,65 @@ const loadAllGatherFacts = function( callback ){
   });
 };
 
+const getDcLessonGivenId = function(id){
+  const dc_search = get('dc_search');
+  for ( let i=0; i < dc_search.list.length; i++ ) {
+    const s = dc_search.list[i];
+    if ( s._id === id ) return s;
+  }
+  return '';
+};
+
 let WordPlayBackBusy = 0;
 let PreviousWordPlayed = '';
 
 Template.Edit.events({
+  'click #dc_save'(e){
+    e.preventDefault();
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( html === wait ) return;
+    let edit_dc_lesson = get('edit_dc_lesson');
+    let doc = {};
+    let count = 0;
+    $('.dc_data').each(function(i, obj) {
+      const field = $(obj).attr('data');
+      let v = $(obj).val();
+      if ( lib.verifyInteger(v) ) v = lib.int(v);
+      if ( v !== edit_dc_lesson[ field ] ) {
+        doc[field] = v;
+        count += 1;
+      }
+    });
+
+    if ( count > 0 ) {
+      // we changed something
+      const changes = [ { collection: 'DrawConclusions', id: edit_dc_lesson._id, doc: doc } ];
+      $(e.currentTarget).html(wait);
+      $(e.currentTarget).html(wait);
+      Meteor.call('updateCollection', changes , function(err,results){
+        $(e.currentTarget).html(html);
+        if ( err ) {
+          console.log('Error in Edit.js line 245',err);
+        }
+      });
+    }
+    $('#dc_popup').hide();
+  },
+  'click .dc_edit'(e){
+    e.preventDefault();
+    const id = $(e.currentTarget).attr('data');
+    const ret = getDcLessonGivenId(id);
+    if ( ret ) {
+      set('edit_dc_lesson',ret);
+      $('#dc_popup').show();
+    }
+    console.log('jones573a',id,ret);
+  },
+  'click .dc_lesson'(e){
+    const id = $(e.currentTarget).attr('data');
+    console.log('jones573b',id);
+  },
   'change #dc_select_grade'(e){
     e.preventDefault();
     const GradeLevel = $(e.currentTarget).val();

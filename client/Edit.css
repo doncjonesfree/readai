@@ -11,24 +11,29 @@
   border-radius: .25em;
   margin: 0 2% 0 2%;
 }
-.dc_list_flex:hover {
-  font-weight: bold;
-  background-color: #99CCFF;
-  cursor: pointer;
+.dc_list_shape { width: 8%; }
+.dc_list_grade { width: 8%; }
+.dc_list_number { width: 8%; }
+.dc_list_qnum { width: 8%; }
+.dc_list_question { width: 58%; overflow: hidden; }
+.dc_list_options { width: 10%; }
+
+.dc_textarea {
+  width: 50em;
+  height: 7em;
 }
-.dc_list_shape { width: 10%; }
-.dc_list_grade { width: 10%; }
-.dc_list_number { width: 10%; }
-.dc_list_qnum { width: 10%; }
-.dc_list_question { width: 60%; overflow: hidden; }
 
 .gf_code { width: 7%; }
 .gf_color { width: 15%; }
 .gf_gradelevel { width: 8%; }
 .gf_number { width: 7%; }
-.gf_paragraph { width: 50%; overflow: hidden; padding-right: 1em; }
+.gf_paragraph { width: 50%; padding-right: .25em; overflow: hidden; padding-right: 1em; }
 .gf_options { width: 12%; }
 .edit_gf_text { width: 50em !important; }
+
+.dc_text_short {
+  width: 3em !important;
+}
 
 #test_word_get_recording {
   width: 8em;

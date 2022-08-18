@@ -219,6 +219,12 @@ Meteor.methods({
     for ( let i=0; i < changes.length; i++ ) {
       const c = changes[i];
       switch ( c.collection) {
+
+        case 'DrawConclusions':
+        DrawConclusions.update(c.id, { $set: c.doc });
+        retObj.updates += 1;
+        break;
+
         case 'GatherFactsAnswers':
         GatherFactsAnswers.update(c.id, { $set: c.doc });
         retObj.updates += 1;
@@ -258,6 +264,7 @@ Meteor.methods({
     return op;
   },
   'loadDrawConclusions'(GradeLevel){
+    // checkForBadCharactersDrawConclusions(); -- fixed one problem I found
     return DrawConclusions.find({ GradeLevel: GradeLevel }, { sort: { Shape: 1, Number: 1, QuestionNum: 1 }}).fetch();
   },
   'loadGatherFacts'( src ) {
@@ -345,4 +352,38 @@ const googleCreateMp3 = function(word, sentences ){
     const doc = { definition: true };
     AudioFiles.update(recs[0]._id, { $set: doc });
   }
+};
+
+const checkForBadCharactersDrawConclusions = function(){
+  // for initial testing - probably don't need any more
+  const recs = DrawConclusions.find().fetch();
+  retObj = { bad: 0 }
+
+  const check = function(rec, field){
+    let s = rec[field];
+    if ( s ) {
+      let bad = '';
+      let position = 0;
+
+      const ix = s.indexOf('ï¿½');
+      if ( ix >= 0 ) {
+        bad = sprintf('%s at position %s','ï¿½',ix)
+        position = ix;
+        s = s.replace(/ï¿½/g,', ');
+        let doc = {};
+        doc[ field ] = s;
+        DrawConclusions.update(rec._id, { $set: doc });
+        retObj.bad += 1;
+      }
+    }
+  };
+
+  for ( let i=0; i < recs.length; i++ ) {
+    const r = recs[i];
+    check( r, 'Question' );
+    for ( let i2=1; i2 <= 4; i2++ ){
+      check( r, sprintf('Answer%s',i2) );
+    }
+  }
+  if ( retObj.bad > 0 ) console.log('Bad records fixed = %s', retObj.bad );
 };

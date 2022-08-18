@@ -42,6 +42,7 @@
           <div class="dc_list_number">Lesson #</div>
           <div class="dc_list_qnum">Question #</div>
           <div class="dc_list_question">Question</div>
+          <div class="dc_list_options">Options</div>
         </div>
         {{ #each list }}
         <div class="dc_list_flex {{ cls }}">
@@ -50,6 +51,11 @@
           <div class="dc_list_number">{{ Number }}</div>
           <div class="dc_list_qnum">{{ QuestionNum }}</div>
           <div class="dc_list_question">{{ Question }}</div>
+          <div class="dc_list_options">
+            <a href="#" class="dc_edit" data="{{ _id }}">edit</a>
+            &nbsp;
+            <a href="#" class="dc_lesson" data="{{ _id }}">lesson</a>
+          </div>
         </div>
         {{ /each }}
       {{ /if }}
@@ -105,6 +111,26 @@
       <button id="popup_close" data="gf_lesson_popup">Close</button>
       <button id="gf_edit_from_popup">Edit</button>
       {{> GFLesson }}
+    </div>
+  </div>
+
+  <div class="popup" id="dc_popup">
+    <div class="popup_inside">
+      <div class="popup_title">Drawing Conclusions</div>
+      <button id="popup_close" data="dc_popup">Cancel</button>
+      <button id="dc_save">Save</button>
+      {{ #each edit_dc_lesson }}
+        <div class="label_flex">
+          <div class="label">{{ label }}</div>
+          <div class="value">
+            {{ #if html }}
+              {{{ html }}}
+            {{ else }}
+              {{ value }}
+            {{ /if }}
+          </div>
+        </div>
+      {{ /each }}
     </div>
   </div>
 
