@@ -20,6 +20,14 @@ Template.Edit.onCreated(function EditOnCreated() {
   setd('mode',1);
   setd('gf_search',{});
   setd('gatherfacts',{ GatherFacts: [] });
+
+  // jones - test code
+  Meteor.call('createAudioDrawConclusions', function(err,results){
+    console.log('jones26 createAudioDrawConclusions',results);
+    if ( err ) {
+      console.log('Error: Edit.js line 26',err);
+    }
+  });
 });
 
 const refresh = function(arg){

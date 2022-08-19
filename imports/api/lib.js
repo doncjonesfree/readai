@@ -143,7 +143,7 @@ export const DictionaryLookup = function( word, callback ){
   });
 };
 
-export const listWordsFromGFParagraph = function( arg ){
+export const listWordsFromGFParagraph = function( arg, alreadyFormatted ){
 
   const removeBadCharacters = function(arg){
     // given a word - remove any characters that cannot be part of the word
@@ -159,7 +159,12 @@ export const listWordsFromGFParagraph = function( arg ){
     return w;
   };
 
-  let p = formatGFParagraph( arg );
+  let p;
+  if ( alreadyFormatted ) {
+    p = arg;
+  } else {
+    p = formatGFParagraph( arg );
+  }
   // each word we care about has class="lesson_word" in a div around it
   let ix = p.indexOf('class="lesson_word"')
   let obj = {}; // words found

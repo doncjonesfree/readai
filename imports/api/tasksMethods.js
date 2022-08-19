@@ -10,6 +10,9 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  'createAudioDrawConclusions'(){
+    return createAudioDrawConclusions();
+  },
   'createDefinitionAudio'( allWords ){
     // Create audio file for all single definitions
     let future=new Future();
@@ -386,4 +389,62 @@ const checkForBadCharactersDrawConclusions = function(){
     }
   }
   if ( retObj.bad > 0 ) console.log('Bad records fixed = %s', retObj.bad );
+};
+
+const createAudioDrawConclusions = function(){
+  const recs = DrawConclusions.find({},{limit: 4}).fetch(); // jones 
+  const alreadyFormatted = true;
+  let uniqueCount = 0;
+  let wordObj = {};
+
+  const addToObject = function( words ){
+    for ( let i2=0; i2< words.length; i2++ ) {
+      const w = words[i2];
+      if ( w.length >= 2 && ! wordObj[w] ) wordObj[w] = { word: w, needWord: true, needDef: true };
+    }
+  };
+
+  const wordList = function(){
+    let l = [];
+    for ( let w in wordObj ) {
+      if ( lib.hasOwnProperty(wordObj,w)){
+        l.push(wordObj[w].word);
+      }
+    }
+    return l;
+  };
+
+  for ( let i=0; i < recs.length; i++ ) {
+    const rec = recs[i];
+    const tmp = lib.addDivsForLongerWords( rec.Question, uniqueCount );
+    uniqueCount = tmp.uniqueCount;
+    const words = lib.listWordsFromGFParagraph( tmp.op, alreadyFormatted );
+    // add words to object
+    addToObject( words );
+    for ( let i2=1; i2 <= 4; i2++ ) {
+      const a = rec[ sprintf('Answer%s',i2)];
+      if ( a ) {
+        const tmp = lib.addDivsForLongerWords( a, uniqueCount );
+        uniqueCount = tmp.uniqueCount;
+        const words = lib.listWordsFromGFParagraph( tmp.op, alreadyFormatted );
+        // add words to object
+        addToObject( words );
+      }
+      let list = wordList();
+      const audioRecs = AudioFiles.find({ word: { $in: list } }).fetch();
+      for ( let i3=0; i3 < audioRecs.length; i3++ ) {
+        const ar = audioRecs[i3];
+        if ( ar.url && ar.definition ) {
+          // both word and def are already present
+          delete wordObj[ ar.word ];
+        } else if ( ar.url ) {
+          // no definition
+          wordObj[ ar.word ].needWord = false;
+        } else if ( ar.definition ) {
+          wordObj[ ar.word ].needDef = false;
+        }
+      }
+    }
+  }
+  return { wordObj: wordObj };
 };
