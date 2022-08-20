@@ -11,79 +11,21 @@ const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
   'createAudioDrawConclusions'(){
-    return createAudioDrawConclusions();
+    return 'createAudioDrawConclusions turned off';
+    let future=new Future();
+
+    createAudioDrawConclusions(function( results ){
+      future.return( results );
+    });
+
+    return future.wait();
   },
   'createDefinitionAudio'( allWords ){
     // Create audio file for all single definitions
     let future=new Future();
 
-    const obscene = function(arg){
-      const s = arg.toLowerCase();
-      if ( s.indexOf('pubic') >= 0 ) return true;
-      if ( s.indexOf('genital') >= 0 ) return true;
-      if ( s.indexOf('sexual') >= 0 ) return true;
-      if ( s.indexOf('sex') >= 0 ) return true;
-      if ( s.indexOf('lenormand') >= 0 ) return true;
-
-      return false;
-    };
-
-    let count = 0;
-    const makeAudio = function(ix, callback){
-      if ( ix < allWords.length ) {
-        const word = allWords[ix].word;
-        recs = AudioFiles.find( { word: word }).fetch();
-        let found = false; // found definition
-        if ( recs.length > 0 ) {
-          const r = recs[0];
-          if ( r.definition ) found = true;
-        }
-        if ( ! found ) {
-          // need to lookup this word in the dictionary and create a sound file
-          // for the definition
-
-          lib.DictionaryLookup( word, function(results){
-            let list = []; // list of sentences in the definition
-            if ( results ) {
-              for ( let i=0; i < results.length; i++ ) {
-                if ( list.length >= 2 ) break;
-                const r = results[i];
-                if ( r.meanings ) {
-                  for ( let i2=0; i2 < r.meanings.length; i2++ ) {
-                    if ( list.length >= 2 ) break;
-                    const m = r.meanings[i2];
-                    if ( m.definitions ) {
-                      for ( let i3=0; i3 < m.definitions.length; i3++ ) {
-                        if ( list.length >= 2 ) break;
-                        const d = m.definitions[i3];
-                        if ( d.definition && ! obscene( d.definition ) ) list.push( d.definition );
-                      }
-                    }
-                  }
-                }
-              }
-            }
-            if ( list.length > 0 ) {
-              // Max 11 requests per minute allowed from google
-              Meteor.setTimeout(function(){
-                console.log('Creating definition mp3 for "%s" %s of %s',word,ix+1,allWords.length);
-                googleCreateMp3(word, list.join('\n\n'));
-                count += 1;
-                makeAudio(ix+1, callback);
-              },6000);
-            } else {
-              makeAudio(ix+1, callback);
-            }
-          });
-        } else {
-          makeAudio(ix+1, callback);
-        }
-      } else {
-        callback();
-      }
-    };
-    makeAudio(6970, function(){ // crashed at 6973 "leisure"
-      future.return( { success: true, count: count } );
+    createDefinitionAudio( allWords, function(results){
+      future.return( results );
     });
 
     return future.wait();
@@ -345,13 +287,13 @@ const googleCreateMp3 = function(word, sentences ){
     await writeFile( fullPath,response.audioContent,'binary');
   };
   convertTextToMp3();
-  const doc = { word: word, url: sprintf('/audio/%s.mp3',word)};
+  let doc = { word: word, url: sprintf('/audio/%s.mp3',word)};
   if ( sentences ) doc.definition = true;
   const recs = AudioFiles.find( { word: word }).fetch();
   if ( recs.length === 0 ) {
     // Only insert if not alread in the collection
     AudioFiles.insert(doc); // make a note so we don't have to generate this word again
-  } else {
+  } else if ( sentences ) {
     const doc = { definition: true };
     AudioFiles.update(recs[0]._id, { $set: doc });
   }
@@ -391,8 +333,9 @@ const checkForBadCharactersDrawConclusions = function(){
   if ( retObj.bad > 0 ) console.log('Bad records fixed = %s', retObj.bad );
 };
 
-const createAudioDrawConclusions = function(){
-  const recs = DrawConclusions.find({},{limit: 4}).fetch(); // jones 
+const createAudioDrawConclusions = function( callback ){
+  const recs = DrawConclusions.find().fetch();
+  console.log('Found %s DrawConclusions records',recs.length);
   const alreadyFormatted = true;
   let uniqueCount = 0;
   let wordObj = {};
@@ -404,11 +347,15 @@ const createAudioDrawConclusions = function(){
     }
   };
 
-  const wordList = function(){
+  const wordList = function( wholeObject ){
     let l = [];
     for ( let w in wordObj ) {
       if ( lib.hasOwnProperty(wordObj,w)){
-        l.push(wordObj[w].word);
+        if ( wholeObject ) {
+          l.push(wordObj[w]);
+        } else {
+          l.push(wordObj[w].word);
+        }
       }
     }
     return l;
@@ -446,5 +393,110 @@ const createAudioDrawConclusions = function(){
       }
     }
   }
-  return { wordObj: wordObj };
+  const list = wordList( true );
+  if ( list.length > 0 ) {
+    console.log('Processing %s words',list.length);
+    createAudio( list, 0, function(){
+      callback( { list: list, wordObj: wordObj } );
+    });
+  } else {
+    console.log('No words to process');
+    callback( { list: list, wordObj: wordObj } );
+  }
+};
+
+const createAudio = function( list, ix, callback ){
+  if ( ix < list.length ) {
+    const o = list[ix];
+    console.log('createAudio word=%s %s of %s',o.word,ix+1,list.length);
+    if ( o.needDef ) {
+      // we need a definition - lookup it up
+      createDefinitionAudio( [o], function(defResults ){
+        if ( o.needWord ) googleCreateMp3(o.word);
+        createAudio( list, ix+1, callback );
+      });
+    } else {
+      if ( o.needWord ) googleCreateMp3(o.word);
+      createAudio( list, ix+1, callback );
+    }
+  } else {
+    callback();
+  }
+};
+
+const createDefinitionAudio = function( allWords, callback ){
+  // Takes a list of words and creates definition audio for the words if
+  // not already defined - and stores the result in AudioFiles
+  const obscene = function(arg){
+    const s = arg.toLowerCase();
+    if ( s.indexOf('pubic') >= 0 ) return true;
+    if ( s.indexOf('genital') >= 0 ) return true;
+    if ( s.indexOf('sexual') >= 0 ) return true;
+    if ( s.indexOf('sex') >= 0 ) return true;
+    if ( s.indexOf('lenormand') >= 0 ) return true;
+
+    return false;
+  };
+
+  let count = 0;
+  const makeAudio = function(ix, callback){
+    if ( ix < allWords.length ) {
+      const word = allWords[ix].word;
+      recs = AudioFiles.find( { word: word }).fetch();
+      let found = false; // found definition
+      if ( recs.length > 0 ) {
+        const r = recs[0];
+        if ( r.definition ) found = true;
+      }
+      if ( ! found ) {
+        // need to lookup this word in the dictionary and create a sound file
+        // for the definition
+
+        lib.DictionaryLookup( word, function(results){
+          let list = []; // list of sentences in the definition
+          if ( results ) {
+            for ( let i=0; i < results.length; i++ ) {
+              if ( list.length >= 2 ) break;
+              const r = results[i];
+              if ( r.meanings ) {
+                for ( let i2=0; i2 < r.meanings.length; i2++ ) {
+                  if ( list.length >= 2 ) break;
+                  const m = r.meanings[i2];
+                  if ( m.definitions ) {
+                    for ( let i3=0; i3 < m.definitions.length; i3++ ) {
+                      if ( list.length >= 2 ) break;
+                      const d = m.definitions[i3];
+                      if ( d.definition && ! obscene( d.definition ) ) list.push( d.definition );
+                    }
+                  }
+                }
+              }
+            }
+          }
+          if ( list.length > 0 ) {
+            // Max 11 requests per minute allowed from google
+            Meteor.setTimeout(function(){
+              if ( allWords.length.length === 1 ) {
+                console.log('Creating definition mp3 for "%s"',word);
+              } else {
+                console.log('Creating definition mp3 for "%s" %s of %s',word,ix+1,allWords.length);
+              }
+              googleCreateMp3(word, list.join('\n\n'));
+              count += 1;
+              makeAudio(ix+1, callback);
+            },6000);
+          } else {
+            makeAudio(ix+1, callback);
+          }
+        });
+      } else {
+        makeAudio(ix+1, callback);
+      }
+    } else {
+      callback();
+    }
+  };
+  makeAudio(0, function(){
+    callback( { success: true, count: count } );
+  });
 };

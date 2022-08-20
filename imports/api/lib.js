@@ -207,7 +207,7 @@ export const listWordsFromGFParagraph = function( arg, alreadyFormatted ){
   return list;
 };
 
-const lettersEtc = "abcdefghijklmnopqrstuvwxya'";
+const lettersEtc = "abcdefghijklmnopqrstuvwxyz'";
 const partOfWord = function(c){
   return lettersEtc.indexOf(c.toLowerCase()) >= 0;
 };

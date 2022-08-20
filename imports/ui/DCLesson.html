@@ -13,13 +13,9 @@
     </div>
     {{ #each answer }}
       <div class="dc_lesson_answer_flex">
-        <div class="dc_lesson_answer_chk">
-          <input type="checkbox" class="dc_lesson_correct" data="{{ nbr }}">
-        </div>
-        <div class="dc_lesson_answer_txt">
-          {{ nbr }}. {{{ text }}}
-        </div>
+        {{{ checkbox }}} {{{ content }}}
       </div>
     {{ /each }}
   {{ /with }}
+  <button id="dc_done">Done</button>
 </template>
