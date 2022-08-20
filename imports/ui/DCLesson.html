@@ -6,7 +6,7 @@
 
   {{ #with lesson }}
     <div class="dc_lesson_code">
-      {{ Shape }} {{ Number }}  #{{ QuestionNum }}
+      {{ Shape }} {{ Number }}  #{{ QuestionNum }} of 10
     </div>
     <div class="dc_lesson_question">
       {{{ Question }}}
@@ -17,5 +17,5 @@
       </div>
     {{ /each }}
   {{ /with }}
-  <button id="dc_done">Done</button>
+  <button id="dc_done">{{ done_button }}</button>
 </template>

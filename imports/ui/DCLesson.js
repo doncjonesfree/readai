@@ -20,7 +20,17 @@ const expandShape = function(s){
   return s;
 };
 
+const onLastQuestion = function(){
+  let l = get('lesson');
+  if ( l && l.QuestionNum === 10 ) return true;
+  return false;
+};
+
 Template.DCLesson.helpers({
+  done_button: function(){
+    if ( onLastQuestion() ) return 'Done';
+    return 'Next';
+  },
   lesson() {
     let l = get('lesson');
     if ( ! l ) return '';
@@ -77,24 +87,47 @@ const random = function(arg){
   return 1;
 };
 
+const loadNextQuestion = function(){
+  let lesson = get('lesson');
+  const find = { GradeLevel: lesson.GradeLevel, "Number": lesson.Number, QuestionNum: lesson.QuestionNum+1, Shape: lesson.Shape }
+  console.log('jones93a',find);
+  Meteor.call('findCollection', 'DrawConclusions', find, function(err,results){
+    console.log('jones93b',results);
+    if ( err ) {
+      console.log('Error in DCLesson.js line 93',err);
+    } else if ( results.length > 0 ){
+      set('lesson', results[0]);
+    }
+  });
+};
+
 Template.DCLesson.events({
   'click #dc_done': function(e){
     let word;
+    const last = onLastQuestion();
+    let correct =  false;
     let lesson = get('lesson');
     if ( lesson.answer_selected && lesson.answer_selected === lesson.Correct ) {
-      const n = random(4);
-      word = sprintf('answer_correct%s',n);
+      word = 'right_answer';
+      correct = true;
     } else if ( lesson.answer_selected ) {
-      word = 'not_correct';
+      word = 'wrong_answer';
     } else {
-      word = 'answer_question';
+      // no answer given
+      word = 'answer_question2'; // next
+      if ( last ) word = 'answer_question';
     }
     lib.googlePlaySound( word, function(){
       console.log('%s finished playing',word);
     });
+    if ( ! last && correct ) {
+      // go to next question
+      loadNextQuestion();
+    }
   },
   'click #dc_help': function(e){
-    const word = 'dc_help';
+    let word = 'dc_help2'; // next
+    if ( onLastQuestion() ) word = 'dc_help';
     lib.googlePlaySound( word, function(){
       console.log('%s finished playing',word);
     });
@@ -102,7 +135,11 @@ Template.DCLesson.events({
   'change .dc_chk_answer': function(e){
     const i = $(e.currentTarget).attr('data'); // question #
     let l = get('lesson');
-    l.answer_selected = lib.int(i);
+    if ( $(e.currentTarget).is(':checked')) {
+      l.answer_selected = lib.int(i);
+    } else {
+      delete l.answer_selected;
+    }
     set('lesson',l);
   },
   'click .lesson_word': function(e){

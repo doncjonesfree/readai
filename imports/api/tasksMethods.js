@@ -159,6 +159,24 @@ Meteor.methods({
     return future.wait();
 
   },
+  'findCollection'( collection, find ){
+    let retObj = { success: true, updates: 0 };
+    switch ( collection) {
+
+      case 'DrawConclusions':
+      return DrawConclusions.find(find).fetch();
+      break;
+
+      case 'GatherFactsAnswers':
+      return GatherFactsAnswers.find(find).fetch();
+      break;
+
+      case 'GatherFacts':
+      return GatherFacts.find(find).fetch();
+      break;
+    }
+    return [];
+  },
   'updateCollection'( changes ){
     let retObj = { success: true, updates: 0 };
     for ( let i=0; i < changes.length; i++ ) {
