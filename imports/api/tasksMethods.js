@@ -10,7 +10,19 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  'fillInDefinitions'(){
+    return oxfordDictionary( 'example' );
+
+    // let future=new Future();
+    //
+    // oxfordDictionary( 'example', function(resuilts){
+    //   future.return(results)
+    // });
+    //
+    // return future.wait();
+  },
   'createAudioDrawConclusions'(){
+    // just for initial creating of audio files for drawing conclusions lessons
     return 'createAudioDrawConclusions turned off';
     let future=new Future();
 
@@ -143,16 +155,25 @@ Meteor.methods({
       let lcWord = word.toLowerCase();
       if ( lcWord === 'its') lcWord = 'itsadjective';
       if ( lcWord === "i'll") lcWord = 'i_ll';
-      lcWord = lcWord.replace(/'/g,'');
+      const ix = lcWord.indexOf("'");
+      if ( ix > 0 ) {
+        lcWord = lcWord.substr(0,ix);
+        word = lcWord;
+      }
       const fullPath = Assets.absoluteFilePath( sprintf('audio/%s.mp3',lcWord) );
       const url = sprintf('http://localhost:3000/audio/%s.mp3',lcWord);
       future.return( [ { phonetics: [ { audio: url } ] } ]);
     } catch(e){
-      const url = sprintf('https://api.dictionaryapi.dev/api/v2/entries/en/%s',word);
+      try {
+        const url = sprintf('https://api.dictionaryapi.dev/api/v2/entries/en/%s',word);
 
-      fetch(url)
-        .then(response => response.json())
-        .then(data => future.return( data));
+        fetch(url)
+          .then(response => response.json())
+          .then(data => future.return( data));
+      } catch(e) {
+        console.log('Problem in dictionary lookup for "%s"',word);
+        future.return('');
+      }
     }
 
 
@@ -426,15 +447,23 @@ const createAudioDrawConclusions = function( callback ){
 const createAudio = function( list, ix, callback ){
   if ( ix < list.length ) {
     const o = list[ix];
-    console.log('createAudio word=%s %s of %s',o.word,ix+1,list.length);
     if ( o.needDef ) {
       // we need a definition - lookup it up
+      console.log('createAudio word=%s %s of %s (needs definition)',o.word,ix+1,list.length);
       createDefinitionAudio( [o], function(defResults ){
-        if ( o.needWord ) googleCreateMp3(o.word);
+        if ( o.needWord ) {
+          console.log('createAudio word=%s %s of %s (needs word)',o.word,ix+1,list.length);
+          googleCreateMp3(o.word);
+        }
         createAudio( list, ix+1, callback );
       });
     } else {
-      if ( o.needWord ) googleCreateMp3(o.word);
+      if ( o.needWord ) {
+        console.log('createAudio word=%s %s of %s (needs word)',o.word,ix+1,list.length);
+        googleCreateMp3(o.word);
+      } else {
+        console.log('createAudio word=%s %s of %s (all good)',o.word,ix+1,list.length);
+      }
       createAudio( list, ix+1, callback );
     }
   } else {
@@ -456,21 +485,27 @@ const createDefinitionAudio = function( allWords, callback ){
     return false;
   };
 
-  let count = 0;
+  let count = { words: 0, added: 0, failed: 0 };
   const makeAudio = function(ix, callback){
     if ( ix < allWords.length ) {
+      count.words += 1;
       const word = allWords[ix].word;
       recs = AudioFiles.find( { word: word }).fetch();
       let found = false; // found definition
       if ( recs.length > 0 ) {
         const r = recs[0];
+        // true means we have the definition
+        // false means we tried to look it up, but it wasn't there
+        // undefined means we haven't tried to find the definition and need to look it up
         if ( r.definition ) found = true;
       }
+      if ( allWords[ix].force ) found = false;
       if ( ! found ) {
         // need to lookup this word in the dictionary and create a sound file
         // for the definition
 
         lib.DictionaryLookup( word, function(results){
+          // 901 of 1201 norsemen needs definition - last error
           let list = []; // list of sentences in the definition
           if ( results ) {
             for ( let i=0; i < results.length; i++ ) {
@@ -500,10 +535,24 @@ const createDefinitionAudio = function( allWords, callback ){
                 console.log('Creating definition mp3 for "%s" %s of %s',word,ix+1,allWords.length);
               }
               googleCreateMp3(word, list.join('\n\n'));
-              count += 1;
+              count.added += 1;
               makeAudio(ix+1, callback);
             },6000);
           } else {
+            count.failed += 1;
+            console.log('No definition found for "%s"',word);
+            const recs = AudioFiles.find( { word: word }).fetch();
+            if ( recs.length === 0 ) {
+              // Only insert if not alread in the collection
+              let doc = { word: word, url: '' };
+              doc.definition = false;  // so we don't have to look it up again
+              AudioFiles.insert(doc); // make a note so we don't have to generate this word again
+            } else {
+              if ( typeof(recs[0].definition) === 'undefined' ) {
+                const doc = { definition: false };
+                AudioFiles.update(recs[0]._id, { $set: doc });
+              }
+            }
             makeAudio(ix+1, callback);
           }
         });
@@ -517,4 +566,53 @@ const createDefinitionAudio = function( allWords, callback ){
   makeAudio(0, function(){
     callback( { success: true, count: count } );
   });
+};
+
+function oxfordDictionary( word ){
+  // see: https://docs.meteor.com/packages/fetch.html
+
+  const s = Meteor.settings.oxford;
+  const language = "en-gb"
+  const url = "https://od-api.oxforddictionaries.com:443/api/v2/entries/" + language + "/" + word.toLowerCase();
+
+  return fetch(url, {
+    method: 'GET',
+    headers: new Headers( {
+      app_id: s.ID,
+      app_key: s.Key
+    }),
+  }).then( res => { return res.json() })
+  .then( data =>  { return { data: data, defs: getOxfordDefinition(data) } } )
+};
+
+const getOxfordDefinition = function(data){
+  // return the definition from the oxford dictionary api
+  let defs = [];
+  if ( data && data.results && data.results.length > 0 ) {
+    for ( let i=0; i < data.results.length; i++ ) {
+      const r = data.results[i];
+      if ( r.lexicalEntries && r.lexicalEntries.length > 0 ) {
+        for ( let i2=0; i2 < r.lexicalEntries.length; i2++ ) {
+          const le = r.lexicalEntries[i2];
+          if ( le.entries && le.entries.length > 0 ) {
+            for ( let i3=0; i3 < le.entries.length; i3++ ) {
+              const e = le.entries[i3];
+              if ( e.senses && e.senses.length > 0 ) {
+                for ( let i4=0; i4 < e.senses.length; i4++ ) {
+                  const s = e.senses[i4];
+                  if ( s.definitions && s.definitions.length > 0 ) {
+                    for ( let i5=0; i5 < s.definitions.length; i5++ ) {
+                      defs.push( s.definitions[i5] );
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  if ( defs.length === 0 ) return '';
+  return defs.join('. ')
 };

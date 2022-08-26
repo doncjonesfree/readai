@@ -21,14 +21,54 @@ Template.Edit.onCreated(function EditOnCreated() {
   setd('gf_search',{});
   setd('gatherfacts',{ GatherFacts: [] });
 
-  // jones - test code
-  Meteor.call('createAudioDrawConclusions', function(err,results){
-    console.log('jones26 createAudioDrawConclusions',results);
+  // jones testing
+  Meteor.call('fillInDefinitions', function(err,results){
     if ( err ) {
-      console.log('Error: Edit.js line 26',err);
+      console.log('Error: Edit.js line 27',err);
+    } else {
+      console.log('jones29',results);
     }
   });
+  // testOxford();
+
 });
+
+const testOxford = function(){
+  const language = "en-gb"
+  const word_id = "example"
+  const url = "https://od-api.oxforddictionaries.com:443/api/v2/entries/" + language + "/" + word_id.toLowerCase();
+  const app_id = 'd56a0451';
+  const app_key = '976682794679be285a7d5d91b4ea8c2e';
+
+  fetch(url, {
+    method: 'GET',
+    mode: 'no-cors',
+    headers: new Headers( {
+      app_id: app_id,
+      app_key: app_key
+    }),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer'
+    }).then( res => console.log(res))
+
+
+  // const response = await fetch(url, {
+  //   method: 'GET',
+  //   headers: new Headers( {
+  //     app_id: app_id,
+  //     app_key: app_key
+  //   }),
+  //   redirect: 'follow',
+  //   referrerPolicy: 'no-referrer'
+  // });
+  // const data = await response.json();
+  // console.log('jones30a',url);
+  // console.log('jones30b',data);
+  // console.log('jones30c',data.results[0].lexicalEntries);
+  // console.log(response);
+  // return response(null,data);
+
+};
 
 const refresh = function(arg){
   const n = sprintf('refresh_%s',arg);
