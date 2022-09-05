@@ -22,13 +22,13 @@ Template.Edit.onCreated(function EditOnCreated() {
   setd('gatherfacts',{ GatherFacts: [] });
 
   // jones testing
-  Meteor.call('fillInDefinitions', function(err,results){
-    if ( err ) {
-      console.log('Error: Edit.js line 27',err);
-    } else {
-      console.log('jones29',results);
-    }
-  });
+  // Meteor.call('fillInDefinitions', function(err,results){
+  //   if ( err ) {
+  //     console.log('Error: Edit.js line 27',err);
+  //   } else {
+  //     console.log('jones29',results);
+  //   }
+  // });
   // testOxford();
 
 });

@@ -18,6 +18,15 @@ const SEED_USERNAME = 'meteorite';
 const SEED_PASSWORD = 'password';
 
 Meteor.startup(() => {
+  // console.log('jones21 startup running fillInDefinitions');
+  // Meteor.call('fillInDefinitions', function(err,results){
+  //   if ( err ) {
+  //     console.log('Error: server/main.js line 23',err);
+  //   } else {
+  //     console.log('jones26',results);
+  //   }
+  // });
+
   if (!Accounts.findUserByUsername(SEED_USERNAME)) {
     Accounts.createUser({
       username: SEED_USERNAME,

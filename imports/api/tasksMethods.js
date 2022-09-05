@@ -11,15 +11,46 @@ const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
   'fillInDefinitions'(){
-    return oxfordDictionary( 'example' );
+    let future=new Future();
 
-    // let future=new Future();
-    //
-    // oxfordDictionary( 'example', function(resuilts){
-    //   future.return(results)
-    // });
-    //
-    // return future.wait();
+    const processUndefinedWords = function( list, ix, op, callback ){
+      // get definition, create definition mp3 if found and store results in AudioFiles collection
+      if ( ix < list.length ) {
+        const r = list[ix];
+        op.count += 1;
+        // Written to process a list of words, but here we just want to process one word
+        getDefs( [r], 0, [], function(results){
+          // results = [ { id: word: def: } ]
+          console.log('jones22b %s results found',results.length);
+          if ( r.def ) {
+            Meteor.setTimeout(function(){
+              googleCreateMp3(r.word, r.def );
+              let doc = { definition: true };
+              console.log('jones22c',ix,r.word,r.def);
+              AudioFiles.update(r.id, { $set: doc });
+              processUndefinedWords( list, ix+1, op, callback );
+            },6000);
+          } else {
+            let doc = { definition: 'failed' };
+            op.failed += 1;
+            console.log('jones22d',ix,r.word,doc);
+            AudioFiles.update(r.id, { $set: doc });
+            processUndefinedWords( list, ix+1, op, callback );
+          }
+        });
+      } else {
+        callback( op );
+      }
+    };
+
+    const recs = AudioFiles.find({ definition: false },{ limit: 2 }).fetch();
+    console.log('jones22a %s records read',recs.length);
+    processUndefinedWords( recs, 0, { count: 0, failed: 0 }, function( processResults ){
+      console.log('jones22e done');
+      future.return( processResults );
+    });
+
+    return future.wait();
   },
   'createAudioDrawConclusions'(){
     // just for initial creating of audio files for drawing conclusions lessons
@@ -575,14 +606,36 @@ function oxfordDictionary( word ){
   const language = "en-gb"
   const url = "https://od-api.oxforddictionaries.com:443/api/v2/entries/" + language + "/" + word.toLowerCase();
 
-  return fetch(url, {
-    method: 'GET',
-    headers: new Headers( {
-      app_id: s.ID,
-      app_key: s.Key
-    }),
-  }).then( res => { return res.json() })
-  .then( data =>  { return { data: data, defs: getOxfordDefinition(data) } } )
+  try {
+    return fetch(url, {
+      method: 'GET',
+      headers: new Headers( {
+        app_id: s.ID,
+        app_key: s.Key
+      }),
+    }).then( res => {
+      if ( res.status === 429 && res.statusText === 'Too Many Requests') {
+        throw 'Oxford: Too Many Requests!'
+      } else {
+        console.log('jones610b1',res);
+        try {
+          return res.json()
+        } catch(err){
+          console.log('jones610b4',err);
+          return '';
+        }
+      }
+    })
+    .then( data =>  {
+      if ( ! data ) return '';
+      const defs = getOxfordDefinition(data);
+      if ( defs ) return defs;
+      return '';
+    })
+  } catch(err){
+    console.log('Error calling oxford',err);
+    return '';
+  }
 };
 
 const getOxfordDefinition = function(data){
@@ -615,4 +668,20 @@ const getOxfordDefinition = function(data){
   }
   if ( defs.length === 0 ) return '';
   return defs.join('. ')
+};
+
+const getDefs = function( recs, ix, results, callback ){
+  if ( ix < recs.length ) {
+    let r = recs[ix];
+    console.log('jones655 getDefs %s',r.word);
+    Meteor.setTimeout(function(){
+      let def = oxfordDictionary( r.word );
+      def.then( (result) => {
+        results.push( { id: r._id, word: r.word, def: result });
+        getDefs( recs, ix+1, results, callback );
+      })
+    },3000);
+  } else {
+    callback( results );
+  }
 };
