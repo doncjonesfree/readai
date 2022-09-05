@@ -14,6 +14,10 @@ import "./GFLesson.html";
 import "./GFLesson.js";
 import "./DCLesson.html";
 import "./DCLesson.js";
+import "./Header.html";
+import "./Header.js";
+import "./Signup.html";
+import "./Signup.js";
 
 const IS_LOADING_STRING = "isLoading";
 
@@ -47,7 +51,7 @@ Template.mainContainer.helpers({
 });
 
 Template.mainContainer.events({
-  'click .user'() {
-    Meteor.logout();
+  'click #signup'() {
+    console.log('jones51');
   }
 });

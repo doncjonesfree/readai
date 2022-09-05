@@ -1,3 +1,72 @@
+export const dateFormat = 'YYYY-MM-DD HH:mm:ss';
+export const today = function() {
+    // pacific time zone
+    return currentMoment().format(dateFormat);
+};
+
+export const currentMoment = function(){
+  // On server it's UTC time which is 7 hours past pacific time
+
+  // may force to a certain time for testing
+  // return moment('2021-03-18 12:00:00',dateFormat);
+  return moment().tz('America/Los_Angeles');
+};
+
+
+export const dataEntryHtml = function(list){
+  let html = [];
+  for ( let i=0; i < list.length; i++ ) {
+    const l = list[i];
+    html.push( '<div class="de_flex">' );
+      if ( l.button ) {
+        html.push( '<div class="de_label"></div>' );
+
+        html.push( '<div class="de_value">' );
+        html.push( sprintf('<button id="%s">%s</button>',l.id,l.button));
+        if ( l.error ) {
+          html.push( sprintf('<div class="de_error">%s</div>',l.error));
+        }
+        html.push( '</div>' );
+      } else {
+        html.push( sprintf('<div class="de_label">%s</div>',l.label));
+
+        let v = l.value;
+        if ( ! v ) v = '';
+        html.push( '<div class="de_value">' );
+        html.push( sprintf('<input type="text" id="%s" value="%s">',l.id,v));
+        html.push( '</div>' );
+      }
+
+    html.push( '</div>' );
+  }
+  return html.join('\n');
+};
+
+export const docFromFields = function( list ){
+  // works with dataEntryHtml and returns an object with data
+  let doc = {};
+  let error = '';
+  for ( let i=0; i < list.length; i++ ) {
+    const l = list[i];
+    if ( ! l.button ) {
+      const v = $('#'+l.id).val();
+      doc[ l.id ] = v;
+      if ( ! error && ! v && l.required ) error = sprintf('%s is required',l.label);
+      if ( ! error && v && l.type === 'email' && ! verifyEmail(v) ) error = sprintf('Invalid %s',l.label);
+    }
+  }
+  doc.created = today();
+  return { doc: doc, error: error };
+};
+
+export const verifyEmail = function( value ) {
+    // see if given value is a given email
+    // const filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    const filter  = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    return filter.test(value);
+};
+
 export const formatGFParagraph = function( arg ){
   let p = arg;
   if ( typeof(p) === 'number') p = p.toString();

@@ -50,3 +50,6 @@ npm docs say: npm i @google-cloud/text-to-speech
 I used: meteor npm install --save @google-cloud/text-to-speech
 
 meteor add pauldowman:dotenv - store store things in environment variables, docs: https://atmospherejs.com/pauldowman/dotenv
+
+meteor add momentjs:moment
+meteor add mrt:moment-timezone
