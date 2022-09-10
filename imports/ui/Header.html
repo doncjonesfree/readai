@@ -7,10 +7,10 @@
         {{ #with user_info }}
           {{ #if user }}
             {{ #if masterUser }}
-              master user 
-              <a href="signout">sign out ({{ name }})</a>
+              master user
+              <a class="signout">sign out ({{ name }})</a>
             {{ else }}
-              <a href="signout">sign out ({{ name }})</a>
+              <a class="signout">sign out ({{ name }})</a>
             {{ /if }}
           {{ else }}
             <a href="#">about us</a>

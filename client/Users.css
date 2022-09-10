@@ -1,0 +1,16 @@
+.users_flex_heading {
+  display: flex;
+  font-weight: bold;
+  border-bottom: 2px solid black;
+  margin-top: 1.5em;
+  width: 60%;
+}
+.users_flex {
+  display: flex;
+  padding: .25em;
+  border-radius: .25em;
+  width: 60%;
+}
+.users_name { width: 30%; }
+.users_email { width: 40%; }
+.users_email { width: 30%; }

@@ -10,6 +10,10 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  'deleteUser': function(id){
+    const doc = { inactive: true };
+    Users.update(id, { $set: doc });
+  },
   'masterUser': function( email ){
     const list = Meteor.settings.masterUsers;
     return list.indexOf(email) >= 0;
@@ -17,7 +21,15 @@ Meteor.methods({
   'collectionFind': function( collection, find ){
     switch ( collection ) {
       case 'Users':
-        return Users.find(find).fetch();
+        const list = Meteor.settings.masterUsers;
+        const recs = Users.find(find).fetch();
+        let op = [];
+        // don't let master users through unless in dev mode
+        for ( let i=0; i < recs.length; i++ ) {
+          const r = recs[i];
+          if ( list.indexOf(r.email) < 0 || Meteor.isDevelopment ) op.push(r);
+        }
+        return op;
       break;
     }
     return [];

@@ -18,6 +18,10 @@ import "./Signup.html";
 import "./Signup.js";
 import "./Signin.html";
 import "./Signin.js";
+import "./Master.html";
+import "./Master.js";
+import "./Users.html";
+import "./Users.js";
 
 const IS_LOADING_STRING = "isLoading";
 

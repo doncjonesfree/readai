@@ -16,7 +16,8 @@ Template.header.events({
     e.preventDefault();
     FlowRouter.go('home');
   },
-  'click #signout'(e){
+  'click .signout'(e){
     Session.set('currentUser','');
+    FlowRouter.go('home');
   }
 });

@@ -1,0 +1,11 @@
+<template name="master">
+
+  {{ #if mode1 }}
+    <button class="change_mode" data="2">Users</button>
+  {{ /if }}
+
+  {{ #if mode2 }}
+    {{ > users }}
+  {{ /if }}
+
+</template>

@@ -1,0 +1,22 @@
+<template name="users">
+  {{ #if mode1 }}
+    loading users...
+  {{ /if }}
+
+  {{ #if mode2 }}
+      <div class="users_flex_heading">
+        <div class="users_name">Name</div>
+        <div class="users_email">Email</div>
+        <div class="users_options">Options</div>
+      </div>
+      {{ #each user }}
+        <div class="users_flex {{ cls }}">
+          <div class="users_name">{{ first_name }} {{ last_name }}</div>
+          <div class="users_email">{{ email }}</div>
+          <div class="users_options">
+            <a href="#" class="user_delete" data="{{ _id }}">delete</a>
+          </div>
+        </div>
+      {{ /each }}
+  {{ /if }}
+</template>
