@@ -1,13 +1,24 @@
 <template name="header">
   <div class="app-bar">
      <div class="app-header">
-       <h1>Learn To Read (Free)</h1>
+       <h1 class="hdr_home">Learn To Read (Free)</h1>
      </div>
      <div class="app-header app-align-right">
-         <a href="#">about us</a>
-         <a href="#">donate</a>
-         <a href="signup">sign up (free)</a>
-         <a href="#">sign in</a>
+        {{ #with user_info }}
+          {{ #if user }}
+            {{ #if masterUser }}
+              master user 
+              <a href="signout">sign out ({{ name }})</a>
+            {{ else }}
+              <a href="signout">sign out ({{ name }})</a>
+            {{ /if }}
+          {{ else }}
+            <a href="#">about us</a>
+            <a href="#">donate</a>
+            <a href="signup">sign up (free)</a>
+            <a href="signin">sign in</a>
+          {{ /if }}
+        {{ /with }}
      </div>
   </div>
 </template>

@@ -33,7 +33,11 @@ export const dataEntryHtml = function(list){
         let v = l.value;
         if ( ! v ) v = '';
         html.push( '<div class="de_value">' );
-        html.push( sprintf('<input type="text" id="%s" value="%s">',l.id,v));
+        if ( l.placeholder ) {
+          html.push( sprintf('<input type="text" id="%s" value="%s" placeholder="%s">',l.id,v,l.placeholder));
+        } else {
+          html.push( sprintf('<input type="text" id="%s" value="%s">',l.id,v));
+        }
         html.push( '</div>' );
       }
 

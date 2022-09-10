@@ -3,9 +3,7 @@ import { TasksCollection } from '/imports/db/Collections';
 import { ReactiveDict } from 'meteor/reactive-dict';
 
 import './App.html';
-import "./Login.js";
 import "./Router.js";
-import "./Lists_show_page.html";
 import "./Home.html";
 import "./Home.js";
 import "./Edit.html";
@@ -18,6 +16,8 @@ import "./Header.html";
 import "./Header.js";
 import "./Signup.html";
 import "./Signup.js";
+import "./Signin.html";
+import "./Signin.js";
 
 const IS_LOADING_STRING = "isLoading";
 

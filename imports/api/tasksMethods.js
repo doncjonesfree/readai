@@ -1,5 +1,5 @@
 import { check } from 'meteor/check';
-import { TasksCollection, GatherFacts, GatherFactsAnswers, AudioFiles, DrawConclusions } from '/imports/db/Collections';
+import { TasksCollection, GatherFacts, GatherFactsAnswers, AudioFiles, DrawConclusions, Users } from '/imports/db/Collections';
 import * as lib from './lib';
 
 var Future = Npm.require("fibers/future");
@@ -10,6 +10,26 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  'masterUser': function( email ){
+    const list = Meteor.settings.masterUsers;
+    return list.indexOf(email) >= 0;
+  },
+  'collectionFind': function( collection, find ){
+    switch ( collection ) {
+      case 'Users':
+        return Users.find(find).fetch();
+      break;
+    }
+    return [];
+  },
+  'collectionInsert': function( collection, doc ){
+    switch ( collection ) {
+      case 'Users':
+        return { id: Users.insert(doc) };
+      break;
+    }
+    return { error: sprintf('No collection "%s"',collection)}
+  },
   'fillInDefinitions'(){
     let future=new Future();
 
