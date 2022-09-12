@@ -11,6 +11,30 @@
   border-radius: .25em;
   width: 60%;
 }
+
+.users_flex100 {
+  display: flex;
+  padding: .25em;
+  border-radius: .25em;
+  width: 100%;
+}
+
 .users_name { width: 30%; }
 .users_email { width: 40%; }
-.users_email { width: 30%; }
+.users_options { width: 30%; }
+
+.users_edit_wrapper {
+  padding: .25em;
+  border-radius: .25em;
+  width: 60%;
+  border: 1px solid red;
+}
+
+.edit_user_text {
+  width: 15em !important;
+}
+
+#user_edit_error {
+  font-weight: bold;
+  color: red;
+}

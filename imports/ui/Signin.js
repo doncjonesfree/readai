@@ -53,6 +53,8 @@ const signin = function(e, id ){
         console.log('Error: Signin.js line 55',err);
       } else if ( results.length === 0 ) {
         set('error','Email not found');
+      } else if ( results[0].inactive ) {
+        set('error','Sorry, No longer an active user');
       } else {
         Session.set('currentUser',results[0]); // global so others can see it
         FlowRouter.go('home');

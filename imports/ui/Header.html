@@ -8,15 +8,15 @@
           {{ #if user }}
             {{ #if masterUser }}
               master user
-              <a class="signout">sign out ({{ name }})</a>
+              <div class="button signout">sign out ({{ name }})</div>
             {{ else }}
-              <a class="signout">sign out ({{ name }})</a>
+              <div class="button signout">sign out ({{ name }})</div>
             {{ /if }}
           {{ else }}
-            <a href="#">about us</a>
-            <a href="#">donate</a>
-            <a href="signup">sign up (free)</a>
-            <a href="signin">sign in</a>
+            <div class="button">about us</div>
+            <div class="button">donate</div>
+            <div class="button" id="signup">sign up (free)</div>
+            <div class="button" id="signin">sign in</div>
           {{ /if }}
         {{ /with }}
      </div>

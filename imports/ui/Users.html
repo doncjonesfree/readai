@@ -1,22 +1,79 @@
 <template name="users">
+  <h1>Users</h1>
   {{ #if mode1 }}
     loading users...
   {{ /if }}
 
   {{ #if mode2 }}
+     {{ #if show_inactive }}
+       <a href="#" id="toggle" data="show_inactive">hide inactive</a>
+     {{ else }}
+     <a href="#" id="toggle" data="show_inactive">show inactive</a>
+     {{ /if }}
       <div class="users_flex_heading">
         <div class="users_name">Name</div>
         <div class="users_email">Email</div>
         <div class="users_options">Options</div>
       </div>
       {{ #each user }}
-        <div class="users_flex {{ cls }}">
-          <div class="users_name">{{ first_name }} {{ last_name }}</div>
-          <div class="users_email">{{ email }}</div>
-          <div class="users_options">
-            <a href="#" class="user_delete" data="{{ _id }}">delete</a>
+        {{ #if edit }}
+        <div class="users_edit_wrapper">
+          <div class="users_flex100">
+            <div class="users_name">
+              <input type="text" class="edit_user_text" id="first_name" value="{{ first_name }}">
+            </div>
+            <div class="users_email">
+              <input type="text" class="edit_user_text" id="email" value="{{ email }}">
+            </div>
+            <div class="users_options">
+              <a href="#" class="user_edit_save" data="{{ _id }}">save</a>
+              |
+              <a href="#" class="user_edit_cancel" data="{{ _id }}">cancel</a>
+            </div>
+          </div>
+
+          <div class="users_flex100">
+            <div class="users_name">
+              <input type="text" class="edit_user_text" id="last_name" value="{{ last_name }}">
+            </div>
+            <div class="users_email">
+            </div>
+            <div class="users_options">
+              {{ #if error }}
+               <div id="user_edit_error">{{ error }}</div>
+              {{ /if }}
+            </div>
+          </div>
+
+          <div class="users_flex100">
+            <div class="users_name">
+              {{ #if inactive }}
+                <input type="checkbox" id="inactive" style="width: 25px;" checked> Inactive
+              {{ else }}
+                <input type="checkbox" id="inactive" style="width: 25px;"> Inactive
+              {{ /if }}
+            </div>
+            <div class="users_email">&nbsp;</div>
+            <div class="users_options">&nbsp;</div>
           </div>
         </div>
+
+        {{ else }}
+          <div class="users_flex {{ cls }}">
+            <div class="users_name">
+              {{ first_name }} {{ last_name }}
+              {{ #if inactive }}
+              (inactive)
+              {{ /if }}
+            </div>
+            <div class="users_email">{{ email }}</div>
+            <div class="users_options">
+              <a href="#" class="user_edit" data="{{ _id }}">edit</a>
+              |
+              <a href="#" class="user_delete" data="{{ _id }}">delete</a>
+            </div>
+          </div>
+        {{ /if }}
       {{ /each }}
   {{ /if }}
 </template>

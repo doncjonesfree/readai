@@ -12,6 +12,14 @@ Template.header.helpers({
 });
 
 Template.header.events({
+  'click #signup'(e){
+    e.preventDefault();
+    FlowRouter.go('signup');
+  },
+  'click #signin'(e){
+    e.preventDefault();
+    FlowRouter.go('signin');
+  },
   'click .hdr_home'(e){
     e.preventDefault();
     FlowRouter.go('home');

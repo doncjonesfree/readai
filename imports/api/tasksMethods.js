@@ -18,6 +18,15 @@ Meteor.methods({
     const list = Meteor.settings.masterUsers;
     return list.indexOf(email) >= 0;
   },
+  'collectionUpdate': function( collection, id, doc ){
+    switch ( collection ) {
+      case 'Users':
+        Users.update(id, { $set: doc });
+        return { success: true };
+      break;
+    }
+    return { error: true, message: sprintf('Bad collection %s',collection) };
+  },
   'collectionFind': function( collection, find ){
     switch ( collection ) {
       case 'Users':
