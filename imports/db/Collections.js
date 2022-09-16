@@ -1,5 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
+export const Students = new Mongo.Collection('students');
 export const TasksCollection = new Mongo.Collection('tasks');
 export const GatherFacts = new Mongo.Collection('gather_facts');
 export const GatherFactsAnswers = new Mongo.Collection('gather_facts_answers');

@@ -1,0 +1,77 @@
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
+import { Session } from 'meteor/session';
+import * as lib from '../api/lib';
+
+const pre = 'StudentHome_';
+const get = function(n) { return Session.get(pre + n )};
+const set = function(n,v) {
+  Session.set(pre + n,v)
+};
+const setd = function(n,v) {  Session.setDefault(pre + n,v) };
+
+Template.StudentHome.onCreated(function StudentHomeOnCreated() {
+  // modes
+  // 1 = Load students
+  // 2 = Show list of students to choose from
+  // 3 = Add a new student
+  // 4 = No students - invite them to add a student
+  setd('students',[]);
+  loadStudents( 'setMode' );
+});
+
+const loadStudents = function( setMode ){
+  let m = 0;
+  if ( setMode ) {
+    m = get('mode');
+    set('mode',1);
+  }
+  Meteor.call('loadStudents', lib.getCurrentUser(), function(err,results){
+    if ( err ) {
+      console.log('Error: Signup.js line 55',err);
+    } else {
+      console.log('jones17',lib.getCurrentUser(),results);
+      set('students',results);
+      if ( setMode ) {
+        if ( m > 1 ) {
+          set('mode',m);
+        } else {
+          if ( results.length > 0 ) {
+            set('mode',2);
+          } else {
+            set('mode',4);
+          }
+        }
+      }
+    }
+  });
+};
+
+const studentFields = function(){
+  // left off here
+  let op = [];
+  op.push( { label: 'Name', value: '', id: 'name', placeholder="you can enter just first name if you like" })
+  op.push( { label: 'Year Born', value: '', id: 'year_of_birth', placeholder="used to determine starting point for lessons" })
+  op.push( { label: '', value: '', id: '', options: lib.copy(options) })
+  op.push( { label: '', value: '', id: '' })
+  op.push( { label: '', value: '', id: '' })
+  op.push( { label: '', value: '', id: '' })
+  op.push( { label: '', value: '', id: '' })
+  return op;
+};
+
+Template.StudentHome.helpers({
+  mode1() { return get('mode') === 1; },
+  mode2() { return get('mode') === 2; },
+  mode3() { return get('mode') === 3; },
+  mode4() { return get('mode') === 4; },
+  data_entry() {
+    return lib.dataEntryHtml( getFields() );
+  },
+});
+
+Template.StudentHome.events({
+  'click .sh_change_mode'(e){
+    const m = lib.int( $(e.currentTarget).attr('data'));
+    set('mode',m);
+  },
+});

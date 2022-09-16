@@ -1,0 +1,31 @@
+<template name="StudentHome">
+  {{ #if mode1 }}
+    loading...
+  {{ /if }}
+
+  {{ #if mode2 }}
+    found student(s)
+  {{ /if }}
+
+  {{ #if mode3 }}
+    add a student
+  {{ /if }}
+
+  {{ #if mode4 }}
+    <div class="container_wrapper">
+      <div class="container">
+        <div class="box">
+          <div class="icon">01</div>
+          <div class="content">
+            <h3>Let's Get Started</h3>
+            <p>
+              Before lessons can begin, you need to
+              add at least one student.
+            </p>
+            <a href="#" class="sh_change_mode" data="3">Add a Student</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{ /if }}
+</template>

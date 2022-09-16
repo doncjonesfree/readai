@@ -1,5 +1,5 @@
 import { check } from 'meteor/check';
-import { TasksCollection, GatherFacts, GatherFactsAnswers, AudioFiles, DrawConclusions, Users } from '/imports/db/Collections';
+import { Students, TasksCollection, GatherFacts, GatherFactsAnswers, AudioFiles, DrawConclusions, Users } from '/imports/db/Collections';
 import * as lib from './lib';
 
 var Future = Npm.require("fibers/future");
@@ -10,6 +10,9 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  'loadStudents': function(user){
+    return Students.find( { user_id: user._id }).fetch();
+  },
   'deleteUser': function(id){
     const doc = { inactive: true };
     Users.update(id, { $set: doc });

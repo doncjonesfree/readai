@@ -22,6 +22,8 @@ import "./Master.html";
 import "./Master.js";
 import "./Users.html";
 import "./Users.js";
+import "./StudentHome.html";
+import "./StudentHome.js";
 
 const IS_LOADING_STRING = "isLoading";
 

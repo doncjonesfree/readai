@@ -18,17 +18,17 @@ Template.Home.onCreated(function HomeOnCreated() {
 
 Template.Home.helpers({
   masterUser() {
-    const u = Session.get('currentUser');
+    const u = lib.getCurrentUser();
     if ( u && u.masterUser ) return true;
     return false;
   },
   signedIn(){
-    const u = Session.get('currentUser');
+    const u = lib.getCurrentUser();
     if ( u && ! u.masterUser ) return true;
     return false;
   },
   notSignedIn(){
-    const u = Session.get('currentUser');
+    const u = lib.getCurrentUser();
     if ( u ) return false;
     return true;
   },

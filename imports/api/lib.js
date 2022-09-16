@@ -4,6 +4,12 @@ export const today = function() {
     return currentMoment().format(dateFormat);
 };
 
+export const getCurrentUser = function(){
+  const u = Session.get('currentUser');
+  if ( u ) return u;
+  return '';
+};
+
 export const currentMoment = function(){
   // On server it's UTC time which is 7 hours past pacific time
 
