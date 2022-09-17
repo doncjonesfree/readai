@@ -19,33 +19,45 @@ export const currentMoment = function(){
 };
 
 
-export const dataEntryHtml = function(list){
+export const dataEntryHtml = function(list, argSettings){
+  let settings = { flexWidth: '100%', longText: '20em', shortText: '5em', labelWidth: '20%', valueWidth: '40%', messageWidth: '40%' };
+  if ( argSettings ) settings = argSettings;
   let html = [];
   for ( let i=0; i < list.length; i++ ) {
     const l = list[i];
-    html.push( '<div class="de_flex">' );
+    html.push( sprintf('<div class="de_flex" style="width: %s;">',settings.flexWidth) );
       if ( l.button ) {
-        html.push( '<div class="de_label"></div>' );
+        html.push( sprintf('<div class="de_label" style="width: %s;"></div>',settings.labelWidth) );
 
-        html.push( '<div class="de_value">' );
+        html.push( sprintf('<div class="de_value" style="width: %s;">',settings.valueWidth) );
         html.push( sprintf('<button id="%s">%s</button>',l.id,l.button));
         if ( l.error ) {
           html.push( sprintf('<div class="de_error">%s</div>',l.error));
+          l.message = '';
         }
         html.push( '</div>' );
+      } else if ( l.checkbox ) {
+        html.push( sprintf('<div class="de_label" style="width: %s;">%s</div>',settings.labelWidth, l.label) );
+        html.push( sprintf('<div class="de_value" style="width: %s;">',settings.valueWidth) );
+        html.push( sprintf('<input type="checkbox" id="%s" class="de_checkbox">',l.id) );
+        html.push( '</div>' );
       } else {
-        html.push( sprintf('<div class="de_label">%s</div>',l.label));
+        html.push( sprintf('<div class="de_label" style="width: %s;">%s</div>',settings.labelWidth, l.label) );
 
         let v = l.value;
         if ( ! v ) v = '';
-        html.push( '<div class="de_value">' );
+        html.push( sprintf('<div class="de_value" style="width: %s;">',settings.valueWidth) );
+        let width = settings.longText;
+        if ( l.short ) width = settings.shortText;
         if ( l.placeholder ) {
-          html.push( sprintf('<input type="text" id="%s" value="%s" placeholder="%s">',l.id,v,l.placeholder));
+          html.push( sprintf('<input type="text" id="%s" value="%s" style="width: %s;" placeholder="%s">',l.id,v,width,l.placeholder));
         } else {
-          html.push( sprintf('<input type="text" id="%s" value="%s">',l.id,v));
+          html.push( sprintf('<input type="text" id="%s" value="%s" style="width: %s;">',l.id,v,width));
         }
         html.push( '</div>' );
       }
+      if ( ! l.message ) l.message = '';
+      html.push( sprintf('<div class="de_message" style="width: %s;">%s</div>',settings.messageWidth, l.message));
 
     html.push( '</div>' );
   }
@@ -63,10 +75,23 @@ export const docFromFields = function( list ){
       doc[ l.id ] = v;
       if ( ! error && ! v && l.required ) error = sprintf('%s is required',l.label);
       if ( ! error && v && l.type === 'email' && ! verifyEmail(v) ) error = sprintf('Invalid %s',l.label);
+      if ( ! error && l.type === 'year' && ! verifyYear(v) ) error = sprintf('Invalid %s',l.label);
     }
   }
   doc.created = today();
   return { doc: doc, error: error };
+};
+
+const verifyYear = function(arg){
+  if ( verifyInteger(arg) ) {
+    const v = int(arg);
+    if ( v < 1900 ) return false;
+    const currentYear = int( today().substr(0,4));
+    if ( v > currentYear ) return false;
+    return true;
+  }
+
+  return false;
 };
 
 export const verifyEmail = function( value ) {

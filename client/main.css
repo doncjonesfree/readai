@@ -19,22 +19,28 @@ body {
   display: flex;
   font-size: 1.2em;
   height: 1.2em;
-  max-width: 30em;
   margin-top: 1em;
 }
 .de_label {
-  width: 20%;
   text-align: right;
   padding-right: 1em;
   color: gray;
 }
-.de_value { width: 80%; }
+.de_value {}
+
 .de_error {
   display: inline-block;
   font-weight: bold;
   font-size: 1.2em;
   color: #b22222;
 }
+
+.de_message {
+  font-size: .8em;
+  color: gray;
+}
+
+.de_checkbox { width: 15px; }
 
 .popup {
   display: none;

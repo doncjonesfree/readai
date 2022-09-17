@@ -16,6 +16,7 @@ Template.StudentHome.onCreated(function StudentHomeOnCreated() {
   // 3 = Add a new student
   // 4 = No students - invite them to add a student
   setd('students',[]);
+  setd('error','');
   loadStudents( 'setMode' );
 });
 
@@ -49,13 +50,10 @@ const loadStudents = function( setMode ){
 const studentFields = function(){
   // left off here
   let op = [];
-  op.push( { label: 'Name', value: '', id: 'name', placeholder="you can enter just first name if you like" })
-  op.push( { label: 'Year Born', value: '', id: 'year_of_birth', placeholder="used to determine starting point for lessons" })
-  op.push( { label: '', value: '', id: '', options: lib.copy(options) })
-  op.push( { label: '', value: '', id: '' })
-  op.push( { label: '', value: '', id: '' })
-  op.push( { label: '', value: '', id: '' })
-  op.push( { label: '', value: '', id: '' })
+  op.push( { label: 'Name', type: 'text', required: true, value: '', id: 'name', message: "you can enter just first name if you like" })
+  op.push( { label: 'Year Born', type: 'year', required: true, short: true, value: '', id: 'year_of_birth', message: "used to determine starting point for lessons" })
+  op.push( { label: 'Award Points', checkbox: true, id: 'award_points', message: 'check if you want to reward this student with points for correct answers' })
+  op.push( { button: 'Save', id: 'student_save', error: get('error')  } );
   return op;
 };
 
@@ -65,7 +63,9 @@ Template.StudentHome.helpers({
   mode3() { return get('mode') === 3; },
   mode4() { return get('mode') === 4; },
   data_entry() {
-    return lib.dataEntryHtml( getFields() );
+    const settings = { flexWidth: '100%', longText: '20em', shortText: '3em',
+      labelWidth: '10%', valueWidth: '35%', messageWidth: '55%' };
+    return lib.dataEntryHtml( studentFields(), settings );
   },
 });
 
@@ -73,5 +73,14 @@ Template.StudentHome.events({
   'click .sh_change_mode'(e){
     const m = lib.int( $(e.currentTarget).attr('data'));
     set('mode',m);
+  },
+  'click #student_save'(e){
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    let data = lib.docFromFields( studentFields() );
+    set('doc',data.doc);
+    set('error',data.error);
+    console.log('jones81',data);
   },
 });

@@ -33,7 +33,8 @@ const getFields = function(){
 
 Template.Signup.helpers({
   data_entry() {
-    return lib.dataEntryHtml( getFields() );
+    const settings = { flexWidth: '60%', longText: '20em', shortText: '5em', labelWidth: '20%', valueWidth: '40%', messageWidth: '40%' };
+    return lib.dataEntryHtml( getFields(), settings );
   },
 });
 
