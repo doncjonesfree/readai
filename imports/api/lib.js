@@ -31,6 +31,11 @@ export const dataEntryHtml = function(list, argSettings){
 
         html.push( sprintf('<div class="de_value" style="width: %s;">',settings.valueWidth) );
         html.push( sprintf('<button id="%s">%s</button>',l.id,l.button));
+        if ( l.button2 ) {
+          //   const button2 = { button: 'Cancel', cls: 'sh_change_mode', data: '2'};
+          const b2 = l.button2;
+          html.push( sprintf('<button class="%s" data="%s">%s</button>',b2.cls,b2.data,b2.button));
+        }
         if ( l.error ) {
           html.push( sprintf('<div class="de_error">%s</div>',l.error));
           l.message = '';

@@ -17,6 +17,7 @@ Template.StudentHome.onCreated(function StudentHomeOnCreated() {
   // 4 = No students - invite them to add a student
   setd('students',[]);
   setd('error','');
+  setd('doc',{});
   loadStudents( 'setMode' );
 });
 
@@ -28,10 +29,11 @@ const loadStudents = function( setMode ){
   }
   Meteor.call('loadStudents', lib.getCurrentUser(), function(err,results){
     if ( err ) {
-      console.log('Error: Signup.js line 55',err);
+      console.log('Error: StudentHome.js line 55',err);
     } else {
-      console.log('jones17',lib.getCurrentUser(),results);
+      console.log('jones17a user=%s students',lib.getCurrentUser(),results);
       set('students',results);
+      console.log('jones17b', get('students'));
       if ( setMode ) {
         if ( m > 1 ) {
           set('mode',m);
@@ -47,13 +49,21 @@ const loadStudents = function( setMode ){
   });
 };
 
+const getValue = function(doc,id){
+  let v = doc[id];
+  if ( ! v ) v = '';
+  return v;
+};
+
 const studentFields = function(){
   // left off here
+  const doc = get('doc');
   let op = [];
-  op.push( { label: 'Name', type: 'text', required: true, value: '', id: 'name', message: "you can enter just first name if you like" })
-  op.push( { label: 'Year Born', type: 'year', required: true, short: true, value: '', id: 'year_of_birth', message: "used to determine starting point for lessons" })
-  op.push( { label: 'Award Points', checkbox: true, id: 'award_points', message: 'check if you want to reward this student with points for correct answers' })
-  op.push( { button: 'Save', id: 'student_save', error: get('error')  } );
+  op.push( { label: 'Name', type: 'text', required: true, value: getValue(doc,'name'), id: 'name', message: "you can enter just first name if you like" })
+  op.push( { label: 'Year Born', type: 'year', required: true, short: true, value: getValue(doc,'year_of_birth'), id: 'year_of_birth', message: "used to determine starting point for lessons" })
+  op.push( { label: 'Award Points', checkbox: true, value: getValue(doc,'award_points'), id: 'award_points', message: 'check if you want to reward this student with points for correct answers' })
+  const button2 = { button: 'Cancel', cls: 'sh_change_mode', data: '2'};
+  op.push( { button: 'Save', id: 'student_save', error: get('error'), button2: button2  } );
   return op;
 };
 
@@ -62,6 +72,14 @@ Template.StudentHome.helpers({
   mode2() { return get('mode') === 2; },
   mode3() { return get('mode') === 3; },
   mode4() { return get('mode') === 4; },
+  addingStudent() {
+    if ( get('student_id') ) return false;
+    return true;
+  },
+  student() {
+    let op = get('students');
+    return op;
+  },
   data_entry() {
     const settings = { flexWidth: '100%', longText: '20em', shortText: '3em',
       labelWidth: '10%', valueWidth: '35%', messageWidth: '55%' };
@@ -69,9 +87,68 @@ Template.StudentHome.helpers({
   },
 });
 
+const checkStudentAge = function(doc){
+  const s = lib.int( doc.year_of_birth );
+  const d1 = moment( sprintf('%4d0701',s),'YYYYMMDD');
+  const d2 = lib.currentMoment();
+  const age = d2.diff(d1,'years');
+  if ( age < 5 ) return 'Student should be at least 5 years old';
+  return '';
+};
+
+const getStudentGivenId = function(id){
+  const students = get('students');
+  for ( let i=0; i < students.length; i++ ) {
+    const s = students[i];
+    if ( s._id === id ) return s;
+  }
+  return '';
+};
+
 Template.StudentHome.events({
+  'click .sh_student'(e){
+    // start lesson for student
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    $(e.currentTarget).html(wait);
+    const id = $(e.currentTarget).attr('data');
+    console.log('jones98a',id);
+  },
+  'click .sh_student_delete'(e){
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    $(e.currentTarget).html(wait);
+    const id = $(e.currentTarget).attr('data');
+    const doc = { inactive: true };
+    Meteor.call('collectionUpdate', 'Students', id, doc, function(err,results){
+      if ( err ) {
+        console.log('Error: StudentHome.js line 127',err);
+      } else {
+        loadStudents('');
+        set('mode',2);
+      }
+    });
+  },
+  'click .sh_student_edit'(e){
+    // edit the selected student
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    $(e.currentTarget).html(wait);
+    const id = $(e.currentTarget).attr('data');
+    set('student_id',id);
+    set('doc', getStudentGivenId(id));
+    set('mode',3);
+  },
   'click .sh_change_mode'(e){
     const m = lib.int( $(e.currentTarget).attr('data'));
+    if ( m === 3 ) {
+      // adding a student - clear the student
+      set('student_id','');
+      set('doc',{});
+    }
     set('mode',m);
   },
   'click #student_save'(e){
@@ -79,8 +156,34 @@ Template.StudentHome.events({
     const html = $(e.currentTarget).html();
     if ( wait === html ) return;
     let data = lib.docFromFields( studentFields() );
+    if ( ! data.error ) data.error = checkStudentAge(data.doc);
+    data.doc.user_id = Session.get('currentUser')._id;
     set('doc',data.doc);
     set('error',data.error);
-    console.log('jones81',data);
+    if ( ! data.error ) {
+      const id = get('student_id');
+      console.log('jones149 id=%s',id,data.doc);
+      if ( id ) {
+        // updating
+        Meteor.call('collectionUpdate', 'Students', id, data.doc, function(err,results){
+          if ( err ) {
+            console.log('Error: StudentHome.js line 155',err);
+          } else {
+            loadStudents('');
+            set('mode',2);
+          }
+        });
+      } else {
+        // new student
+        Meteor.call('collectionInsert', 'Students', data.doc, function(err,results){
+          if ( err ) {
+            console.log('Error: StudentHome.js line 165',err);
+          } else {
+            loadStudents('');
+            set('mode',2);
+          }
+        });
+      }
+    }
   },
 });

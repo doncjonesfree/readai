@@ -4,11 +4,25 @@
   {{ /if }}
 
   {{ #if mode2 }}
-    found student(s)
+    <button class="sh_change_mode" data="3">Add a Student</button>
+    {{ #each student }}
+      <div class="sh_student" data="{{ _id }}">
+        {{ name }}
+        <div class="sh_student_flex">
+          <div class="sh_student_edit" data="{{ _id }}">edit</div>
+          &nbsp; 
+          <div class="sh_student_delete" data="{{ _id }}">delete</div>
+        </div>
+      </div>
+    {{ /each }}
   {{ /if }}
 
   {{ #if mode3 }}
-    <h1>Add New Student</h1>
+    {{ #if addingStudent }}
+      <h1>Add New Student</h1>
+    {{ else }}
+      <h1>Edit Student</h1>
+    {{ /if }}
     {{{ data_entry }}}
   {{ /if }}
 

@@ -11,7 +11,15 @@ const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
   'loadStudents': function(user){
-    return Students.find( { user_id: user._id }).fetch();
+    const removeInactive = function(list){
+      let op = [];
+      for ( let i=0; i < list.length; i++ ) {
+        const r = list[i];
+        if ( ! r.inactive ) op.push(r);
+      }
+      return op;
+    };
+    return removeInactive( Students.find( { user_id: user._id }, { sort: { name: 1 }}).fetch() );
   },
   'deleteUser': function(id){
     const doc = { inactive: true };
@@ -25,6 +33,11 @@ Meteor.methods({
     switch ( collection ) {
       case 'Users':
         Users.update(id, { $set: doc });
+        return { success: true };
+      break;
+
+      case 'Students':
+        Students.update(id, { $set: doc });
         return { success: true };
       break;
     }
@@ -49,7 +62,12 @@ Meteor.methods({
   'collectionInsert': function( collection, doc ){
     switch ( collection ) {
       case 'Users':
-        return { id: Users.insert(doc) };
+      return { id: Users.insert(doc) };
+      break;
+
+      case 'Students':
+      console.log('jones52b');
+      return { id: Students.insert(doc) };
       break;
     }
     return { error: sprintf('No collection "%s"',collection)}

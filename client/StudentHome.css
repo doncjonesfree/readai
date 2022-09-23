@@ -1,0 +1,41 @@
+.sh_student {
+  border: 2px solid #23e629;
+  border-radius: .5em;
+  margin: 1em 0 0 0;
+  width: 10em;
+  text-align: center;
+  padding: 1em;
+  font-size: 2em;
+  background-color: rgba(35,230,41,.2);
+  cursor: pointer;
+}
+
+.sh_student:hover {
+  border: 2px solid #008000;
+  background-color: #23e629;
+  opacity: 1;
+}
+
+.sh_student_edit {
+  display: inline-block;
+  font-size: .6em;
+  color: blue;
+  margin-top: 1em;
+  opacity: .2;
+}
+
+.sh_student_edit:hover {
+  opacity: 1;
+}
+
+.sh_student_delete {
+  display: inline-block;
+  font-size: .6em;
+  color: blue;
+  margin-top: 1em;
+  opacity: .2;
+}
+
+.sh_student_delete:hover {
+  opacity: 1;
+}
