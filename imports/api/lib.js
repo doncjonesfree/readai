@@ -1,12 +1,32 @@
+import { Cookies } from 'meteor/ostrio:cookies';
+const cookies = new Cookies();
+
 export const dateFormat = 'YYYY-MM-DD HH:mm:ss';
 export const today = function() {
     // pacific time zone
     return currentMoment().format(dateFormat);
 };
 
+export const setCookie = function(key,value){
+  const options = { expires: Infinity };
+  cookies.set(key,value,options);
+};
+
+export const getCookie = function(key){
+  return cookies.get(key)
+};
+
 export const getCurrentUser = function(){
-  const u = Session.get('currentUser');
+  let u = Session.get('currentUser');
   if ( u ) return u;
+
+  // Not currently signed in for this session, but check to
+  // see if there is a cookie.  If so, use that as the login.
+  u = getCookie('ltrSignin');
+  if ( u && typeof(u) === 'object') {
+    Session.set('currentUser',u);
+    return u;
+  }
   return '';
 };
 

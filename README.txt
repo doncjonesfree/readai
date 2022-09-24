@@ -53,3 +53,5 @@ meteor add pauldowman:dotenv - store store things in environment variables, docs
 
 meteor add momentjs:moment
 meteor add mrt:moment-timezone
+
+meteor add ostrio:cookies -- https://atmospherejs.com/ostrio/cookies

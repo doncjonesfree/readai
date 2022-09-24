@@ -56,7 +56,8 @@ const signin = function(e, id ){
       } else if ( results[0].inactive ) {
         set('error','Sorry, No longer an active user');
       } else {
-        Session.set('currentUser',results[0]); // global so others can see it
+        Session.set('currentUser',results[0] ); // global so others can see it
+        lib.setCookie('ltrSignin',results[0] );
         FlowRouter.go('home');
         Meteor.call('masterUser', results[0].email, function(err,master){
           if ( err ) {

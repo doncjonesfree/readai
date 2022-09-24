@@ -1,4 +1,5 @@
 import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
+import * as lib from '../api/lib';
 
 Template.header.helpers({
   user_info() {
@@ -26,6 +27,7 @@ Template.header.events({
   },
   'click .signout'(e){
     Session.set('currentUser','');
+    lib.setCookie('ltrSignin',''); // clear the cookie as well
     FlowRouter.go('home');
   }
 });

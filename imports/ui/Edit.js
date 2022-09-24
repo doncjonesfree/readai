@@ -20,17 +20,6 @@ Template.Edit.onCreated(function EditOnCreated() {
   setd('mode',1);
   setd('gf_search',{});
   setd('gatherfacts',{ GatherFacts: [] });
-
-  // jones testing
-  // Meteor.call('fillInDefinitions', function(err,results){
-  //   if ( err ) {
-  //     console.log('Error: Edit.js line 27',err);
-  //   } else {
-  //     console.log('jones29',results);
-  //   }
-  // });
-  // testOxford();
-
 });
 
 const testOxford = function(){
@@ -50,24 +39,6 @@ const testOxford = function(){
     redirect: 'follow',
     referrerPolicy: 'no-referrer'
     }).then( res => console.log(res))
-
-
-  // const response = await fetch(url, {
-  //   method: 'GET',
-  //   headers: new Headers( {
-  //     app_id: app_id,
-  //     app_key: app_key
-  //   }),
-  //   redirect: 'follow',
-  //   referrerPolicy: 'no-referrer'
-  // });
-  // const data = await response.json();
-  // console.log('jones30a',url);
-  // console.log('jones30b',data);
-  // console.log('jones30c',data.results[0].lexicalEntries);
-  // console.log(response);
-  // return response(null,data);
-
 };
 
 const refresh = function(arg){
