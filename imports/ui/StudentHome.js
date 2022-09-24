@@ -61,7 +61,9 @@ const studentFields = function(){
   let op = [];
   op.push( { label: 'Name', type: 'text', required: true, value: getValue(doc,'name'), id: 'name', message: "you can enter just first name if you like" })
   op.push( { label: 'Year Born', type: 'year', required: true, short: true, value: getValue(doc,'year_of_birth'), id: 'year_of_birth', message: "used to determine starting point for lessons" })
-  op.push( { label: 'Award Points', checkbox: true, value: getValue(doc,'award_points'), id: 'award_points', message: 'check if you want to reward this student with points for correct answers' })
+  let checked = '';
+  if ( doc.award_points ) checked = 'checked';
+  op.push( { label: 'Award Points', checkbox: true, value: checked, id: 'award_points', message: 'check if you want to reward this student with points for correct answers' })
   const button2 = { button: 'Cancel', cls: 'sh_change_mode', data: '2'};
   op.push( { button: 'Save', id: 'student_save', error: get('error'), button2: button2  } );
   return op;

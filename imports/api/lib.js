@@ -64,7 +64,7 @@ export const dataEntryHtml = function(list, argSettings){
       } else if ( l.checkbox ) {
         html.push( sprintf('<div class="de_label" style="width: %s;">%s</div>',settings.labelWidth, l.label) );
         html.push( sprintf('<div class="de_value" style="width: %s;">',settings.valueWidth) );
-        html.push( sprintf('<input type="checkbox" id="%s" class="de_checkbox">',l.id) );
+        html.push( sprintf('<input type="checkbox" id="%s" class="de_checkbox" %s>',l.id,l.value) );
         html.push( '</div>' );
       } else {
         html.push( sprintf('<div class="de_label" style="width: %s;">%s</div>',settings.labelWidth, l.label) );
@@ -96,11 +96,16 @@ export const docFromFields = function( list ){
   for ( let i=0; i < list.length; i++ ) {
     const l = list[i];
     if ( ! l.button ) {
-      const v = $('#'+l.id).val();
-      doc[ l.id ] = v;
-      if ( ! error && ! v && l.required ) error = sprintf('%s is required',l.label);
-      if ( ! error && v && l.type === 'email' && ! verifyEmail(v) ) error = sprintf('Invalid %s',l.label);
-      if ( ! error && l.type === 'year' && ! verifyYear(v) ) error = sprintf('Invalid %s',l.label);
+      if ( $('#'+l.id).attr('type') === 'checkbox') {
+        const v = $('#'+l.id).is(':checked');
+        doc[ l.id ] = v;
+      } else {
+        const v = $('#'+l.id).val();
+        doc[ l.id ] = v;
+        if ( ! error && ! v && l.required ) error = sprintf('%s is required',l.label);
+        if ( ! error && v && l.type === 'email' && ! verifyEmail(v) ) error = sprintf('Invalid %s',l.label);
+        if ( ! error && l.type === 'year' && ! verifyYear(v) ) error = sprintf('Invalid %s',l.label);
+      }
     }
   }
   doc.created = today();
