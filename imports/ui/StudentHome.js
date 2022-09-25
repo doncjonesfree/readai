@@ -31,9 +31,7 @@ const loadStudents = function( setMode ){
     if ( err ) {
       console.log('Error: StudentHome.js line 55',err);
     } else {
-      console.log('jones17a user=%s students',lib.getCurrentUser(),results);
       set('students',results);
-      console.log('jones17b', get('students'));
       if ( setMode ) {
         if ( m > 1 ) {
           set('mode',m);
@@ -115,7 +113,8 @@ Template.StudentHome.events({
     if ( wait === html ) return;
     $(e.currentTarget).html(wait);
     const id = $(e.currentTarget).attr('data');
-    console.log('jones98a',id);
+    Session.set('lesson_student_id',id);
+    FlowRouter.go('lesson');
   },
   'click .sh_student_delete'(e){
     const wait = '...';
@@ -164,7 +163,6 @@ Template.StudentHome.events({
     set('error',data.error);
     if ( ! data.error ) {
       const id = get('student_id');
-      console.log('jones149 id=%s',id,data.doc);
       if ( id ) {
         // updating
         Meteor.call('collectionUpdate', 'Students', id, data.doc, function(err,results){
