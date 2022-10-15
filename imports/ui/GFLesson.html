@@ -1,7 +1,7 @@
 <template name="GFLesson">
   <h1>
-    Gather Facts Lesson
-    <button id="gf_help">?</button>
+    Gather Facts Lesson for {{ name }}
+    <div id="gf_help">?</div>
   </h1>
 
   {{ #with lesson }}
@@ -35,4 +35,5 @@
     <br>
     <button id="gf_done">Done</button>
   </div>
+  <div id="gf_show_points">{{ points }} Points!</div>
 </template>

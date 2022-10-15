@@ -1,3 +1,12 @@
 <template name="Lesson">
-  <h1>Lesson</h1>
+
+  {{ #if mode1 }}
+    <h1>Lesson</h1>
+    Loading lesson...
+  {{ /if }}
+
+  {{ #if mode2 }}
+    {{> GFLesson }}
+  {{ /if }}
+
 </template>

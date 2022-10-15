@@ -1,4 +1,30 @@
 
+#gf_show_points {
+  display: none;
+  position: fixed;
+  width: 20%;
+  top: 50%;
+  margin: 0 40% 0 40%;
+  text-align: center;
+  padding: .25em;
+  border: 2px solid #006400;
+  border-radius: .5em;
+  font-size: 3em;
+  background-color: #228b22;
+  color: #dcdcdc;
+}
+
+#gf_help {
+  display: inline-block;
+  border: 1px solid gray;
+  color: gray;
+  border-radius: .25em;
+  font-size: .8em;
+  margin-left: 1em;
+  padding: 0 .25em 0 .25em;
+  cursor: pointer;
+}
+
 .lesson_word {
   display: inline-block;
 }

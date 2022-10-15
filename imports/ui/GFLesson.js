@@ -9,10 +9,13 @@ const set = function(n,v) {
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
 Template.GFLesson.onCreated(function GFLessonOnCreated() {
-
+  set('points','');
 });
 
 Template.GFLesson.helpers({
+  points() {
+    return get('points');
+  },
   lesson() {
     let l = get('lesson');
     if ( l && l.lesson ) {
@@ -23,6 +26,9 @@ Template.GFLesson.helpers({
   },
   word(){
     return get('word');
+  },
+  name(){
+    return get('name');
   },
   question() {
     let l = get('lesson');
@@ -75,6 +81,7 @@ const showDefinitionButton = function(word,uniqueCount){
 Template.GFLesson.events({
   'click #gf_done': function(e){
     let lesson = get('lesson');
+    if ( ! lesson.incorrect ) lesson.incorrect = {};
     let notAnswered = [];
     let incorrect = [];
     let previouslyIncorrect = [];
@@ -85,6 +92,8 @@ Template.GFLesson.events({
         if ( a.selected !== a.Correct ) {
           incorrect.push( a.QuestionNum )
           a.incorrect = true;
+          if ( ! lesson.incorrect[ a.QuestionNum ] ) lesson.incorrect[ a.QuestionNum ] = 0;
+          lesson.incorrect[ a.QuestionNum ] += 1;
         } else {
           a.incorrect = false;
         }
@@ -104,8 +113,22 @@ Template.GFLesson.events({
       if ( incorrect.length === 1 ) word = 'one_incorrect';
       lib.googlePlaySound( word );
     } else {
-      if ( previouslyIncorrect.length > 0 ) {
-        set('lesson',lesson); // save so we can clear incorrect
+      set('lesson',lesson); // save so we can clear incorrect
+      const student = get('student');
+      let points = 0;
+      if ( student && student.award_points ) {
+        points = lib.calculatePoints( lesson );
+      }
+      set('points','');
+      if ( points ) {
+        set('points',points);
+        $('#gf_show_points').show();
+        const word = 'ding';
+        lib.googlePlaySound( word, function(){
+          $('#gf_show_points').hide();
+        });
+      } else {
+
       }
       console.log('all answers correct');
     }

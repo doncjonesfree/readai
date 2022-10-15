@@ -108,15 +108,19 @@ const getStudentGivenId = function(id){
 Template.StudentHome.events({
   'click .sh_student'(e){
     // start lesson for student
+    e.stopPropagation();
+    e.preventDefault();
     const wait = '...';
     const html = $(e.currentTarget).html();
     if ( wait === html ) return;
     $(e.currentTarget).html(wait);
     const id = $(e.currentTarget).attr('data');
-    Session.set('lesson_student_id',id);
+    lib.setCookie('studentId',id);
     FlowRouter.go('lesson');
   },
   'click .sh_student_delete'(e){
+    e.stopPropagation();
+    e.preventDefault();
     const wait = '...';
     const html = $(e.currentTarget).html();
     if ( wait === html ) return;
@@ -134,6 +138,8 @@ Template.StudentHome.events({
   },
   'click .sh_student_edit'(e){
     // edit the selected student
+    e.preventDefault();
+    e.stopPropagation();
     const wait = '...';
     const html = $(e.currentTarget).html();
     if ( wait === html ) return;
@@ -144,6 +150,8 @@ Template.StudentHome.events({
     set('mode',3);
   },
   'click .sh_change_mode'(e){
+    e.stopPropagation();
+    e.preventDefault();
     const m = lib.int( $(e.currentTarget).attr('data'));
     if ( m === 3 ) {
       // adding a student - clear the student
@@ -153,6 +161,8 @@ Template.StudentHome.events({
     set('mode',m);
   },
   'click #student_save'(e){
+    e.stopPropagation();
+    e.preventDefault();
     const wait = '...';
     const html = $(e.currentTarget).html();
     if ( wait === html ) return;

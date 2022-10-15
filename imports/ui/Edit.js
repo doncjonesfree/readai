@@ -811,6 +811,7 @@ Template.Edit.events({
     if ( ret.lesson && ret.answers ) {
       // set up for other template
       Session.set('GFLesson_lesson',ret);
+      Session.set('GFLesson_name','Admin Edit');
       $('#gf_lesson_popup').show();
     }
   },

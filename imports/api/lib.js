@@ -16,6 +16,22 @@ export const getCookie = function(key){
   return cookies.get(key)
 };
 
+export const calculatePoints = function( lesson ){
+  const correctPoints = 10; // points for every correct answer
+  const incorrectPoints = 5; // negagitive points for every incorrect answer
+  let points = correctPoints * lesson.answers.length;
+  if ( lesson.incorrect ) {
+    for ( let key in lesson.incorrect ) {
+      if ( hasOwnProperty(lesson.incorrect,key)) {
+        let v = lesson.incorrect[key];
+        if ( v > 2 ) v = 2;
+        points -= ( incorrectPoints * v );
+      }
+    }
+  }
+  return Math.max(0,points);
+};
+
 export const getCurrentUser = function(){
   let u = Session.get('currentUser');
   if ( u ) return u;

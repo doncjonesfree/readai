@@ -4,21 +4,25 @@
        <h1 class="hdr_home">Learn To Read (Free)</h1>
      </div>
      <div class="app-header app-align-right">
-        {{ #with user_info }}
-          {{ #if user }}
-            {{ #if masterUser }}
-              master user
-              <div class="button signout">sign out ({{ name }})</div>
+       {{ #if activeLesson }}
+         <div class="button" id="student_done">done for now</div>
+       {{ else }}
+          {{ #with user_info }}
+            {{ #if user }}
+              {{ #if masterUser }}
+                master user
+                <div class="button signout">sign out ({{ name }})</div>
+              {{ else }}
+                <div class="button signout">sign out ({{ name }})</div>
+              {{ /if }}
             {{ else }}
-              <div class="button signout">sign out ({{ name }})</div>
+              <div class="button">about us</div>
+              <div class="button">donate</div>
+              <div class="button" id="signup">sign up (free)</div>
+              <div class="button" id="signin">sign in</div>
             {{ /if }}
-          {{ else }}
-            <div class="button">about us</div>
-            <div class="button">donate</div>
-            <div class="button" id="signup">sign up (free)</div>
-            <div class="button" id="signin">sign in</div>
-          {{ /if }}
-        {{ /with }}
+          {{ /with }}
+        {{ /if }}
      </div>
   </div>
 </template>

@@ -4,12 +4,16 @@ import * as lib from './lib';
 
 var Future = Npm.require("fibers/future");
 import { fetch, Headers } from "meteor/fetch";
+import { getNextLesson } from "../../server/lessons"
 
 const fs = require('fs');
 const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  'getNextLesson': function( StudentId ){
+    return getNextLesson( StudentId );
+  },
   'loadStudents': function(user){
     const removeInactive = function(list){
       let op = [];
@@ -66,7 +70,6 @@ Meteor.methods({
       break;
 
       case 'Students':
-      console.log('jones52b');
       return { id: Students.insert(doc) };
       break;
     }
