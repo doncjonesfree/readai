@@ -4,7 +4,7 @@ import * as lib from './lib';
 
 var Future = Npm.require("fibers/future");
 import { fetch, Headers } from "meteor/fetch";
-import { getNextLesson, saveLessonHistory } from "../../server/lessons"
+import { getNextLesson, saveLessonHistory, addPoints } from "../../server/lessons"
 
 const fs = require('fs');
 const util = require('util');
@@ -26,7 +26,9 @@ Meteor.methods({
       }
       return op;
     };
-    return removeInactive( Students.find( { user_id: user._id }, { sort: { name: 1 }}).fetch() );
+    let recs = removeInactive( Students.find( { user_id: user._id }, { sort: { name: 1 }}).fetch() );
+    addPoints( recs );
+    return recs;
   },
   'deleteUser': function(id){
     const doc = { inactive: true };

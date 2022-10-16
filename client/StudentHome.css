@@ -1,3 +1,8 @@
+.sh_points_show {
+  color: #008000;
+  font-size: .8em;
+}
+
 .sh_student {
   border: 2px solid #23e629;
   border-radius: .5em;

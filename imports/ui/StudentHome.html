@@ -8,9 +8,12 @@
     {{ #each student }}
       <div class="sh_student" data="{{ _id }}">
         {{ name }}
+        {{ #if award_points }}
+          <div class="sh_points_show">{{ points }} Points</div>
+        {{ /if }}
         <div class="sh_student_flex">
           <div class="sh_student_edit" data="{{ _id }}">edit</div>
-          &nbsp; 
+          &nbsp;
           <div class="sh_student_delete" data="{{ _id }}">delete</div>
         </div>
       </div>

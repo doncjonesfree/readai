@@ -16,6 +16,15 @@ export const getCookie = function(key){
   return cookies.get(key)
 };
 
+export const toObject = function(list,field){
+  let obj = {};
+  for ( let i=0; i < list.length; i++ ) {
+    const l = list[i];
+    obj[ field ] = l;
+  }
+  return obj;
+};
+
 export const calculatePoints = function( lesson ){
   const correctPoints = 10; // points for every correct answer
   const incorrectPoints = 5; // negagitive points for every incorrect answer

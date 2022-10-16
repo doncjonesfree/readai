@@ -1,6 +1,32 @@
 import { Students, GatherFacts, GatherFactsAnswers, DrawConclusions, LessonHistory } from '/imports/db/Collections';
 import * as lib from '../imports/api/lib';
 
+export const addPoints = function(students){
+  // given a list of students, add "points" to each student record
+  const studentList = lib.makeList(students,'_id','');
+  const history = LessonHistory.find( { student_id: { $in: studentList }}).fetch();
+  console.log('jones8a',history);
+  let obj = {};
+  for ( let i=0; i < history.length; i++ ) {
+    const h = history[i];
+    console.log('jones8b',i,h.points);
+    if ( h.points ) {
+      if ( ! obj[ h.student_id ] ) obj[ h.student_id ] = 0;
+      obj[ h.student_id ] += h.points;
+    }
+  }
+  console.log('jones8c',obj);
+  for ( let i=0; i < students.length; i++ ) {
+    let s = students[i];
+    if ( obj[ s._id ] ) {
+      s.points = obj[ s._id ];
+    } else {
+      s.points = 0;
+    }
+  }
+  console.log('jones8d',lib.copy(students));
+};
+
 export const saveLessonHistory = function( lesson_type, incorrect, lesson_id, points, student_id ){
   let doc = { incorrect: incorrect, lesson_type: lesson_type, lesson_id: lesson_id, points: points, student_id: student_id};
   doc.when = lib.today();
