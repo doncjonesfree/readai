@@ -5,17 +5,15 @@ export const addPoints = function(students){
   // given a list of students, add "points" to each student record
   const studentList = lib.makeList(students,'_id','');
   const history = LessonHistory.find( { student_id: { $in: studentList }}).fetch();
-  console.log('jones8a',history);
   let obj = {};
   for ( let i=0; i < history.length; i++ ) {
     const h = history[i];
-    console.log('jones8b',i,h.points);
+    console.log('jones11',i,h);
     if ( h.points ) {
       if ( ! obj[ h.student_id ] ) obj[ h.student_id ] = 0;
       obj[ h.student_id ] += h.points;
     }
   }
-  console.log('jones8c',obj);
   for ( let i=0; i < students.length; i++ ) {
     let s = students[i];
     if ( obj[ s._id ] ) {
@@ -24,14 +22,34 @@ export const addPoints = function(students){
       s.points = 0;
     }
   }
-  console.log('jones8d',lib.copy(students));
 };
 
-export const saveLessonHistory = function( lesson_type, incorrect, lesson_id, points, student_id ){
-  let doc = { incorrect: incorrect, lesson_type: lesson_type, lesson_id: lesson_id, points: points, student_id: student_id};
+export const saveLessonHistory = function( lesson_type, answerCount, incorrect, lesson_id, points, student_id ){
+
+  // remove all previous lesson history - still debugging
+  // const recs = LessonHistory.find().fetch();
+  // for ( let i=0; i < recs.length; i++ ) {
+  //   const r = recs[i];
+  //   LessonHistory.remove(r._id);
+  // }
+
+  let doc = { answerCount: answerCount, incorrect: incorrect, lesson_type: lesson_type, lesson_id: lesson_id, points: points, student_id: student_id};
   doc.when = lib.today();
+  doc.pct = calcPct ( answerCount, incorrect );
   const id = LessonHistory.insert(doc);
   return { id: id, doc: doc };
+};
+
+const calcPct  = function( answerCount, incorrect ){
+  let errors = 0; // # of incorrect answers
+  for ( let key in incorrect ) {
+    if ( lib.hasOwnProperty(incorrect,key)) {
+      const v = incorrect[key];
+      if ( v ) errors += 1;
+    }
+  }
+  if ( answerCount > 0 ) return ( (answerCount - errors ) / answerCount ) * 100;
+  return 0;
 };
 
 export const getNextLesson = function( StudentId ){
@@ -41,7 +59,7 @@ export const getNextLesson = function( StudentId ){
   let retObj = { success: true, history: history, student: student };
 
   let ret;
-  if ( history.length === 0 ) {
+  if ( history.length === 0 || true ) { // jones - force gf for now
     // get gathering facts lesson
     ret = getFirstLesson( student );
     retObj.lesson_type = 'gf';

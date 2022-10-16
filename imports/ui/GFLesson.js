@@ -79,7 +79,7 @@ const showDefinitionButton = function(word,uniqueCount){
 };
 
 const saveLessonHistory = function(lesson,points){
-  Meteor.call('saveLessonHistory', 'gf', lesson.incorrect, lesson.lesson._id , points, get('student')._id, function(err,results){
+  Meteor.call('saveLessonHistory', 'gf', lesson.answers.length, lesson.incorrect, lesson.lesson._id , points, get('student')._id, function(err,results){
     console.log('jones83',results);
     if ( err ) {
       console.log('Error: GFLesson.js line 84',err);
