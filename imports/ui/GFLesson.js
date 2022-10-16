@@ -78,6 +78,16 @@ const showDefinitionButton = function(word,uniqueCount){
   });
 };
 
+const saveLessonHistory = function(lesson,points){
+  Meteor.call('saveLessonHistory', 'gf', lesson.incorrect, lesson.lesson._id , points, get('student')._id, function(err,results){
+    console.log('jones83',results);
+    if ( err ) {
+      console.log('Error: GFLesson.js line 84',err);
+    } else {
+    }
+  });
+};
+
 Template.GFLesson.events({
   'click #gf_done': function(e){
     let lesson = get('lesson');
@@ -127,10 +137,10 @@ Template.GFLesson.events({
         lib.googlePlaySound( word, function(){
           $('#gf_show_points').hide();
         });
+        saveLessonHistory(lesson,points);
       } else {
-
+        saveLessonHistory(lesson,0);
       }
-      console.log('all answers correct');
     }
   },
   'click #gf_help': function(e){

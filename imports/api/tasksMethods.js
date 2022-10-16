@@ -4,13 +4,16 @@ import * as lib from './lib';
 
 var Future = Npm.require("fibers/future");
 import { fetch, Headers } from "meteor/fetch";
-import { getNextLesson } from "../../server/lessons"
+import { getNextLesson, saveLessonHistory } from "../../server/lessons"
 
 const fs = require('fs');
 const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  'saveLessonHistory': function( lesson_type, incorrect, lesson_id, points, student_id ){
+    return saveLessonHistory( lesson_type, incorrect, lesson_id, points, student_id );
+  },
   'getNextLesson': function( StudentId ){
     return getNextLesson( StudentId );
   },
