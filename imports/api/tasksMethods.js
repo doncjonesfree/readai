@@ -11,8 +11,8 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
-  'saveLessonHistory': function( lesson_type, answerCount, incorrect, lesson_id, points, student_id ){
-    return saveLessonHistory( lesson_type, answerCount, incorrect, lesson_id, points, student_id );
+  'saveLessonHistory': function( doc ){
+    return saveLessonHistory( doc );
   },
   'getNextLesson': function( StudentId ){
     return getNextLesson( StudentId );

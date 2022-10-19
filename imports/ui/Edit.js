@@ -71,8 +71,8 @@ Template.Edit.helpers({
     const shapeName = function(s){
       if ( s === 'C') return 'Circle';
       if ( s === 'S') return 'Square';
-      if ( s === 'D') return 'Diamond';
       if ( s === 'T') return 'Triangle';
+      if ( s === 'D') return 'Diamond';
       return s;
     };
 

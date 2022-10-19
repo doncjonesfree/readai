@@ -26,6 +26,10 @@ Template.Lesson.onCreated(function LessonOnCreated() {
           Session.set('GFLesson_name',results.student.name);
           Session.set('GFLesson_lesson',results.ret);
           set('mode',2);
+        } else {
+          // dc lesson
+          Session.set('DCLesson_lesson',results.ret[0]);
+          set('mode',3);
         }
       }
     });

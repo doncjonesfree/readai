@@ -9,10 +9,20 @@ const set = function(n,v) {
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
 Template.GFLesson.onCreated(function GFLessonOnCreated() {
+  // modes
+  // 1 = show lesson
+  // 2 = blank screen while loading lesson
   set('points','');
+  setd('mode',1);
 });
 
 Template.GFLesson.helpers({
+  mode1() {
+    return get('mode') === 1;
+  },
+  mode2() {
+    return get('mode') === 2;
+  },
   points() {
     return get('points');
   },
@@ -79,11 +89,35 @@ const showDefinitionButton = function(word,uniqueCount){
 };
 
 const saveLessonHistory = function(lesson,points){
-  Meteor.call('saveLessonHistory', 'gf', lesson.answers.length, lesson.incorrect, lesson.lesson._id , points, get('student')._id, function(err,results){
+  let obj = {};
+  obj.lesson_type = 'gf';
+  obj.answerCount = lesson.answers.length;
+  obj.incorrect =  lesson.incorrect;
+  obj.lesson_id =  lesson.lesson._id;
+  obj.grade_level =  lesson.lesson.GradeLevel;
+  obj.points =  points;
+  obj.student_id = get('student')._id;
+  Meteor.call('saveLessonHistory', obj , function(err,results){
     console.log('jones83',results);
     if ( err ) {
       console.log('Error: GFLesson.js line 84',err);
     } else {
+      set('mode',2);
+      Meteor.call('getNextLesson', obj.student_id, function(err,results){
+        if ( err ) {
+          console.log('Error: Lesson.js line 19',err);
+        } else {
+          if ( results.lesson_type === 'gf') {
+            set('student',results.student);
+            set('name',results.student.name);
+            set('lesson',results.ret);
+            set('mode',1);
+          } else {
+            console.log('jones116',results);
+            console.log('Drawing Conclusion lesson - needs code ');
+          }
+        }
+      });
     }
   });
 };
