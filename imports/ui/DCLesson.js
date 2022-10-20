@@ -94,13 +94,18 @@ const loadNextQuestion = function(){
     if ( err ) {
       console.log('Error in DCLesson.js line 93',err);
     } else if ( results.length > 0 ){
-      set('lesson', results[0]);
+      let obj = results[0];
+      obj.incorrect_count = 0;
+      console.log('jones98',obj);
+      set('lesson', obj);
     }
   });
 };
 
 Template.DCLesson.events({
   'click #dc_done': function(e){
+    e.stopPropagation();
+    e.preventDefault();
     let word;
     const last = onLastQuestion();
     let correct =  false;
@@ -110,6 +115,9 @@ Template.DCLesson.events({
       correct = true;
     } else if ( lesson.answer_selected ) {
       word = 'wrong_answer';
+      lesson.incorrect_count += 1;
+      console.log('jones117',lesson);
+      set('lesson',lesson);
     } else {
       // no answer given
       word = 'answer_question2'; // next
@@ -118,9 +126,29 @@ Template.DCLesson.events({
     lib.googlePlaySound( word, function(){
       console.log('%s finished playing',word);
     });
-    if ( ! last && correct ) {
+    if ( correct ) {
       // go to next question
-      loadNextQuestion();
+      const wait = '...';
+      const html = $(e.currentTarget).html();
+      if ( wait === html ) return;
+      $(e.currentTarget).html(wait);
+      let points = 10;
+      if ( lesson.incorrect_count === 1 ) points = 5;
+      if ( lesson.incorrect_count > 1 ) points = 0;
+      lesson.points = points;
+      Meteor.call('dcSaveLessonHistory',lesson, lib.getCookie('studentId'), function(err,results){
+        $(e.currentTarget).html(html);
+        if ( err ) {
+          console.log('Error in DCLesson.js line 131',err);
+        } else if ( Meteor.isDevelopment ) {
+          console.log('dcSaveLessonHistory',results);
+        }
+      });
+      if ( last ) {
+        // start a new lesson
+      } else {
+        loadNextQuestion();
+      }
     }
   },
   'click #dc_help': function(e){

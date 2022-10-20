@@ -23,7 +23,46 @@ export const addPoints = function(students){
   }
 };
 
+export const dcSaveLessonHistory = function( lesson, studentId ){
+  let retObj = {};
+  retObj.lesson = lesson;
+
+  retObj.studentId = studentId;
+
+  retObj.PreviousLessonHistory = LessonHistory.find( { Shape: lesson.Shape, Number: lesson.Number}).fetch();
+
+  retObj.DrawConclusions1 = DrawConclusions.find({ Shape: "D", Number: 1, GradeLevel: 2.8 }).fetch();
+  console.log('jones39a',retObj.DrawConclusions1);
+
+  if ( retObj.PreviousLessonHistory.length > 0 ) {
+  } else {
+    let doc = {};
+    doc.answerCount = 1;
+    doc.grade_level = lesson.GradeLevel;
+    doc.qnumList = [ lesson.QuestionNum ];
+    doc.pct = 100;
+    doc.incorrect = {};
+    if ( lesson.incorrect_count > 0 ) {
+      doc.incorrect[ lesson.QuestionNum ] = lesson.incorrect_count;
+      doc.pct = 0;
+    }
+    doc.lesson_id = lesson._id;
+    doc.lesson_type = 'dc';
+    doc.points = lesson.points;
+    doc.student_id = studentId;
+    doc.Shape = lesson.Shape;
+    doc.Number = lesson.Number;
+    doc.when = lib.today();
+
+    retObj.doc = doc;
+  }
+
+  retObj.LessonHistory = LessonHistory.find().fetch();
+  return retObj;
+};
+
 export const saveLessonHistory = function( doc ){
+  // For GF Lessons only see dcSaveLessonHistory for DC lessons
 
   // remove all previous lesson history - still debugging
   // const recs = LessonHistory.find().fetch();

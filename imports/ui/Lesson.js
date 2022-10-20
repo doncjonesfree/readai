@@ -28,7 +28,9 @@ Template.Lesson.onCreated(function LessonOnCreated() {
           set('mode',2);
         } else {
           // dc lesson
-          Session.set('DCLesson_lesson',results.ret[0]);
+          let obj = results.ret[0];
+          obj.incorrect_count = 0;
+          Session.set('DCLesson_lesson',obj);
           set('mode',3);
         }
       }

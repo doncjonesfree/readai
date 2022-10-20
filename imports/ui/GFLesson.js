@@ -159,12 +159,9 @@ Template.GFLesson.events({
     } else {
       set('lesson',lesson); // save so we can clear incorrect
       const student = get('student');
-      let points = 0;
-      if ( student && student.award_points ) {
-        points = lib.calculatePoints( lesson );
-      }
+      let points = lib.calculatePoints( lesson );
       set('points','');
-      if ( points ) {
+      if ( points && student.award_points ) {
         set('points',points);
         $('#gf_show_points').show();
         const word = 'ding';
@@ -173,7 +170,8 @@ Template.GFLesson.events({
         });
         saveLessonHistory(lesson,points);
       } else {
-        saveLessonHistory(lesson,0);
+        // save points anyway - even if they asked not to show points
+        saveLessonHistory(lesson,points);
       }
     }
   },
