@@ -5,6 +5,8 @@
      </div>
      <div class="app-header app-align-right">
        {{ #if activeLesson }}
+         {{ points }}
+         {{ name }}
          <div class="button" id="student_done">done for now</div>
        {{ else }}
           {{ #with user_info }}

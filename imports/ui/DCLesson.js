@@ -2,10 +2,7 @@ import * as lib from '../api/lib';
 
 const pre = 'DCLesson_';
 const get = function(n) { return Session.get(pre + n )};
-const set = function(n,v) {
-  Session.set(pre + n,v)
-};
-
+const set = function(n,v) { Session.set(pre + n,v) };
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
 Template.DCLesson.onCreated(function DCLessonOnCreated() {
@@ -136,6 +133,11 @@ Template.DCLesson.events({
       if ( lesson.incorrect_count === 1 ) points = 5;
       if ( lesson.incorrect_count > 1 ) points = 0;
       lesson.points = points;
+
+      const totalPoints = lib.int( lib.getCookie('studentPoints') ) + points;
+      lib.setCookie('studentPoints',totalPoints);
+      Session.set('header_points',totalPoints)
+
       Meteor.call('dcSaveLessonHistory',lesson, lib.getCookie('studentId'), function(err,results){
         $(e.currentTarget).html(html);
         if ( err ) {

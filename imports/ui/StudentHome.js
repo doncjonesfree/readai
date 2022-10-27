@@ -54,7 +54,6 @@ const getValue = function(doc,id){
 };
 
 const studentFields = function(){
-  // left off here
   const doc = get('doc');
   let op = [];
   op.push( { label: 'Name', type: 'text', required: true, value: getValue(doc,'name'), id: 'name', message: "you can enter just first name if you like" })
@@ -116,6 +115,14 @@ Template.StudentHome.events({
     $(e.currentTarget).html(wait);
     const id = $(e.currentTarget).attr('data');
     lib.setCookie('studentId',id);
+
+    const student = getStudentGivenId(id);
+    lib.setCookie('student',student);
+
+    let points = 0;
+    if ( student.points ) points = student.points;
+    lib.setCookie('studentPoints',points);
+
     FlowRouter.go('lesson');
   },
   'click .sh_student_delete'(e){
