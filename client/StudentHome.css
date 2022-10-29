@@ -21,7 +21,7 @@
   opacity: 1;
 }
 
-.sh_student_edit {
+.sh_student_link {
   display: inline-block;
   font-size: .6em;
   color: blue;
@@ -29,18 +29,6 @@
   opacity: .2;
 }
 
-.sh_student_edit:hover {
-  opacity: 1;
-}
-
-.sh_student_delete {
-  display: inline-block;
-  font-size: .6em;
-  color: blue;
-  margin-top: 1em;
-  opacity: .2;
-}
-
-.sh_student_delete:hover {
+.sh_student_link:hover {
   opacity: 1;
 }

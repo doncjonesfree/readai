@@ -20,7 +20,25 @@ Meteor.methods({
   'getNextLesson': function( StudentId ){
     return getNextLesson( StudentId );
   },
-  'loadStudents': function(user){
+  'restoreInactiveStudents': function(user){
+    const addInactive = function(list){
+      let op = [];
+      for ( let i=0; i < list.length; i++ ) {
+        let r = list[i];
+        const doc = { inactive: false };
+        if ( r.inactive ) {
+          r.inactive = false;
+          Students.update(r._id, { $set: doc });
+        }
+        op.push(r);
+      }
+      return op;
+    };
+    let recs = addInactive( Students.find( { user_id: user._id }, { sort: { name: 1 }}).fetch() );
+    addPoints( recs );
+    return recs;
+  },
+  'loadStudents': function(user ){
     const removeInactive = function(list){
       let op = [];
       for ( let i=0; i < list.length; i++ ) {
@@ -29,7 +47,8 @@ Meteor.methods({
       }
       return op;
     };
-    let recs = removeInactive( Students.find( { user_id: user._id }, { sort: { name: 1 }}).fetch() );
+    // let recs = removeInactive( Students.find( { user_id: user._id }, { sort: { name: 1 }}).fetch() );
+    let recs = Students.find( { user_id: user._id }, { sort: { name: 1 }}).fetch();
     addPoints( recs );
     return recs;
   },

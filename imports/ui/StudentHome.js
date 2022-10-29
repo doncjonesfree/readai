@@ -75,8 +75,23 @@ Template.StudentHome.helpers({
     if ( get('student_id') ) return false;
     return true;
   },
+  inactive_count(){
+    let list = get('students');
+    let count = 0;
+    for ( let i=0; i < list.length; i++ ) {
+      const l = list[i];
+      if ( l.inactive ) count += 1;
+    }
+    if ( count ) return count;
+    return '';
+  },
   student() {
-    let op = get('students');
+    let list = get('students');
+    let op = [];
+    for ( let i=0; i < list.length; i++ ) {
+      const l = list[i];
+      if ( ! l.inactive ) op.push(l);
+    }
     return op;
   },
   data_entry() {
@@ -105,6 +120,22 @@ const getStudentGivenId = function(id){
 };
 
 Template.StudentHome.events({
+  'click #sh_restore_inactive'(e){
+    e.stopPropagation();
+    e.preventDefault();
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    $(e.currentTarget).html(wait);
+    Meteor.call('restoreInactiveStudents', lib.getCurrentUser(), function(err,results){
+      $(e.currentTarget).html(html);
+      if ( err ) {
+        console.log('Error: StudentHome.js line 55',err);
+      } else {
+        set('students',results);
+      }
+    });
+  },
   'click .sh_student'(e){
     // start lesson for student
     e.stopPropagation();
@@ -125,23 +156,43 @@ Template.StudentHome.events({
 
     FlowRouter.go('lesson');
   },
+  'click .sh_student_progress'(e){
+    e.stopPropagation();
+    e.preventDefault();
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    const id = $(e.currentTarget).attr('data');
+    lib.setCookie('studentId',id);
+
+    const student = getStudentGivenId(id);
+    lib.setCookie('student',student);
+
+    let points = 0;
+    if ( student.points ) points = student.points;
+    lib.setCookie('studentPoints',points);
+
+    FlowRouter.go('progress');
+  },
   'click .sh_student_delete'(e){
     e.stopPropagation();
     e.preventDefault();
     const wait = '...';
     const html = $(e.currentTarget).html();
     if ( wait === html ) return;
-    $(e.currentTarget).html(wait);
-    const id = $(e.currentTarget).attr('data');
-    const doc = { inactive: true };
-    Meteor.call('collectionUpdate', 'Students', id, doc, function(err,results){
-      if ( err ) {
-        console.log('Error: StudentHome.js line 127',err);
-      } else {
-        loadStudents('');
-        set('mode',2);
-      }
-    });
+    if ( confirm('Confirm: Mark this student "inactive"') ) {
+      $(e.currentTarget).html(wait);
+      const id = $(e.currentTarget).attr('data');
+      const doc = { inactive: true };
+      Meteor.call('collectionUpdate', 'Students', id, doc, function(err,results){
+        if ( err ) {
+          console.log('Error: StudentHome.js line 127',err);
+        } else {
+          loadStudents('');
+          set('mode',2);
+        }
+      });
+    }
   },
   'click .sh_student_edit'(e){
     // edit the selected student

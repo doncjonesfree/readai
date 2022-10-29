@@ -5,6 +5,9 @@
 
   {{ #if mode2 }}
     <button class="sh_change_mode" data="3">Add a Student</button>
+    {{ #if inactive_count }}
+      <button id="sh_restore_inactive">Restore Inactive Students ({{ inactive_count }})</button>
+    {{ /if }}
     {{ #each student }}
       <div class="sh_student" data="{{ _id }}">
         {{ name }}
@@ -12,9 +15,11 @@
           <div class="sh_points_show">{{ points }} Points</div>
         {{ /if }}
         <div class="sh_student_flex">
-          <div class="sh_student_edit" data="{{ _id }}">edit</div>
+          <div class="sh_student_edit sh_student_link" data="{{ _id }}" title="modify name or points awards">edit</div>
           &nbsp;
-          <div class="sh_student_delete" data="{{ _id }}">delete</div>
+          <div class="sh_student_delete sh_student_link" data="{{ _id }}" title="mark student inactive">delete</div>
+          &nbsp;
+          <div class="sh_student_progress sh_student_link" data="{{ _id }}" title="view student progress">progress</div>
         </div>
       </div>
     {{ /each }}
