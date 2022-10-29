@@ -24,17 +24,31 @@ export const addPoints = function(students){
 };
 
 export const dcSaveLessonHistory = function( lesson, studentId ){
+  // Save a drawing conclusion lesson into history
   let retObj = {};
   retObj.lesson = lesson;
 
   retObj.studentId = studentId;
 
-  retObj.PreviousLessonHistory = LessonHistory.find( { Shape: lesson.Shape, Number: lesson.Number}).fetch();
+  const find = { lesson_type: 'dc', Shape: lesson.Shape, Number: lesson.Number, student_id: studentId, grade_level: lesson.GradeLevel};
+  retObj.PreviousLessonHistory = LessonHistory.find( find, { sort: { when: -1 }, limit: 1 } ).fetch();
 
-  retObj.DrawConclusions1 = DrawConclusions.find({ Shape: "D", Number: 1, GradeLevel: 2.8 }).fetch();
-  console.log('jones39a',retObj.DrawConclusions1);
-
-  if ( retObj.PreviousLessonHistory.length > 0 ) {
+  if ( retObj.PreviousLessonHistory.length > 0 && retObj.PreviousLessonHistory[0].answerCount < 10 ) {
+    // We have an additional answer to a dc lesson in progress
+    const p = retObj.PreviousLessonHistory[0];
+    let doc = {};
+    doc.answerCount = p.answerCount + 1;
+    doc.qnumList = p.qnumList;
+    doc.qnumList.push( lesson.QuestionNum );
+    doc.incorrect = p.incorrect;
+    if ( lesson.incorrect_count > 0 ) {
+      doc.incorrect[ lesson.QuestionNum ] = lesson.incorrect_count;
+    }
+    doc.pct = calcPct ( doc.answerCount, doc.incorrect );
+    doc.when = lib.today();
+    LessonHistory.update(p._id, { $set: doc });
+    retObj.updated_id = p._id;
+    retObj.doc = doc;
   } else {
     let doc = {};
     doc.answerCount = 1;
@@ -54,10 +68,12 @@ export const dcSaveLessonHistory = function( lesson, studentId ){
     doc.Number = lesson.Number;
     doc.when = lib.today();
 
+    LessonHistory.insert(doc);
+
     retObj.doc = doc;
   }
 
-  retObj.LessonHistory = LessonHistory.find().fetch();
+  retObj.LessonHistory = LessonHistory.find({},{ sort: { when: -1 }}).fetch();
   return retObj;
 };
 
@@ -91,7 +107,7 @@ const calcPct  = function( answerCount, incorrect ){
 
 export const getNextLesson = function( StudentId ){
   const student = Students.findOne( StudentId );
-  const history = LessonHistory.find( { student_id: StudentId }, { sort: { when: -1 }}).fetch();
+  const history = LessonHistory.find( { student_id: StudentId }, { sort: { when: -1 } }).fetch();
 
   // delete lesson history
   // for ( let i=0; i < history.length; i++ ) {
@@ -106,7 +122,7 @@ export const getNextLesson = function( StudentId ){
     // get gathering facts lesson
     ret = getFirstLesson( student );
     retObj.lesson_type = 'gf';
-  } else if ( history[0].lesson_type === 'gf') {
+  } else if ( history[0].lesson_type === 'gf' || ( history[0].lesson_type === 'dc' && history[0].answerCount < 10 ) ) {
     // get draw conclusions lesson
     ret = getDcLesson( student, history );
     if ( ret ) {
@@ -151,6 +167,26 @@ const getGfLesson = function( student, history ){
 
 const getDcLesson = function( student, history ){
   // We had at least one gf lesson, now pick a dc lesson
+  let recs;
+  const mostRecent = LessonHistory.find({ lesson_type: 'dc', student_id: student._id },{ sort: { when: -1 }, limit: 1}).fetch();
+  if ( mostRecent.length > 0 && mostRecent[0].answerCount < 10 ) {
+    // we haven't asked all questions yet
+    const mr = mostRecent[0];
+    // first the first missing question
+    let QuestionNum = 0;
+    for ( let i=1; i <= 10; i++ ) {
+      if ( mr.qnumList.indexOf(i) < 0 ) {
+        QuestionNum = i;
+        break;
+      }
+    }
+    if ( QuestionNum > 0 ) {
+      const dc = DrawConclusions.findOne( mr.lesson_id );
+      recs = DrawConclusions.find({ GradeLevel: dc.GradeLevel, Shape: dc.Shape, Number: dc.Number, QuestionNum: QuestionNum } ).fetch();
+      if ( recs.length > 0 ) return [ recs[0] ]; // should only be one record anyway
+    }
+  }
+  // Not in the middle of a lesson - start a new lesson
   const gfResults = getLessonResults( 'gf', history );
   const dcResults = getLessonResults( 'dc', history );
   let grade;
@@ -161,7 +197,6 @@ const getDcLesson = function( student, history ){
   } else {
     grade = gfResults.average_grade;
   }
-  let recs;
   if ( done ) {
     recs = DrawConclusions.find({ GradeLevel: { $gte: grade, $lt: grade + 5 }, QuestionNum: 1, _id: { $nin: done } }, { limit: 2 }).fetch();
   } else {
