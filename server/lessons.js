@@ -116,8 +116,19 @@ export const getNextLesson = function( StudentId ){
   // }
 
   let retObj = { success: true, history: history, student: student };
-
   let ret;
+
+  const forceDcLesson = true; // jones - for debugging
+  if ( forceDcLesson ) {
+    ret = getDcLesson( student, history );
+    console.log('jones124',ret);
+    if ( ret ) {
+      retObj.lesson_type = 'dc';
+      retObj.ret = ret;
+      return retObj;
+    }
+  }
+
   if ( history.length === 0 ) {
     // get gathering facts lesson
     ret = getFirstLesson( student );
@@ -223,7 +234,7 @@ const getDcLesson = function( student, history ){
   const lesson = recs[0];
   // dc lessons start at grade 2.8,  if the student is less than 2.3, then don't
   // do a dc lesson until they have progressed further.
-  if ( (lesson.GradeLevel - 0.5 ) > grade ) return '';
+  // if ( (lesson.GradeLevel - 0.5 ) > grade ) return ''; // not sure about this line 
   return DrawConclusions.find({ Shape: lesson.Shape, Number: lesson.Number, GradeLevel: lesson.GradeLevel },{sort: { QuestionNum: 1 } }).fetch();
 };
 

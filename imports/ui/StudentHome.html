@@ -3,6 +3,10 @@
     loading...
   {{ /if }}
 
+  {{ #if mode5 }}
+    {{ > Progress }}
+  {{ /if }}
+
   {{ #if mode2 }}
     <button class="sh_change_mode" data="3">Add a Student</button>
     {{ #if inactive_count }}

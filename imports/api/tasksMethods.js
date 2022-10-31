@@ -1,5 +1,5 @@
 import { check } from 'meteor/check';
-import { Students, TasksCollection, GatherFacts, GatherFactsAnswers, AudioFiles, DrawConclusions, Users } from '/imports/db/Collections';
+import { Students, TasksCollection, GatherFacts, GatherFactsAnswers, AudioFiles, DrawConclusions, Users, LessonHistory } from '/imports/db/Collections';
 import * as lib from './lib';
 
 var Future = Npm.require("fibers/future");
@@ -11,6 +11,9 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  'loadHistory': function( studentId ){
+    return LessonHistory.find( { student_id: studentId }, { sort: { when: -1 }}).fetch();
+  },
   'dcSaveLessonHistory': function( lesson, studentId ){
     return dcSaveLessonHistory( lesson, studentId );
   },
@@ -86,6 +89,14 @@ Meteor.methods({
           if ( list.indexOf(r.email) < 0 || Meteor.isDevelopment ) op.push(r);
         }
         return op;
+      break;
+
+      case 'DrawConclusions':
+      return DrawConclusions.find(find).fetch();
+      break;
+
+      case 'LessonHistory':
+      return LessonHistory.find(find).fetch();
       break;
     }
     return [];

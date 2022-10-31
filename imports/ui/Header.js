@@ -16,7 +16,7 @@ Template.header.helpers({
     if ( ! u ) {
       return { user: false };
     } else {
-      return { user: true, name: u.first_name, masterUser: u.masterUser };
+      return { user: true, user_name: u.first_name, masterUser: u.masterUser };
     }
   },
   name() {

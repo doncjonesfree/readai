@@ -16,6 +16,19 @@ export const getCookie = function(key){
   return cookies.get(key)
 };
 
+export const prettyDate = function(d) {
+  return moment(d,dateFormat).format('ddd MM/DD/YY h:mm a');
+};
+
+export const prettyDateShort = function(d) {
+  // just the date YYYY-MM-DD or 5/24/2021
+  if ( d.indexOf('/') > 0 ) {
+    return moment(d,'MM/DD/YYYY').format('ddd MM/DD/YY');
+  } else {
+    return moment(d,'YYYY-MM-DD').format('ddd MM/DD/YY');
+  }
+};
+
 export const toObject = function(list,field){
   let obj = {};
   for ( let i=0; i < list.length; i++ ) {

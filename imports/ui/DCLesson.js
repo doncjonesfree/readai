@@ -9,7 +9,7 @@ Template.DCLesson.onCreated(function DCLessonOnCreated() {
 
 });
 
-const expandShape = function(s){
+export const expandShape = function(s){
   if ( s === 'S') return 'Square';
   if ( s === 'T') return 'Triangle';
   if ( s === 'D') return 'Diamond';

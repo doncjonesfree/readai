@@ -1,0 +1,17 @@
+.pr_lesson_flex_heading {
+  display: flex;
+  font-weight: bold;
+  border-bottom: 2px solid black;
+  padding: 0 .5em 0 .5em;
+}
+.pr_lesson_flex {
+  display: flex;
+  padding: .25em .5em .25em .5em;
+  border-radius: .25em;
+}
+.pr_lesson_when { width: 15%; }
+.pr_lesson_type { width: 15%; }
+.pr_lesson_grade { width: 10%; }
+.pr_lesson_pct { width: 10%; }
+.pr_lesson_missed { width: 10%; }
+.pr_lesson_options { width: 40%; }

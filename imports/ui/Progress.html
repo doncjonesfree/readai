@@ -1,0 +1,49 @@
+<template name="Progress">
+  {{ #if mode2 }}
+    {{ #with student }}
+      <h1>{{ name }}</h1>
+    {{ /with }}
+    <button class="pr_change_mode" data="1">Back</button>
+    {{ #with dc_review }}
+      <div class="dc_lesson_question">{{ Question }}</div>
+    {{ /with }}
+  {{ /if }}
+
+  {{ #if mode3 }}
+    {{ #with student }}
+      <h1>{{ name }}</h1>
+    {{ /with }}
+    <button class="pr_change_mode" data="1">Back</button>
+    Review GF Lesson
+  {{ /if }}
+
+  {{ #if mode1 }}
+    <button class="pr_change_mode" data="2" data2="StudentHome">Back</button>
+    {{ #with student }}
+      <h1>Progress for {{ name }}</h1>
+    {{ /with }}
+
+    <div class="pr_lesson_flex_heading">
+      <div class="pr_lesson_when"><br>When</div>
+      <div class="pr_lesson_type"><br>Lesson Type</div>
+      <div class="pr_lesson_grade">Appr.<br>Grade</div>
+      <div class="pr_lesson_pct">Pct<br>Correct</div>
+      <div class="pr_lesson_missed"><br># Missed</div>
+      <div class="pr_lesson_missed"><br>Options</div>
+    </div>
+    {{ #each lesson }}
+      <div class="pr_lesson_flex {{ cls }}">
+        <div class="pr_lesson_when">{{ when }}</div>
+        <div class="pr_lesson_type">{{ lesson_type }}</div>
+        <div class="pr_lesson_grade">{{ grade_level }}</div>
+        <div class="pr_lesson_pct">{{ pct }}</div>
+        <div class="pr_lesson_missed">{{ missed }}</div>
+        <div class="pr_lesson_missed">
+          {{ #if review }}
+            <a href="#" class="pr_lesson_review" data="{{ _id }}">review</a>
+          {{ /if }}
+        </div>
+      </div>
+    {{ /each }}
+  {{ /if }}
+</template>
