@@ -1,5 +1,6 @@
 import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 import { Session } from 'meteor/session';
+import { addDcAnswerCheckbox } from './DCLesson';
 import * as lib from '../api/lib';
 
 const pre = 'Progress_';
@@ -15,6 +16,7 @@ Template.Progress.onCreated(function ProgressOnCreated() {
   set('studentId',lib.getCookie('studentId'));
   set('student',lib.getCookie('student'));
   set('points',lib.getCookie('studentPoints'));
+  set('singleQuestion','');
   setd('mode',1);
 
   Meteor.call('loadHistory', get('studentId'), function(err,results){
@@ -22,7 +24,6 @@ Template.Progress.onCreated(function ProgressOnCreated() {
       console.log('Error: Progress.js line 19',err);
     } else {
       set('history',results);
-      console.log('jones14 history',get('history'));
     }
   });
 });
@@ -41,12 +42,21 @@ Template.Progress.helpers({
   mode1() { return get('mode') === 1; },
   mode2() { return get('mode') === 2; },
   mode3() { return get('mode') === 3; },
+  wordHelper() {
+    return get('wordHelper');
+  },
   student() {
     return get('student');
   },
   dc_review(){
     let review = get('review');
     if ( ! review ) return '';
+
+    let singleQuestion = get('singleQuestion');
+    if ( singleQuestion ) {
+      addDcAnswerCheckbox(singleQuestion);
+      return singleQuestion;
+    }
 
     let list = []; // list of questions answered incorrectly
     for ( let key in review.incorrect ) {
@@ -63,7 +73,6 @@ Template.Progress.helpers({
     let reviewed = review.reviewed;
     if ( ! reviewed ) reviewed = {};
     let QuestionNum = 0;
-    console.log('jones71a',list);
     for ( let i=0; i < list.length; i++ ) {
       const n = list[i]; // question number
       if ( ! reviewed[n] ) {
@@ -71,19 +80,22 @@ Template.Progress.helpers({
         break;
       }
     }
-    // left off here 
-    console.log('jones71b',QuestionNum);
     if ( QuestionNum ) {
-      const dc_lesson = get('dc_lesson');
+      let dc_lesson = get('dc_lesson');
+      if ( ! dc_lesson ) dc_lesson = [];
       let lesson = '';
       for ( let i=0; i < dc_lesson.length; i++ ) {
         const dc = dc_lesson[i];
         if ( QuestionNum === dc.QuestionNum ) {
           lesson = dc;
-          console.log('jones71c',lesson);
           break;
         }
       }
+      if ( lesson ) {
+        addDcAnswerCheckbox(lesson);
+        set('singleQuestion',lesson);
+      }
+
       return lesson;
     } else {
       // nothing left to review
@@ -119,6 +131,29 @@ const getLessonGivenId = function(id){
 };
 
 Template.Progress.events({
+  'click .lesson_word'(e){
+    e.preventDefault();
+    e.stopPropagation();
+    let wordHelper = {};
+    wordHelper.word = $(e.currentTarget).attr('data');
+    wordHelper.ix = lib.int( $(e.currentTarget).attr('data2') );
+    set('wordHelper',wordHelper);
+    $('#pr_word_popup').show();
+  },
+  'change .dc_chk_answer': function(e){
+    const i = $(e.currentTarget).attr('data'); // question #
+    let l = get('singleQuestion');
+    if ( $(e.currentTarget).is(':checked')) {
+      l.answer_selected = lib.int(i);
+    } else {
+      delete l.answer_selected;
+    }
+    set('singleQuestion',l);
+  },
+  'click #popup_close'(e){
+    const id = '#' + $(e.currentTarget).attr('data');
+    $(id).hide();
+  },
   'click .pr_change_mode'(e){
     const m = lib.int( $(e.currentTarget).attr('data'));
     const t = $(e.currentTarget).attr('data2');

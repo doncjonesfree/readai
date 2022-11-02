@@ -23,6 +23,32 @@ const onLastQuestion = function(){
   return false;
 };
 
+export const addDcAnswerCheckbox = function(l){
+  // l is a dc lesson - add "answer" array with checkbox and text
+  let uniqueCount = 0;
+  l.Shape = expandShape( l.Shape );
+  l.answer = [];
+  const tmp = lib.addDivsForLongerWords( l.Question, uniqueCount );
+  l.htmlQuestion = tmp.op;
+  uniqueCount = tmp.uniqueCount;
+
+  for ( let i=1; i <= 4; i++ ) {
+    let a = l[ sprintf('Answer%s',i)];
+    if ( a ) {
+      const tmp = lib.addDivsForLongerWords( a, uniqueCount );
+      a = tmp.op;
+      uniqueCount = tmp.uniqueCount;
+      let checked = '';
+      if ( i === l.answer_selected ) checked = 'checked';
+
+      const checkbox = sprintf('<input type="checkbox" class="dc_chk_answer" data="%s" %s>',i,checked);
+      const content = sprintf('%s. %s',i,a);
+
+      l.answer.push( { checkbox: checkbox, content: content });
+    }
+  }
+};
+
 Template.DCLesson.helpers({
   done_button: function(){
     if ( onLastQuestion() ) return 'Done';
@@ -31,28 +57,7 @@ Template.DCLesson.helpers({
   lesson() {
     let l = get('lesson');
     if ( ! l ) return '';
-    let uniqueCount = 0;
-    l.Shape = expandShape( l.Shape );
-    l.answer = [];
-    const tmp = lib.addDivsForLongerWords( l.Question, uniqueCount );
-    l.Question = tmp.op;
-    uniqueCount = tmp.uniqueCount;
-
-    for ( let i=1; i <= 4; i++ ) {
-      let a = l[ sprintf('Answer%s',i)];
-      if ( a ) {
-        const tmp = lib.addDivsForLongerWords( a, uniqueCount );
-        a = tmp.op;
-        uniqueCount = tmp.uniqueCount;
-        let checked = '';
-        if ( i === l.answer_selected ) checked = 'checked';
-
-        const checkbox = sprintf('<input type="checkbox" class="dc_chk_answer" data="%s" %s>',i,checked);
-        const content = sprintf('%s. %s',i,a);
-
-        l.answer.push( { checkbox: checkbox, content: content });
-      }
-    }
+    addDcAnswerCheckbox(l);
     return l;
   },
 });

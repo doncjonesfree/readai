@@ -316,7 +316,7 @@ export const DictionaryLookup = function( word, callback ){
 };
 
 export const listWordsFromGFParagraph = function( arg, alreadyFormatted ){
-
+  // arg is the paragraph 
   const removeBadCharacters = function(arg){
     // given a word - remove any characters that cannot be part of the word
     // example: 'Hammerstein

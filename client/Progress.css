@@ -15,3 +15,7 @@
 .pr_lesson_pct { width: 10%; }
 .pr_lesson_missed { width: 10%; }
 .pr_lesson_options { width: 40%; }
+
+.dc_lesson_question {
+  margin-top: 1em;
+}

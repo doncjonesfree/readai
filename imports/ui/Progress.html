@@ -5,7 +5,13 @@
     {{ /with }}
     <button class="pr_change_mode" data="1">Back</button>
     {{ #with dc_review }}
-      <div class="dc_lesson_question">{{ Question }}</div>
+      <div class="dc_lesson_question">{{{ htmlQuestion }}}</div>
+
+      {{ #each answer }}
+        <div class="dc_lesson_answer_flex">
+          {{{ checkbox }}} {{{ content }}}
+        </div>
+      {{ /each }}
     {{ /with }}
   {{ /if }}
 
@@ -46,4 +52,13 @@
       </div>
     {{ /each }}
   {{ /if }}
+
+  <div class="popup" id="pr_word_popup">
+    <div class="popup_inside">
+      <button id="popup_close" data="pr_word_popup">Close</button>
+      {{ #with wordHelper }}
+        {{ word }}
+      {{ /with }}
+    </div>
+  </div>
 </template>
