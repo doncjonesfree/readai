@@ -17,16 +17,24 @@ Template.Progress.onCreated(function ProgressOnCreated() {
   set('student',lib.getCookie('student'));
   set('points',lib.getCookie('studentPoints'));
   set('singleQuestion','');
+  setd('WordList',[]);
   setd('mode',1);
 
+  loadHistoryEtc();
+
+});
+
+const loadHistoryEtc = function( callback ){
   Meteor.call('loadHistory', get('studentId'), function(err,results){
     if ( err ) {
       console.log('Error: Progress.js line 19',err);
     } else {
-      set('history',results);
+      set('history',results.LessonHistory);
+      set('WordList',results.WordList);
+      if ( callback ) callback();
     }
   });
-});
+};
 
 const countMissed = function( incorrect ){
   let count = 0;
@@ -42,8 +50,27 @@ Template.Progress.helpers({
   mode1() { return get('mode') === 1; },
   mode2() { return get('mode') === 2; },
   mode3() { return get('mode') === 3; },
+  wordsToStudyCount(){
+    let WordList = get('WordList');
+    if ( WordList.length === 1 ) {
+      return '1 Study Word';
+    } else if ( WordList.length > 1 ) {
+      return sprintf('%s Study Words',WordList.length);
+    } else {
+      return '';
+    }
+  },
+  wordsToStudy(){
+    let WordList = get('WordList');
+    if ( WordList.length > 0 ) {
+      return WordList;
+    } else {
+      return '';
+    }
+  },
   wordHelper() {
-    return get('wordHelper');
+    let wordHelper = get('wordHelper');
+    return wordHelper;
   },
   student() {
     return get('student');
@@ -131,14 +158,45 @@ const getLessonGivenId = function(id){
 };
 
 const knowsWord = function( word, knows ){
-  $('#pr_word_popup').hide();
+  let WordList = get('WordList');
+
+  let wordHelper = get('wordHelper');
+  if ( typeof( wordHelper.list_ix) !== 'undefined') {
+    // we are working on a list of words, not just one from a lesson
+    let ix = wordHelper.list_ix;
+    if ( knows ) {
+      WordList.splice(ix,1);
+    } else {
+      ix += 1;
+    }
+    if ( ix < WordList.length ) {
+      // we have more words to look at
+      wordHelper.word = WordList[ix].word;
+      wordHelper.list_ix = ix;
+      set('wordHelper',wordHelper);
+    } else {
+      loadHistoryEtc();
+      $('#pr_word_popup').hide();
+    }
+  } else {
+    // just a word from a lesson
+    loadHistoryEtc();
+    $('#pr_word_popup').hide();
+  }
+
   const studentId = lib.getCookie('studentId');
-  console.log('jones136',word,knows,studentId);
   Meteor.call('knowsWord', word, knows, studentId, function(err,results){
     if ( err ) {
       console.log('Error: Progress.js line 137',err);
     } else {
       console.log('knowsWord',results);
+      if ( results.points ) {
+        // give student points earned on screen
+        // "knowsWord" already stored points in WordList collection
+        const totalPoints = lib.int( lib.getCookie('studentPoints') ) + results.points;
+        lib.setCookie('studentPoints',totalPoints);
+        Session.set('header_points',totalPoints)
+      }
     }
   });
 };
@@ -183,6 +241,19 @@ Template.Progress.events({
       });
     });
   },
+  'click .pr_words'(e){
+    // user asked to study word list
+    e.preventDefault();
+    e.stopPropagation();
+
+    let WordList = get('WordList');
+
+    let wordHelper = {};
+    wordHelper.word = WordList[0].word;
+    wordHelper.list_ix = 0;
+    set('wordHelper',wordHelper);
+    $('#pr_word_popup').show();
+  },
   'click .lesson_word'(e){
     e.preventDefault();
     e.stopPropagation();
@@ -212,6 +283,9 @@ Template.Progress.events({
     if ( t ) {
       Session.set( sprintf('%s_mode',t),m );
     } else {
+      if ( m === 1 ) {
+        loadHistoryEtc();
+      }
       set('mode',m);
     }
   },

@@ -98,7 +98,6 @@ const loadNextQuestion = function(){
     } else if ( results.length > 0 ){
       let obj = results[0];
       obj.incorrect_count = 0;
-      console.log('jones98',obj);
       set('lesson', obj);
     }
   });
@@ -118,7 +117,6 @@ Template.DCLesson.events({
     } else if ( lesson.answer_selected ) {
       word = 'wrong_answer';
       lesson.incorrect_count += 1;
-      console.log('jones117',lesson);
       set('lesson',lesson);
     } else {
       // no answer given

@@ -23,8 +23,13 @@ Meteor.methods({
         found = true;
         if ( knows && r.active ) {
           // give them points and mark inactive
-          retObj.action = { task: 'update', id: r._id, doc: { active: false }};
-          retObj.points = 10;
+          if ( r.points ) {
+            // We already have points from a previous session with this word
+            retObj.points = 5; // give them 1/2 points
+          } else {
+            retObj.points = 10;
+          }
+          retObj.action = { task: 'update', id: r._id, doc: { active: false, points: retObj.points }};
           retObj.wordCount -= 1; // count active words only
         } else if ( knows && ! r.active ) {
           // nothing needs to change
@@ -46,6 +51,7 @@ Meteor.methods({
       doc.raw_word = word;
       doc.when = lib.today();
       doc.active = true;
+      doc.points = 0;
       retObj.action = { task: 'insert', doc: doc };
       retObj.wordCount += 1; // count active words only
     }
@@ -58,7 +64,10 @@ Meteor.methods({
     return { wordCount: retObj.wordCount, points: retObj.points };
   },
   'loadHistory': function( studentId ){
-    return LessonHistory.find( { student_id: studentId }, { sort: { when: -1 }}).fetch();
+    let retObj = {};
+    retObj.LessonHistory = LessonHistory.find( { student_id: studentId }, { sort: { when: -1 }}).fetch();
+    retObj.WordList = WordList.find( { student_id: studentId, active: true }, { sort: { when: 1 }}).fetch();
+    return retObj;
   },
   'dcSaveLessonHistory': function( lesson, studentId ){
     return dcSaveLessonHistory( lesson, studentId );

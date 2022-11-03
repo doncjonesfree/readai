@@ -25,6 +25,9 @@
 
   {{ #if mode1 }}
     <button class="pr_home">Back</button>
+    {{ #if wordsToStudyCount }}
+      <button class="pr_words">{{ wordsToStudyCount }}</button>
+    {{ /if }}
     {{ #with student }}
       <h1>Progress for {{ name }}</h1>
     {{ /with }}

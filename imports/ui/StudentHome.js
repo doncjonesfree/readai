@@ -121,6 +121,7 @@ const getStudentGivenId = function(id){
 
 Template.StudentHome.events({
   'click #sh_restore_inactive'(e){
+    // restore all inactive students
     e.stopPropagation();
     e.preventDefault();
     const wait = '...';

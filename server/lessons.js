@@ -1,13 +1,23 @@
-import { Students, GatherFacts, GatherFactsAnswers, DrawConclusions, LessonHistory } from '/imports/db/Collections';
+import { Students, GatherFacts, GatherFactsAnswers, DrawConclusions, LessonHistory, WordList } from '/imports/db/Collections';
 import * as lib from '../imports/api/lib';
 
 export const addPoints = function(students){
   // given a list of students, add "points" to each student record
   const studentList = lib.makeList(students,'_id','');
+
   const history = LessonHistory.find( { student_id: { $in: studentList }}).fetch();
+  const words = WordList.find( { student_id: { $in: studentList } }).fetch();
+
   let obj = {};
   for ( let i=0; i < history.length; i++ ) {
     const h = history[i];
+    if ( h.points ) {
+      if ( ! obj[ h.student_id ] ) obj[ h.student_id ] = 0;
+      obj[ h.student_id ] += h.points;
+    }
+  }
+  for ( let i=0; i < words.length; i++ ) {
+    const h = words[i];
     if ( h.points ) {
       if ( ! obj[ h.student_id ] ) obj[ h.student_id ] = 0;
       obj[ h.student_id ] += h.points;
@@ -234,7 +244,7 @@ const getDcLesson = function( student, history ){
   const lesson = recs[0];
   // dc lessons start at grade 2.8,  if the student is less than 2.3, then don't
   // do a dc lesson until they have progressed further.
-  // if ( (lesson.GradeLevel - 0.5 ) > grade ) return ''; // not sure about this line 
+  // if ( (lesson.GradeLevel - 0.5 ) > grade ) return ''; // not sure about this line
   return DrawConclusions.find({ Shape: lesson.Shape, Number: lesson.Number, GradeLevel: lesson.GradeLevel },{sort: { QuestionNum: 1 } }).fetch();
 };
 
