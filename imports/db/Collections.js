@@ -1,5 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
+export const WordList = new Mongo.Collection('word_list');
 export const LessonHistory = new Mongo.Collection('lesson_history');
 export const Students = new Mongo.Collection('students');
 export const TasksCollection = new Mongo.Collection('tasks');

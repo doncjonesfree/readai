@@ -15,7 +15,6 @@ Template.StudentHome.onCreated(function StudentHomeOnCreated() {
   // 2 = Show list of students to choose from
   // 3 = Add a new student
   // 4 = No students - invite them to add a student
-  // 5 = Show progress
   setd('students',[]);
   setd('error','');
   setd('doc',{});
@@ -72,7 +71,6 @@ Template.StudentHome.helpers({
   mode2() { return get('mode') === 2; },
   mode3() { return get('mode') === 3; },
   mode4() { return get('mode') === 4; },
-  mode5() { return get('mode') === 5; },
   addingStudent() {
     if ( get('student_id') ) return false;
     return true;
@@ -174,7 +172,7 @@ Template.StudentHome.events({
     if ( student.points ) points = student.points;
     lib.setCookie('studentPoints',points);
 
-    set('mode',5);
+    FlowRouter.go('progress');
   },
   'click .sh_student_delete'(e){
     e.stopPropagation();

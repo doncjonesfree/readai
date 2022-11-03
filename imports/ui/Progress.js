@@ -130,7 +130,59 @@ const getLessonGivenId = function(id){
   return '';
 };
 
+const knowsWord = function( word, knows ){
+  $('#pr_word_popup').hide();
+  const studentId = lib.getCookie('studentId');
+  console.log('jones136',word,knows,studentId);
+  Meteor.call('knowsWord', word, knows, studentId, function(err,results){
+    if ( err ) {
+      console.log('Error: Progress.js line 137',err);
+    } else {
+      console.log('knowsWord',results);
+    }
+  });
+};
+
 Template.Progress.events({
+  'click .pr_home'(){
+    FlowRouter.go('home');
+  },
+  'click #wh_knows'(e){
+    e.preventDefault();
+    e.stopPropagation();
+    const word = $(e.currentTarget).attr('data');
+    const knows = lib.int( $(e.currentTarget).attr('data2') );
+    knowsWord( word, knows );
+  },
+  'click #wh_instructions'(e){
+    e.preventDefault();
+    e.stopPropagation();
+    lib.googlePlaySound( 'wh_instructions', function(){
+      console.log('Play %s finished','wh_instructions');
+    });
+  },
+  'click #wh_study_word'(e){
+    e.preventDefault();
+    e.stopPropagation();
+    const word = $(e.currentTarget).attr('data');
+    lib.googlePlaySound( word, function(){
+      console.log('Play %s finished',word);
+    });
+  },
+  'click #wh_word_def'(e){
+    e.preventDefault();
+    e.stopPropagation();
+    let word = $(e.currentTarget).attr('data');
+    lib.wordExists(word, function(results){
+      if ( ! results || ! results.definition ) {
+        // no definition found
+        word = 'no_definition_found';
+      }
+      lib.googlePlaySound( '*' + word, function(){
+        console.log('%s definition finished playing',word);
+      });
+    });
+  },
   'click .lesson_word'(e){
     e.preventDefault();
     e.stopPropagation();

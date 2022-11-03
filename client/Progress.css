@@ -1,3 +1,34 @@
+#wh_study_word {
+  display: inline-block;
+  margin-top: .25em;
+  font-size: 2em;
+  cursor: pointer;
+}
+
+#wh_study_word:hover {
+  color: blue;
+}
+
+#wh_word_def {
+  display: inline-block;
+  font-size: 1.7em;
+  width: 1em;
+  border-radius: .25em;
+  padding: 0 .2em 0 .2em;
+  background-color: #336600;
+  color: white;
+  margin-left: .5em;
+  height: 1.3em;
+  line-height: 1.3em;
+  text-align: center;
+}
+
+#wh_word_def:hover {
+  background-color: #339900;
+  cursor: pointer;
+}
+
+
 .pr_lesson_flex_heading {
   display: flex;
   font-weight: bold;

@@ -9,7 +9,8 @@ const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 let Student = '';
 Template.header.helpers({
   activeLesson() {
-    return FlowRouter.getRouteName() === 'Lesson';
+    const list = ['Lesson','Progress'];
+    return list.indexOf( FlowRouter.getRouteName() ) >= 0;
   },
   user_info() {
     const u = Session.get('currentUser');

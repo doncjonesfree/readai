@@ -1,5 +1,5 @@
 import { check } from 'meteor/check';
-import { Students, TasksCollection, GatherFacts, GatherFactsAnswers, AudioFiles, DrawConclusions, Users, LessonHistory } from '/imports/db/Collections';
+import { Students, TasksCollection, GatherFacts, GatherFactsAnswers, AudioFiles, DrawConclusions, Users, LessonHistory, WordList } from '/imports/db/Collections';
 import * as lib from './lib';
 
 var Future = Npm.require("fibers/future");
@@ -11,6 +11,52 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  'knowsWord': function( word, knows, studentId ){
+    let retObj = { word: word, knows: knows, studentId: studentId, points: 0, wordCount: 0 };
+    retObj.WordList = WordList.find( { student_id: studentId }).fetch();
+    const lc_word = word.toLowerCase();
+    let found = false;
+    for ( let i=0; i < retObj.WordList.length; i++ ) {
+      const r = retObj.WordList[i];
+      if ( r.active ) retObj.wordCount += 1; // count active words only
+      if ( r.word === lc_word ) {
+        found = true;
+        if ( knows && r.active ) {
+          // give them points and mark inactive
+          retObj.action = { task: 'update', id: r._id, doc: { active: false }};
+          retObj.points = 10;
+          retObj.wordCount -= 1; // count active words only
+        } else if ( knows && ! r.active ) {
+          // nothing needs to change
+        } else if ( r.active ) {
+          // active and does not know - nothing to do
+        } else {
+          // not active and does not know - make active again
+          retObj.action = { task: 'update', id: r._id, doc: { active: true }};
+          retObj.wordCount += 1; // count active words only
+        }
+      }
+    }
+
+    if ( ! found && ! knows ) {
+      // need to add
+      let doc = {};
+      doc.student_id = studentId;
+      doc.word = lc_word;
+      doc.raw_word = word;
+      doc.when = lib.today();
+      doc.active = true;
+      retObj.action = { task: 'insert', doc: doc };
+      retObj.wordCount += 1; // count active words only
+    }
+
+    if ( retObj.action ) {
+      if ( retObj.action.task === 'insert' ) WordList.insert( retObj.action.doc );
+      if ( retObj.action.task === 'update' ) WordList.update(retObj.action.id, { $set: retObj.action.doc });
+    }
+
+    return { wordCount: retObj.wordCount, points: retObj.points };
+  },
   'loadHistory': function( studentId ){
     return LessonHistory.find( { student_id: studentId }, { sort: { when: -1 }}).fetch();
   },
@@ -124,19 +170,16 @@ Meteor.methods({
         // Written to process a list of words, but here we just want to process one word
         getDefs( [r], 0, [], function(results){
           // results = [ { id: word: def: } ]
-          console.log('jones22b %s results found',results.length);
           if ( r.def ) {
             Meteor.setTimeout(function(){
               googleCreateMp3(r.word, r.def );
               let doc = { definition: true };
-              console.log('jones22c',ix,r.word,r.def);
               AudioFiles.update(r.id, { $set: doc });
               processUndefinedWords( list, ix+1, op, callback );
             },6000);
           } else {
             let doc = { definition: 'failed' };
             op.failed += 1;
-            console.log('jones22d',ix,r.word,doc);
             AudioFiles.update(r.id, { $set: doc });
             processUndefinedWords( list, ix+1, op, callback );
           }
@@ -147,9 +190,7 @@ Meteor.methods({
     };
 
     const recs = AudioFiles.find({ definition: false },{ limit: 2 }).fetch();
-    console.log('jones22a %s records read',recs.length);
     processUndefinedWords( recs, 0, { count: 0, failed: 0 }, function( processResults ){
-      console.log('jones22e done');
       future.return( processResults );
     });
 
@@ -720,11 +761,9 @@ function oxfordDictionary( word ){
       if ( res.status === 429 && res.statusText === 'Too Many Requests') {
         throw 'Oxford: Too Many Requests!'
       } else {
-        console.log('jones610b1',res);
         try {
           return res.json()
         } catch(err){
-          console.log('jones610b4',err);
           return '';
         }
       }
@@ -776,7 +815,6 @@ const getOxfordDefinition = function(data){
 const getDefs = function( recs, ix, results, callback ){
   if ( ix < recs.length ) {
     let r = recs[ix];
-    console.log('jones655 getDefs %s',r.word);
     Meteor.setTimeout(function(){
       let def = oxfordDictionary( r.word );
       def.then( (result) => {
