@@ -1,9 +1,12 @@
 <template name="Progress">
   {{ #if mode2 }}
+    <!-- review dc lesson -->
     {{ #with student }}
       <h1>{{ name }}</h1>
     {{ /with }}
     <button class="pr_change_mode" data="1">Back</button>
+    <button id="pr_dc_next">Next</button>
+    <button id="pr_dc_q">?</button>
     {{ #with dc_review }}
       <div class="dc_lesson_question">{{{ htmlQuestion }}}</div>
 
@@ -16,6 +19,7 @@
   {{ /if }}
 
   {{ #if mode3 }}
+  <!-- review gf lesson -->
     {{ #with student }}
       <h1>{{ name }}</h1>
     {{ /with }}
@@ -27,6 +31,9 @@
     <button class="pr_home">Back</button>
     {{ #if wordsToStudyCount }}
       <button class="pr_words">{{ wordsToStudyCount }}</button>
+    {{ /if }}
+    {{ #if local }}
+      <button id="pr_erase_reviewed">Erase Reviewed</button>
     {{ /if }}
     {{ #with student }}
       <h1>Progress for {{ name }}</h1>
@@ -46,7 +53,12 @@
         <div class="pr_lesson_type">{{ lesson_type }}</div>
         <div class="pr_lesson_grade">{{ grade_level }}</div>
         <div class="pr_lesson_pct">{{ pct }}</div>
-        <div class="pr_lesson_missed">{{ missed }}</div>
+        <div class="pr_lesson_missed">
+          {{ missed }}
+          {{ #if reviewed }}
+            (reviewed)
+          {{ /if }}
+        </div>
         <div class="pr_lesson_missed">
           {{ #if review }}
             <a href="#" class="pr_lesson_review" data="{{ _id }}">review</a>

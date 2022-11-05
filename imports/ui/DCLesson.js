@@ -92,7 +92,7 @@ const random = function(arg){
 const loadNextQuestion = function(){
   let lesson = get('lesson');
   const find = { GradeLevel: lesson.GradeLevel, "Number": lesson.Number, QuestionNum: lesson.QuestionNum+1, Shape: lesson.Shape }
-  Meteor.call('findCollection', 'DrawConclusions', find, function(err,results){
+  Meteor.call('collectionFind', 'DrawConclusions', find, function(err,results){
     if ( err ) {
       console.log('Error in DCLesson.js line 93',err);
     } else if ( results.length > 0 ){

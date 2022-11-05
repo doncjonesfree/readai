@@ -11,6 +11,20 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  'eraseReviewed': function(){
+    // erase reviewed from lesson history
+    const recs = LessonHistory.find({}).fetch();
+    let op = [];
+    for ( let i=0; i < recs.length; i++ ) {
+      let r = recs[i];
+      if ( r.reviewed ) {
+        const doc = { reviewed: {} };
+        LessonHistory.update(r._id, { $set: doc });
+        op.push(r);
+      }
+    }
+    return op;
+  },
   'knowsWord': function( word, knows, studentId ){
     let retObj = { word: word, knows: knows, studentId: studentId, points: 0, wordCount: 0 };
     retObj.WordList = WordList.find( { student_id: studentId }).fetch();
@@ -129,8 +143,43 @@ Meteor.methods({
         Students.update(id, { $set: doc });
         return { success: true };
       break;
+
+      case 'LessonHistory':
+        LessonHistory.update(id, { $set: doc });
+        return { success: true };
+      break;
     }
     return { error: true, message: sprintf('Bad collection %s',collection) };
+  },
+  'collectionUpdateList'( changes ){
+    let retObj = { success: true, updates: 0 };
+    for ( let i=0; i < changes.length; i++ ) {
+      const c = changes[i];
+      switch ( c.collection) {
+
+        case 'DrawConclusions':
+        DrawConclusions.update(c.id, { $set: c.doc });
+        retObj.updates += 1;
+        break;
+
+        case 'GatherFactsAnswers':
+        GatherFactsAnswers.update(c.id, { $set: c.doc });
+        retObj.updates += 1;
+        break;
+
+        case 'GatherFacts':
+        GatherFacts.update(c.id, { $set: c.doc });
+        retObj.updates += 1;
+        break;
+
+        case "LessonHistory":
+        LessonHistory.update(c.id, { $set: c.doc });
+        retObj.updates += 1;
+        break;
+      }
+    }
+    if ( retObj.updates === 0 ) retObj.success = false;
+    return retObj;
   },
   'collectionFind': function( collection, find ){
     switch ( collection ) {
@@ -152,6 +201,14 @@ Meteor.methods({
 
       case 'LessonHistory':
       return LessonHistory.find(find).fetch();
+      break;
+
+      case 'GatherFactsAnswers':
+      return GatherFactsAnswers.find(find).fetch();
+      break;
+
+      case 'GatherFacts':
+      return GatherFacts.find(find).fetch();
       break;
     }
     return [];
@@ -363,49 +420,6 @@ Meteor.methods({
 
     return future.wait();
 
-  },
-  'findCollection'( collection, find ){
-    let retObj = { success: true, updates: 0 };
-    switch ( collection) {
-
-      case 'DrawConclusions':
-      return DrawConclusions.find(find).fetch();
-      break;
-
-      case 'GatherFactsAnswers':
-      return GatherFactsAnswers.find(find).fetch();
-      break;
-
-      case 'GatherFacts':
-      return GatherFacts.find(find).fetch();
-      break;
-    }
-    return [];
-  },
-  'updateCollection'( changes ){
-    let retObj = { success: true, updates: 0 };
-    for ( let i=0; i < changes.length; i++ ) {
-      const c = changes[i];
-      switch ( c.collection) {
-
-        case 'DrawConclusions':
-        DrawConclusions.update(c.id, { $set: c.doc });
-        retObj.updates += 1;
-        break;
-
-        case 'GatherFactsAnswers':
-        GatherFactsAnswers.update(c.id, { $set: c.doc });
-        retObj.updates += 1;
-        break;
-
-        case 'GatherFacts':
-        GatherFacts.update(c.id, { $set: c.doc });
-        retObj.updates += 1;
-        break;
-      }
-    }
-    if ( retObj.updates === 0 ) retObj.success = false;
-    return retObj;
   },
   'dcGradeLevels'(){
     let retObj = {};

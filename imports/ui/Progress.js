@@ -46,10 +46,91 @@ const countMissed = function( incorrect ){
   return count;
 };
 
+const dcReviewHelper = function( reset ){
+  let review = get('review');
+  if ( ! review ) return '';
+
+  if ( ! reset ) {
+    let singleQuestion = get('singleQuestion');
+    if ( singleQuestion ) {
+      addDcAnswerCheckbox(singleQuestion);
+      return singleQuestion;
+    }
+  }
+
+  let list = []; // list of questions answered incorrectly
+  for ( let key in review.incorrect ) {
+    if ( lib.hasOwnProperty(review.incorrect,key)){
+      list.push( lib.int(key));
+    }
+  }
+  list.sort(function(a,b){
+    if ( a < b ) return -1;
+    if ( a > b ) return 1;
+    return 0;
+  });
+
+  let reviewed = review.reviewed;
+  if ( ! reviewed ) reviewed = {};
+  let QuestionNum = 0;
+  for ( let i=0; i < list.length; i++ ) {
+    const n = list[i]; // question number
+    if ( ! reviewed[n] ) {
+      QuestionNum = n;
+      break;
+    }
+  }
+  if ( QuestionNum ) {
+    let dc_lesson = get('dc_lesson');
+    if ( ! dc_lesson ) dc_lesson = [];
+    let lesson = '';
+    for ( let i=0; i < dc_lesson.length; i++ ) {
+      const dc = dc_lesson[i];
+      if ( QuestionNum === dc.QuestionNum ) {
+        lesson = dc;
+        break;
+      }
+    }
+    if ( lesson ) {
+      lesson.answer_selected = -1;
+      addDcAnswerCheckbox(lesson);
+      set('singleQuestion',lesson);
+    }
+
+    return lesson;
+  } else {
+    // nothing left to review
+    return '';
+  }
+};
+
+const countReviewed = function( reviewed ){
+  let count = 0;
+  if ( reviewed ) {
+    for ( let key in reviewed ) {
+      if ( lib.hasOwnProperty(reviewed,key)) {
+        count += 1;
+      }
+    }
+  }
+  return count;
+};
+
+const refresh = function(n){
+  let v = get(n);
+  if ( typeof(v) === 'undefined') v = 0;
+  set(n,v+1);
+};
+
+const getRefresh = function(n){
+  return get(n);
+};
+
 Template.Progress.helpers({
   mode1() { return get('mode') === 1; },
   mode2() { return get('mode') === 2; },
   mode3() { return get('mode') === 3; },
+  local() { return Meteor.isDevelopment },
   wordsToStudyCount(){
     let WordList = get('WordList');
     if ( WordList.length === 1 ) {
@@ -76,58 +157,8 @@ Template.Progress.helpers({
     return get('student');
   },
   dc_review(){
-    let review = get('review');
-    if ( ! review ) return '';
-
-    let singleQuestion = get('singleQuestion');
-    if ( singleQuestion ) {
-      addDcAnswerCheckbox(singleQuestion);
-      return singleQuestion;
-    }
-
-    let list = []; // list of questions answered incorrectly
-    for ( let key in review.incorrect ) {
-      if ( lib.hasOwnProperty(review.incorrect,key)){
-        list.push( lib.int(key));
-      }
-    }
-    list.sort(function(a,b){
-      if ( a < b ) return -1;
-      if ( a > b ) return 1;
-      return 0;
-    });
-
-    let reviewed = review.reviewed;
-    if ( ! reviewed ) reviewed = {};
-    let QuestionNum = 0;
-    for ( let i=0; i < list.length; i++ ) {
-      const n = list[i]; // question number
-      if ( ! reviewed[n] ) {
-        QuestionNum = n;
-        break;
-      }
-    }
-    if ( QuestionNum ) {
-      let dc_lesson = get('dc_lesson');
-      if ( ! dc_lesson ) dc_lesson = [];
-      let lesson = '';
-      for ( let i=0; i < dc_lesson.length; i++ ) {
-        const dc = dc_lesson[i];
-        if ( QuestionNum === dc.QuestionNum ) {
-          lesson = dc;
-          break;
-        }
-      }
-      if ( lesson ) {
-        addDcAnswerCheckbox(lesson);
-        set('singleQuestion',lesson);
-      }
-
-      return lesson;
-    } else {
-      // nothing left to review
-      return '';
-    }
+    const dmy = getRefresh('dc_review');
+    return dcReviewHelper();
   },
   lesson() {
     let op = get('history');
@@ -142,7 +173,10 @@ Template.Progress.helpers({
         o.lesson_type = 'Gathering Facts';
       }
       o.missed = countMissed( o.incorrect );
-      if ( o.missed ) o.review = true; // needs to be reviewed
+      const reviewCount = countReviewed( o.reviewed );
+      if ( o.missed > reviewCount ) o.review = true; // needs to be reviewed
+      o.reviewed = false;
+      if ( o.missed > 0 && o.missed === reviewCount ) o.reviewed = true; // needs to be reviewed
     }
     return op;
   },
@@ -201,7 +235,75 @@ const knowsWord = function( word, knows ){
   });
 };
 
+const setHistory = function( review ){
+  // set reviewed value for appropriate history record
+  let history = get('history');
+  for ( let i=0; i < history.length; i++ ) {
+    let h = history[i];
+    if ( h._id === review._id ) {
+      h.reviewed = review.reviewed;
+    }
+  }
+  set('history',history);
+};
+
 Template.Progress.events({
+  'click #pr_erase_reviewed'(e){
+    Meteor.call('eraseReviewed', function(err,results){
+      if ( err ) {
+        console.log('Error: Progress.js line 241',err);
+      } else {
+        console.log('eraseReviewed',results);
+      }
+    });
+  },
+  'click #pr_dc_next'(){
+    // We answered the question in a dc lesson - see if the answer is correct.
+    let singleQuestion = get('singleQuestion');
+    let answer = 0;
+    $('.dc_chk_answer').each(function(i, obj) {
+      if ( $(obj).is(':checked') ) answer = lib.int( $(obj).attr('data'));
+    });
+    if ( answer === singleQuestion.Correct ) {
+      const word = 'right_answer';
+      const review = get('review'); // history record
+      let doc = { reviewed: {} };
+      if ( typeof(review.reviewed) === 'object') doc.reviewed = review.reviewed;
+      doc.reviewed[ singleQuestion.QuestionNum ] = true;
+      review.reviewed = doc.reviewed;
+      set('review',review);
+      setHistory( review );
+      Meteor.call('collectionUpdate', 'LessonHistory', review._id, doc , function(err,results){
+        if ( err ) {
+          console.log('Error: Progress.js line 219',err);
+        } else {
+          lib.googlePlaySound( word, function(){
+            console.log('%s finished playing',word);
+            if ( dcReviewHelper( 'reset' ) ) {
+              // go to next question in this dc lesson
+              set('mode',2);
+              refresh('dc_review');
+            } else {
+              // done with this lesson - close it out
+              set('mode',1);
+            }
+          });
+        }
+      });
+    } else {
+      const word = 'wrong_answer';
+      lib.googlePlaySound( word, function(){
+        console.log('%s finished playing',word);
+      });
+    }
+  },
+  'click #pr_dc_q'(){
+    // dc lesson - play what to do instructions
+    const word = 'dc_review_instructions';
+    lib.googlePlaySound( word, function(){
+      console.log('%s finished playing',word);
+    });
+  },
   'click .pr_home'(){
     FlowRouter.go('home');
   },
@@ -264,10 +366,12 @@ Template.Progress.events({
     $('#pr_word_popup').show();
   },
   'change .dc_chk_answer': function(e){
-    const i = $(e.currentTarget).attr('data'); // question #
+    const i = lib.int( $(e.currentTarget).attr('data') ); // question #
     let l = get('singleQuestion');
+    let checked = false;
     if ( $(e.currentTarget).is(':checked')) {
-      l.answer_selected = lib.int(i);
+      l.answer_selected = i;
+      checked = true;
     } else {
       delete l.answer_selected;
     }
@@ -294,20 +398,26 @@ Template.Progress.events({
     const html = $(e.currentTarget).html();
     if ( wait === html ) return;
     const id = $(e.currentTarget).attr('data');
+    set('lesson_id',id);
     const lesson = getLessonGivenId(id);
     if ( lesson ) {
       $(e.currentTarget).html(wait);
-      set('review',lesson);
-      const find = { Shape: lesson.Shape, Number: lesson.Number, GradeLevel: lesson.grade_level };
-      Meteor.call('collectionFind', 'DrawConclusions', find , function(err,results){
-        if ( err ) {
-          console.log('Error: Progress.js line 128',err);
-        } else {
-          set('dc_lesson',results);
-        }
-      });
+      set('review',lesson); // from history
       if ( lesson.lesson_type === 'dc' ) {
-        set('mode',2);
+        const find = { Shape: lesson.Shape, Number: lesson.Number, GradeLevel: lesson.grade_level };
+        Meteor.call('collectionFind', 'DrawConclusions', find , function(err,results){
+          if ( err ) {
+            console.log('Error: Progress.js line 128',err);
+          } else {
+            set('dc_lesson',results);
+            if ( dcReviewHelper( 'reset' ) ) {
+              $(e.currentTarget).html(html);
+              set('mode',2);
+            } else {
+              $(e.currentTarget).html(html);
+            }
+          }
+        });
       } else {
         set('mode',3);
       }

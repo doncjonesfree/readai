@@ -423,7 +423,7 @@ const gfSave = function(e,html){
   }
   if ( changes.length > 0 ) {
     updateGatherFacts( changes );
-    Meteor.call('updateCollection', changes , function(err,results){
+    Meteor.call('collectionUpdateList', changes , function(err,results){
       $(e.currentTarget).html(html);
       if ( err ) {
         console.log('Error in Edit.js line 245',err);
@@ -657,7 +657,7 @@ Template.Edit.events({
       const changes = [ { collection: 'DrawConclusions', id: edit_dc_lesson._id, doc: doc } ];
       $(e.currentTarget).html(wait);
       $(e.currentTarget).html(wait);
-      Meteor.call('updateCollection', changes , function(err,results){
+      Meteor.call('collectionUpdateList', changes , function(err,results){
         $(e.currentTarget).html(html);
         if ( err ) {
           console.log('Error in Edit.js line 245',err);
