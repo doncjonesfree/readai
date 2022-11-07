@@ -38,6 +38,11 @@
     {{ #with student }}
       <h1>Progress for {{ name }}</h1>
     {{ /with }}
+      <select id="pr_show">
+        {{ #each pr_show_option }}
+          <option value="{{ value }}" {{ sel }}>{{ label }}</option>
+        {{ /each }}
+      </select>
 
     <div class="pr_lesson_flex_heading">
       <div class="pr_lesson_when"><br>When</div>

@@ -334,3 +334,9 @@ p {
   max-width: 30em;
   font-style: italic;
 }
+
+select {
+  font-size: 1.2em;
+  border-radius: .25em;
+  padding: .25em;
+}

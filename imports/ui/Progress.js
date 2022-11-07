@@ -19,6 +19,7 @@ Template.Progress.onCreated(function ProgressOnCreated() {
   set('singleQuestion','');
   setd('WordList',[]);
   setd('mode',1);
+  setd('show_option','week');
 
   loadHistoryEtc();
 
@@ -131,6 +132,22 @@ Template.Progress.helpers({
   mode2() { return get('mode') === 2; },
   mode3() { return get('mode') === 3; },
   local() { return Meteor.isDevelopment },
+  pr_show_option(){
+    let sel;
+    const show_option = get('show_option');
+    let op = [];
+
+    sel = '';
+    if ( show_option === 'week' ) sel = 'selected';
+    op.push( { value: 'week', sel: sel, label: 'Last 7 Days' });
+    sel = '';
+    if ( show_option === 'month' ) sel = 'selected';
+    op.push( { value: 'month', sel: sel, label: 'Last Month' });
+    sel = '';
+    if ( show_option === 'all' ) sel = 'selected';
+    op.push( { value: 'all', sel: sel, label: 'Show All' });
+    return op;
+  },
   wordsToStudyCount(){
     let WordList = get('WordList');
     if ( WordList.length === 1 ) {
@@ -161,7 +178,32 @@ Template.Progress.helpers({
     return dcReviewHelper();
   },
   lesson() {
-    let op = get('history');
+    const show_option = get('show_option'); // week, month or all
+
+    const filter = function( iList ){
+      // may not be showing all depending on show_option setting
+      let oList = [];
+      for ( let i=0; i < iList.length; i++ ) {
+        let l = iList[i];
+        if ( show_option === 'all' ) {
+          oList.push(l);
+        } else if ( show_option === 'week' ) {
+          const m1 = lib.currentMoment();
+          const m2 = moment( l.when, lib.dateFormat);
+          const days = m1.diff(m2,'days');
+          if ( days <= 7 ) oList.push(l);
+        } else {
+          // month
+          const m1 = lib.currentMoment();
+          const m2 = moment( l.when, lib.dateFormat);
+          const months = m1.diff(m2,'months');
+          if ( months <= 1 ) oList.push(l);
+        }
+      }
+      return oList;
+    };
+
+    let op = filter( get('history') );
     if ( ! op ) op = [];
     for ( let i=0; i < op.length; i++ ) {
       let o = op[i];
@@ -248,12 +290,23 @@ const setHistory = function( review ){
 };
 
 Template.Progress.events({
+  'change #pr_show'(e){
+    set('show_option',$(e.currentTarget).val());
+  },
   'click #pr_erase_reviewed'(e){
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    $(e.currentTarget).html(wait);
     Meteor.call('eraseReviewed', function(err,results){
       if ( err ) {
         console.log('Error: Progress.js line 241',err);
+        $(e.currentTarget).html(html);
       } else {
         console.log('eraseReviewed',results);
+        loadHistoryEtc( function(){
+          $(e.currentTarget).html(html);
+        });
       }
     });
   },

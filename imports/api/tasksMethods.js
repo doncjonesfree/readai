@@ -79,7 +79,7 @@ Meteor.methods({
   },
   'loadHistory': function( studentId ){
     let retObj = {};
-    retObj.LessonHistory = LessonHistory.find( { student_id: studentId }, { sort: { when: -1 }}).fetch();
+    retObj.LessonHistory = LessonHistory.find( { student_id: studentId }, { sort: { when: 1 }}).fetch();
     retObj.WordList = WordList.find( { student_id: studentId, active: true }, { sort: { when: 1 }}).fetch();
     return retObj;
   },
