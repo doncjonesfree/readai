@@ -98,7 +98,6 @@ const saveLessonHistory = function(lesson,points){
   obj.points =  points;
   obj.student_id = get('student')._id;
   Meteor.call('saveLessonHistory', obj , function(err,results){
-    console.log('jones83',results);
     if ( err ) {
       console.log('Error: GFLesson.js line 84',err);
     } else {
@@ -113,7 +112,6 @@ const saveLessonHistory = function(lesson,points){
             set('lesson',results.ret);
             set('mode',1);
           } else {
-            console.log('jones116',results);
             console.log('Drawing Conclusion lesson - needs code ');
           }
         }

@@ -24,7 +24,39 @@
       <h1>{{ name }}</h1>
     {{ /with }}
     <button class="pr_change_mode" data="1">Back</button>
-    Review GF Lesson
+    {{ #with gf_lesson }}
+      <br><br>
+      <div class="gf_lesson_code">
+        {{ Code }} {{ Color }}  #{{ Number }}
+      </div>
+      <div class="gf_lesson_paragraph">
+        {{{ Paragraph }}}
+      </div>
+    {{ /with }}
+
+    <br>
+    <div class="gf_question_wrapper">
+      {{ #each gf_question }}
+        {{ #if incorrect }}
+          <div class="gf_question_incorrect">{{{ Question }}}</div>
+          {{ #each list }}
+            <div class="gf_answer_incorrect">
+              {{{ checkbox }}} {{{ answer }}}
+            </div>
+          {{ /each}}
+        {{ else }}
+          <div class="gf_question">{{{ Question }}}</div>
+          {{ #each list }}
+            <div class="gf_answer">
+              {{{ checkbox }}} {{{ answer }}}
+            </div>
+          {{ /each}}
+        {{ /if }}
+      {{ /each }}
+      <br>
+      <button id="gf_done">Done</button>
+    </div>
+
   {{ /if }}
 
   {{ #if mode1 }}

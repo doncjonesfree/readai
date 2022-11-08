@@ -18,7 +18,12 @@ Meteor.methods({
     for ( let i=0; i < recs.length; i++ ) {
       let r = recs[i];
       if ( r.reviewed ) {
-        const doc = { reviewed: {} };
+        let doc;
+        if ( r.lesson_type === 'gf' ) {
+          doc = { reviewed: false };
+        } else {
+          doc = { reviewed: {} };
+        }
         LessonHistory.update(r._id, { $set: doc });
         op.push(r);
       }
