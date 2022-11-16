@@ -1,17 +1,19 @@
 <template name="Lesson">
+  {{ > header }}
 
-  {{ #if mode1 }}
-    <h1>Lesson</h1>
-    Loading lesson...
-  {{ /if }}
+  <div class="main">
+    {{ #if mode1 }}
+      <h1>Lesson</h1>
+      Loading lesson...
+    {{ /if }}
 
-  {{ #if mode2 }}
-    {{> GFLesson }}
-  {{ /if }}
+    {{ #if mode2 }}
+      {{> GFLesson }}
+    {{ /if }}
 
-  {{ #if mode3 }}
-    {{> DCLesson }}
-  {{ /if }}
-
+    {{ #if mode3 }}
+      {{> DCLesson }}
+    {{ /if }}
+  </div>
 
 </template>

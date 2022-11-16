@@ -6,29 +6,19 @@
     </div>
     <div class="header-right">
       <div class="nav-container">
-        <div class="nav-element">about us</div>
-        <div class="nav-element">donate</div>
-        <div class="nav-element">sign up (free)</div>
-        <div class="nav-element">sign in</div>
+        {{ #if activeLesson }}
+          {{ points }}
+          {{ name }}
+          <div class="nav-element" id="student_done">done for now</div>
+        {{ else }}
+          <div class="nav-element">about us</div>
+          <div class="nav-element">donate</div>
+          <div class="nav-element" id="signup">sign up (free)</div>
+          <div class="nav-element" id="signin">sign in</div>
+        {{ /if }}
       </div>
     </div>
   </div>
-  <!--
-    <div class="container container-nav">
-      <div class="site-title">
-        <h1>Learn To Read</h1>
-        <p class="subtitle">Building reading skills for all ages</p>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="#">about us</li>
-          <li><a href="#">donate</li>
-          <li><a href="#">sign up (free)</li>
-          <li><a href="#">sign in</li>
-        </ul>
-      </nav>
-    </div>
--->
 <!--
   <div class="app-bar">
      <div class="app-header">

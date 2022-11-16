@@ -3,61 +3,62 @@
   <!--
   <button id="edit_lessons">Edit Lessons</button>
 -->
+  <div class="main">
 
-  {{ #if masterUser }}
-    {{ > master }}
-  {{ /if  }}
+    {{ #if masterUser }}
+      {{ > master }}
+    {{ /if  }}
 
-  {{ #if signedIn }}
-    {{ > StudentHome }}
-  {{ /if }}
+    {{ #if signedIn }}
+      {{ > StudentHome }}
+    {{ /if }}
 
-  {{ #if notSignedIn }}
-    <!--
-      Video where I found instructions on how to do these boxes
-      https://www.youtube.com/watch?v=JJkuGvfFKOw
-    -->
-    <div class="container_wrapper">
-      <div class="container">
-        <div class="box">
-          <div class="icon">01</div>
-          <div class="content">
-            <h3>Young Readers</h3>
-            <p>
-              You as a parent can help your child improve
-              reading skills with simple daily lessons your child
-              can do independently.
-            </p>
-            <a href="#">Read More</a>
+    {{ #if notSignedIn }}
+      <!--
+        Video where I found instructions on how to do these boxes
+        https://www.youtube.com/watch?v=JJkuGvfFKOw
+      -->
+      <div class="container_wrapper">
+        <div class="container">
+          <div class="box">
+            <div class="icon">01</div>
+            <div class="content">
+              <h3>Young Readers</h3>
+              <p>
+                You as a parent can help your child improve
+                reading skills with simple daily lessons your child
+                can do independently.
+              </p>
+              <a href="#">Read More</a>
+            </div>
           </div>
-        </div>
 
-        <div class="box">
-          <div class="icon">02</div>
-          <div class="content">
-            <h3>Older Readers</h3>
-            <p>
-              Teach yourself how to read with our expert teaching materials and methods.
-              Your progress is automatically documented.
-            </p>
-            <a href="#">Read More</a>
+          <div class="box">
+            <div class="icon">02</div>
+            <div class="content">
+              <h3>Older Readers</h3>
+              <p>
+                Teach yourself how to read with our expert teaching materials and methods.
+                Your progress is automatically documented.
+              </p>
+              <a href="#">Read More</a>
+            </div>
           </div>
-        </div>
 
-        <div class="box">
-          <div class="icon">03</div>
-          <div class="content">
-            <h3>Bonus Material</h3>
-            <p>
-              Teaching aids and white papers that will
-              expand your skills in teaching your child or yourself
-              to read faster and with better comprehension.
-            </p>
-            <a href="#">View Material</a>
+          <div class="box">
+            <div class="icon">03</div>
+            <div class="content">
+              <h3>Bonus Material</h3>
+              <p>
+                Teaching aids and white papers that will
+                expand your skills in teaching your child or yourself
+                to read faster and with better comprehension.
+              </p>
+              <a href="#">View Material</a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  {{ /if }}
-
+    {{ /if }}
+  </div>
 </template>
