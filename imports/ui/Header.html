@@ -11,42 +11,23 @@
           {{ name }}
           <div class="nav-element" id="student_done">done for now</div>
         {{ else }}
-          <div class="nav-element">about us</div>
-          <div class="nav-element">donate</div>
-          <div class="nav-element" id="signup">sign up (free)</div>
-          <div class="nav-element" id="signin">sign in</div>
+          {{ #with user_info }}
+           {{ #if user }}
+             {{ #if masterUser }}
+               master user
+               <div class="nav-element signout">sign out ({{ user_name }})</div>
+             {{ else }}
+             <div class="nav-element signout">sign out ({{ user_name }})</div>
+             {{ /if }}
+           {{ else }}
+             <div class="nav-element">about us</div>
+             <div class="nav-element">donate</div>
+             <div class="nav-element" id="signup">sign up (free)</div>
+             <div class="nav-element" id="signin">sign in</div>
+           {{ /if }}
+          {{ /with }}
         {{ /if }}
       </div>
     </div>
   </div>
-<!--
-  <div class="app-bar">
-     <div class="app-header">
-       <div class="hdr_home">Learn To Read (Free)</div>
-     </div>
-     <div class="app-header app-align-right">
-       {{ #if activeLesson }}
-         {{ points }}
-         {{ name }}
-         <div class="button" id="student_done">done for now</div>
-       {{ else }}
-          {{ #with user_info }}
-            {{ #if user }}
-              {{ #if masterUser }}
-                master user
-                <div class="button signout">sign out ({{ user_name }})</div>
-              {{ else }}
-                <div class="button signout">sign out ({{ user_name }})</div>
-              {{ /if }}
-            {{ else }}
-              <div class="button">about us</div>
-              <div class="button">donate</div>
-              <div class="button" id="signup">sign up (free)</div>
-              <div class="button" id="signin">sign in</div>
-            {{ /if }}
-          {{ /with }}
-        {{ /if }}
-     </div>
-  </div>
--->
 </template>

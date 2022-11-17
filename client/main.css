@@ -38,6 +38,8 @@
 
   --color-link: rgb(93,149,240);
   --color-border: #d3d3d3;
+  --color-primary: #696969;
+  --color-light-grey: #f1f2f2;
 
   --fw-light: 200;
 
@@ -47,18 +49,11 @@
   --fs-600: 1.25em;
   --fs-700: 1.5em;
   --fs-800: 2em;
-}
 
-.nav-container {
-    display: flex;
-    justify-content: space-around;
-    flex-direction: row;
-    align-items: stretch;
-    width: 100%;
-    height: 100%;
-    font-family: var(--ff-nav);
-    font-weight: var(--fw-light);
-    font-size: var(--fs-600);
+  --input-radius: 24px;
+  --input-background: #f1f2f2;
+  --input-text-color: #6d6e71;
+  --input-border-color: rgba(0, 0, 0, 0.23);
 }
 
 @media screen and (min-width: 50em) {
@@ -66,7 +61,29 @@
   div.header-left { width: 50%; }
   div.header-right { width: 50%; }
 
-  /* div.nav-element { border-bottom: var(--light-grey-color); } */
+  div.nav-container {
+    flex-direction: row;
+  }
+
+  /* div.nav-element { border-bottom: var(--color-light-grey); } */
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start; /* stretch */
+    width: 100%;
+    height: 100%;
+    font-family: var(--ff-nav);
+    font-weight: var(--fw-light);
+    font-size: var(--fs-600);
+}
+
+.nav-container-left {
+  justify-content: flex-start;
+  gap: 1.5rem;
 }
 
 .nav-element {
@@ -75,6 +92,42 @@
 
 .nav-element:hover {
   color: var(--color-link);
+}
+
+/* standard input css */
+.input-wrapper {
+  width: 20rem;
+  height: 55px;
+  border: 1px solid var(--color-light-grey);
+  border-radius: var(--input-radius);
+  background-color: var(--input-background);
+}
+
+.input-text {
+  background-color: var(--input-background) !important;
+  width: 90% !important;
+  margin-top: 16px;
+  border: 0;
+  margin-left: 1rem !important;
+}
+
+.input-wrapper:focus-within {
+  border: 1px solid black;
+}
+
+.input-label {
+  display: inline-block;
+  position: relative;
+  left: 16px;
+  top: -57px;
+  font-size: var(--fs-400);
+  padding: 0;
+  font-weight: var(--fw-light);
+  z-index: 1;
+}
+
+.input-wrapper:hover {
+  border: 1px solid black;
 }
 
 .header-container {
@@ -184,10 +237,16 @@ svg {
   }
 }
 /* end of reset */
+
+h1 {
+  font-size: var(--fs-600);
+}
+
 body {
   font-family: var(--body-font), sans-serif;
   background-color: white;
   background-attachment: fixed;
+  color: var(--color-primary);
 
   position: absolute;
   top: 0;
@@ -460,6 +519,7 @@ header {
 input {
   font-size: 1em;
   width: 20em;
+  outline: none !important;
 }
 
 .user {

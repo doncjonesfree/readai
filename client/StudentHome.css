@@ -7,7 +7,7 @@
   border: 2px solid #23e629;
   border-radius: .5em;
   margin: 1em 0 0 0;
-  width: 10em;
+  max-width: 10em;
   text-align: center;
   padding: 1em;
   font-size: 2em;

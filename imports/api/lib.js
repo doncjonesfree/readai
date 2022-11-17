@@ -76,8 +76,40 @@ export const currentMoment = function(){
   return moment().tz('America/Los_Angeles');
 };
 
+export const inputHtml = function(obj){
+  // { label: id: placeholder: value: }
+  let html = [];
+  html.push( '<div class="input-wrapper">');
+  let ph = '';
+  if ( obj.placeholder ) ph = sprintf(' placeholder="%s"',obj.placeholder);
+  if ( ! obj.value ) obj.value = '';
+  html.push( sprintf('<input class="input-text" type="text" id="%s" value="%s"%s>',obj.id,obj.value,ph))
+  html.push( '</div>');
+  if ( obj.label ) {
+    html.push( sprintf('<div class="input-label">%s</div>',obj.label));
+  }
+  return html.join('\n');
+};
+
+export const flexEntryHtml = function(list){
+  // left off here
+  let html = [];
+  for ( let i=0; i < list.length; i++ ) {
+    const l = list[i];
+    if ( l.button ) {
+      // const button2 = { button: 'Cancel', cls: 'sh_change_mode', data: '2'};
+      // op.push( { button: 'Save', id: 'student_save', error: get('error'), button2: button2  } );
+    } else if ( l.checkbox ) {
+    } else {
+      // { label: id: placeholder: value: }
+      html.push( inputHtml( { id: l.id, label: l.label, placeholder: l.message, value: l.value } ) );
+    }
+  }
+  return html.join('\n');
+};
 
 export const dataEntryHtml = function(list, argSettings){
+  // probably deprecated
   let settings = { flexWidth: '100%', longText: '20em', shortText: '5em', labelWidth: '20%', valueWidth: '40%', messageWidth: '40%' };
   if ( argSettings ) settings = argSettings;
   let html = [];
@@ -316,7 +348,7 @@ export const DictionaryLookup = function( word, callback ){
 };
 
 export const listWordsFromGFParagraph = function( arg, alreadyFormatted ){
-  // arg is the paragraph 
+  // arg is the paragraph
   const removeBadCharacters = function(arg){
     // given a word - remove any characters that cannot be part of the word
     // example: 'Hammerstein

@@ -95,9 +95,7 @@ Template.StudentHome.helpers({
     return op;
   },
   data_entry() {
-    const settings = { flexWidth: '100%', longText: '20em', shortText: '3em',
-      labelWidth: '10%', valueWidth: '35%', messageWidth: '55%' };
-    return lib.dataEntryHtml( studentFields(), settings );
+    return lib.flexEntryHtml( studentFields() );
   },
 });
 
