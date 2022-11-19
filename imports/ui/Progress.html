@@ -6,9 +6,9 @@
       {{ #with student }}
         <h1>{{ name }}</h1>
       {{ /with }}
-      <button class="pr_change_mode" data="1">Back</button>
-      <button id="pr_dc_next">Next</button>
-      <button id="pr_dc_q">?</button>
+      <div class="button pr_change_mode" data="1">Back</div>
+      <div class="button" id="pr_dc_next">Next</div>
+      <div class="button" id="pr_dc_q">?</div>
       {{ #with dc_review }}
         <div class="dc_lesson_question">{{{ htmlQuestion }}}</div>
 
@@ -25,7 +25,7 @@
       {{ #with student }}
         <h1>{{ name }}</h1>
       {{ /with }}
-      <button class="pr_change_mode" data="1">Back</button>
+      <div class="button pr_change_mode" data="1">Back</div>
       {{ #with gf_lesson }}
         <br><br>
         <div class="gf_lesson_code">
@@ -56,18 +56,18 @@
           {{ /if }}
         {{ /each }}
         <br>
-        <button id="gf_done">Done</button>
+        <div class="button" id="gf_done">Done</div>
       </div>
 
     {{ /if }}
 
     {{ #if mode1 }}
-      <button class="pr_home">Back</button>
+      <div class="button pr_home">Back</div>
       {{ #if wordsToStudyCount }}
-        <button class="pr_words">{{ wordsToStudyCount }}</button>
+        <div class="button pr_words">{{ wordsToStudyCount }}</div>
       {{ /if }}
       {{ #if local }}
-        <button id="pr_erase_reviewed">Erase Reviewed</button>
+        <div class="button" id="pr_erase_reviewed">Erase Reviewed</div>
       {{ /if }}
       {{ #with student }}
         <h1>Progress for {{ name }}</h1>
@@ -110,10 +110,10 @@
     <div class="popup" id="pr_word_popup">
       <div class="popup_inside">
         {{ #with wordHelper }}
-          <button id="wh_knows" data="{{ word }}" data2="1">Knows</button>
-          <button id="wh_knows" data="{{ word }}" data2="0">Doesn't Know</button>
-          <button id="popup_close" data="pr_word_popup">Close</button>
-          <button id="wh_instructions" data="{{ word }}">?</button>
+          <div class="button" id="wh_knows" data="{{ word }}" data2="1">Knows</div>
+          <div class="button" id="wh_knows" data="{{ word }}" data2="0">Doesn't Know</div>
+          <div class="button" id="popup_close" data="pr_word_popup">Close</div>
+          <div class="button" id="wh_instructions" data="{{ word }}">?</div>
           <div>&nbsp;</div>
           <div id="wh_study_word" data="{{ word }}">{{ word }}</div>
           <div id="wh_word_def" data="{{ word }}">D</div>
