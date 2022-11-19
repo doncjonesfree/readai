@@ -76,18 +76,75 @@ export const currentMoment = function(){
   return moment().tz('America/Los_Angeles');
 };
 
-export const inputHtml = function(obj){
-  // { label: id: placeholder: value: }
+export const buttonHtml = function(obj){
+  // const button2 = { button: 'Cancel', cls: 'sh_change_mode', data: '2'};
+  // op.push( { button: 'Save', id: 'student_save', error: get('error'), button2: button2  } );
+  let cls, id, loadGatherFacts;
   let html = [];
-  html.push( '<div class="input-wrapper">');
-  let ph = '';
-  if ( obj.placeholder ) ph = sprintf(' placeholder="%s"',obj.placeholder);
-  if ( ! obj.value ) obj.value = '';
-  html.push( sprintf('<input class="input-text" type="text" id="%s" value="%s"%s>',obj.id,obj.value,ph))
-  html.push( '</div>');
-  if ( obj.label ) {
-    html.push( sprintf('<div class="input-label">%s</div>',obj.label));
+  let title = '';
+  if ( obj.title ) title = sprintf('title="%s"',obj.title);
+  cls = '';
+  if ( obj.cls ) cls = sprintf(' %s',obj.cls );
+  id = '';
+  if ( obj.id ) id = sprintf(' id="%s"',obj.id );
+  data = '';
+  if ( obj.data ) data = sprintf(' data="%s"',obj.data );
+  html.push(  sprintf('<div class="button%s"%s%s%s>%s</div>',cls,id,title,data,obj.button ) );
+  if ( obj.button2 ) {
+    cls = '';
+    if ( obj.button2.cls ) cls = sprintf(' %s',obj.button2.cls );
+    id = '';
+    if ( obj.button2.id ) id = sprintf(' id="%s"',obj.button2.id );
+    data = '';
+    if ( obj.button2.data ) data = sprintf(' data="%s"',obj.button2.data );
+    html.push(  sprintf('<div class="button%s"%s%s>%s</div>',cls,id,data,obj.button2.button ) );
   }
+  if ( obj.error ) {
+    html.push(  sprintf('<div class="button-error">%s</div>',obj.error ) );
+  }
+
+  return html.join('\n');
+};
+
+
+export const inputCheckboxHtml = function(obj){
+  // { label: id: placeholder: value:, title }
+  let html = [];
+  html.push('<form>')
+    html.push( '<div class="input-wrapper">');
+      if ( ! obj.value ) obj.value = '';
+      if ( obj.label ) {
+        html.push( sprintf('<label class="input-label" for="%s">%s</label>',obj.id,obj.label));
+      }
+      let checked = '';
+      if ( obj.value ) checked = ' checked';
+      html.push( '<div class="input-checkbox-message">' );
+      html.push( sprintf('<input class="input-checkbox" type="checkbox" id="%s"%s>',obj.id,checked));
+      html.push( obj.title );
+      html.push( '</div>');
+    html.push( '</div>');
+  html.push('</form>');
+
+  return html.join('\n');
+};
+
+export const inputHtml = function(obj){
+  // { label: id: placeholder: value:, title }
+  let html = [];
+  html.push('<form>')
+    html.push( '<div class="input-wrapper">');
+      let ph = '';
+      if ( obj.placeholder ) ph = sprintf(' placeholder="%s"',obj.placeholder);
+      let title = '';
+      if ( obj.title ) title = sprintf(' title="%s"',obj.title);
+      if ( ! obj.value ) obj.value = '';
+      if ( obj.label ) {
+        html.push( sprintf('<label class="input-label" for="%s">%s</label>',obj.id,obj.label));
+      }
+      html.push( sprintf('<input class="input-text" type="text" id="%s" value="%s"%s%s>',obj.id,obj.value,ph,title))
+    html.push( '</div>');
+  html.push('</form>');
+
   return html.join('\n');
 };
 
@@ -99,10 +156,12 @@ export const flexEntryHtml = function(list){
     if ( l.button ) {
       // const button2 = { button: 'Cancel', cls: 'sh_change_mode', data: '2'};
       // op.push( { button: 'Save', id: 'student_save', error: get('error'), button2: button2  } );
+      html.push( buttonHtml( l ) );
     } else if ( l.checkbox ) {
+      html.push( inputCheckboxHtml( { id: l.id, label: l.label, title: l.message, value: l.value } ) );
     } else {
-      // { label: id: placeholder: value: }
-      html.push( inputHtml( { id: l.id, label: l.label, placeholder: l.message, value: l.value } ) );
+      // { label: id: placeholder: value:, title }
+      html.push( inputHtml( { id: l.id, label: l.label, title: l.message, value: l.value } ) );
     }
   }
   return html.join('\n');

@@ -40,6 +40,10 @@
   --color-border: #d3d3d3;
   --color-primary: #696969;
   --color-light-grey: #f1f2f2;
+  --color-error: red;
+
+  --color-button: rgb(90,131,180);
+  --color-button-hover: rgb(54,54,54);
 
   --fw-light: 200;
 
@@ -50,10 +54,14 @@
   --fs-700: 1.5em;
   --fs-800: 2em;
 
-  --input-radius: 24px;
+  --input-radius: 8px;
   --input-background: #f1f2f2;
   --input-text-color: #6d6e71;
+  --input-label-color: #6d6e71;
   --input-border-color: rgba(0, 0, 0, 0.23);
+
+  --button-box-shadow: #132836;
+
 }
 
 @media screen and (min-width: 50em) {
@@ -98,17 +106,68 @@
 .input-wrapper {
   width: 20rem;
   height: 55px;
-  border: 1px solid var(--color-light-grey);
+  border: 1px solid var(--input-border-color);
   border-radius: var(--input-radius);
-  background-color: var(--input-background);
+  background-color: #fff;
+  margin-top: 1.5rem;
 }
 
 .input-text {
-  background-color: var(--input-background) !important;
+  position: relative;
+  background-color: #fff;
   width: 90% !important;
-  margin-top: 16px;
+  top: -9px;
+  color: var(--input-text-color);
   border: 0;
   margin-left: 1rem !important;
+  font-weight: var(--fw-light) !important;
+}
+
+.input-checkbox {
+  width: 25px;
+}
+
+.button {
+  display: inline-block;
+  background-color: var(--color-button);
+  height: 2.5rem;
+  width: 9rem;
+  border-radius: 19.5rem !important;
+  color: #fff;
+  font-weight: bold;
+  line-height: 2.5rem !important;
+  text-align: center;
+  margin-top: 0.9rem;
+  margin-right: 0.9rem;
+  margin-bottom: 0.9rem;
+  margin-left: 0;
+  cursor: pointer;
+  box-shadow: 0rem 0.1rem 0rem var(--button-box-shadow) !important;
+}
+
+.button-cancel {
+  /* different look for cancel type buttons */
+  border: 1px solid var(--button-box-shadow);
+  background-color: #fff;
+  color: var(--color-button);
+}
+
+.button-error {
+  display: inline-block;
+  color: var(--color-error);
+  font-weight: bold;
+}
+
+.button:hover {
+  background-color: var(--color-button-hover);
+  color: #fff;
+}
+
+.input-checkbox-message {
+  position: relative;
+  top: -9px;
+  left: 1rem;
+  font-weight: var(--fw-light);
 }
 
 .input-wrapper:focus-within {
@@ -116,13 +175,15 @@
 }
 
 .input-label {
-  display: inline-block;
+  display: inline;
   position: relative;
-  left: 16px;
-  top: -57px;
+  font-weight: bold !important;
+  left: 14px;
+  top: -13px;
+  background-color: #fff;
   font-size: var(--fs-400);
-  padding: 0;
-  font-weight: var(--fw-light);
+  padding: 0 .5rem 0 .5rem !important;
+  color: var(--input-label-color);
   z-index: 1;
 }
 
@@ -543,6 +604,7 @@ input {
   font-weight: bold;
 }
 
+/*
 .button {
   display: inline-block;
   padding: 10px 20px;
@@ -559,6 +621,7 @@ input {
 .button:hover {
   font-weight: bold;
 }
+*/
 
 a {
   display: inline-block;
