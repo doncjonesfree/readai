@@ -1,8 +1,0 @@
-.hdr_home {
-  cursor: pointer;
-  /*
-  font-family: "Fredoka";
-  */
-  font-family: var(--logo-font), sans-serif;
-  font-size: 2rem;
-}

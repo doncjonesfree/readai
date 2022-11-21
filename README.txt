@@ -55,3 +55,5 @@ meteor add momentjs:moment
 meteor add mrt:moment-timezone
 
 meteor add ostrio:cookies -- https://atmospherejs.com/ostrio/cookies
+
+added fontawesome - free version - https://fontawesome.com/search?q=calendar&o=r&m=free
