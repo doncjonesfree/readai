@@ -5,12 +5,16 @@ import * as lib from './lib';
 var Future = Npm.require("fibers/future");
 import { fetch, Headers } from "meteor/fetch";
 import { getNextLesson, saveLessonHistory, dcSaveLessonHistory, addPoints } from "../../server/lessons"
+import { backupToText } from '../../server/backup';
 
 const fs = require('fs');
 const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  'backupToText': function(){
+    return backupToText();
+  },
   'eraseReviewed': function(){
     // erase reviewed from lesson history
     const recs = LessonHistory.find({}).fetch();

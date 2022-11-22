@@ -28,6 +28,8 @@ import "./Lesson.html";
 import "./Lesson.js";
 import "./Progress.html";
 import "./Progress.js";
+import "./Backup.html";
+import "./Backup.js";
 
 const IS_LOADING_STRING = "isLoading";
 
