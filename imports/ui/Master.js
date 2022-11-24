@@ -23,6 +23,9 @@ Template.master.helpers({
   mode4() { return get('mode') === 4; },
   mode5() { return get('mode') === 5; },
   mode6() { return get('mode') === 6; },
+  masterUser(){
+    return lib.getCookie('ltrMaster');
+  },
 });
 
 Template.master.events({

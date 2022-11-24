@@ -14,16 +14,19 @@
           {{ #with user_info }}
            {{ #if user }}
              {{ #if masterUser }}
-               master user
                <div class="nav-element signout">sign out ({{ user_name }})</div>
              {{ else }}
              <div class="nav-element signout">sign out ({{ user_name }})</div>
              {{ /if }}
            {{ else }}
-             <div class="nav-element">about us</div>
-             <div class="nav-element">donate</div>
-             <div class="nav-element" id="signup">sign up (free)</div>
-             <div class="nav-element" id="signin">sign in</div>
+             {{ #if isMasterUser }}
+               <div class="nav-element signout">sign out (Master)</div>
+             {{ else }}
+               <div class="nav-element">about us</div>
+               <div class="nav-element">donate</div>
+               <div class="nav-element" id="signup">sign up (free)</div>
+               <div class="nav-element" id="signin">sign in</div>
+             {{ /if }}
            {{ /if }}
           {{ /with }}
         {{ /if }}

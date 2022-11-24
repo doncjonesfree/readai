@@ -6,6 +6,16 @@ const get = function(n) { return Session.get(pre + n )};
 const set = function(n,v) { Session.set(pre + n,v) };
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
+const refresh = function(n){
+  let v = get(n);
+  if ( typeof(v) === 'undefined') v = 0;
+  set(n,v+1);
+};
+
+const getRefresh = function(n){
+  return get(n);
+};
+
 let Student = '';
 Template.header.helpers({
   activeLesson() {
@@ -13,12 +23,18 @@ Template.header.helpers({
     return list.indexOf( FlowRouter.getRouteName() ) >= 0;
   },
   user_info() {
+    const dmy = getRefresh('user_info');
     const u = Session.get('currentUser');
+    const masterUser = lib.getCookie('ltrMaster');
     if ( ! u ) {
-      return { user: false };
+      return { user: false, masterUser: masterUser };
     } else {
-      return { user: true, user_name: u.first_name, masterUser: u.masterUser };
+      return { user: true, user_name: u.first_name, masterUser: masterUser };
     }
+  },
+  isMasterUser(){
+    const t = lib.getCookie('ltrMaster');
+    return t;
   },
   name() {
     const student = lib.getCookie('student');
@@ -57,6 +73,8 @@ Template.header.events({
   'click .signout'(e){
     Session.set('currentUser','');
     lib.setCookie('ltrSignin',''); // clear the cookie as well
+    lib.setCookie('ltrMaster',false);
+    refresh('user_info');
     FlowRouter.go('home');
   }
 });
