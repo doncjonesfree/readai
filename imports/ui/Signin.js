@@ -61,15 +61,16 @@ const signin = function(id ){
       } else {
         Session.set('currentUser',results[0] ); // global so others can see it
         lib.setCookie('ltrSignin',results[0] );
-        FlowRouter.go('home');
         Meteor.call('masterUser', results[0].email, function(err,master){
           if ( err ) {
             console.log('Error: Signin.js line 61',err);
           } else {
-            if ( master ) {
-              let doc = results[0];
-              doc.masterUser = true;
-              Session.set('currentUser',doc);
+            if ( master && Meteor.isDevelopment ) {
+              lib.setCookie('ltrMaster',true );
+              FlowRouter.go('master');
+            } else {
+              lib.setCookie('ltrMaster',false );
+              FlowRouter.go('home');
             }
           }
         });

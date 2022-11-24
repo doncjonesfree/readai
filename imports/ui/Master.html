@@ -1,11 +1,14 @@
 <template name="master">
+  {{ > header }}
 
-  {{ #if mode1 }}
-    <button class="change_mode" data="2">Users</button>
-  {{ /if }}
+  <div class="main">
+    {{ #if mode1 }}
+      <button class="change_mode" data="2">Users</button>
+    {{ /if }}
 
-  {{ #if mode2 }}
-    {{ > users }}
-  {{ /if }}
+    {{ #if mode2 }}
+      {{ > users }}
+    {{ /if }}
+  </div>
 
 </template>

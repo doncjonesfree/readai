@@ -15,6 +15,13 @@ FlowRouter.route('/signup', {
   }
 });
 
+FlowRouter.route('/master', {
+  name: 'Master',
+  action(params, queryParams) {
+    BlazeLayout.render('mainContainer', {main: 'master'});
+  }
+});
+
 FlowRouter.route('/backup', {
   name: 'Backup',
   action(params, queryParams) {
