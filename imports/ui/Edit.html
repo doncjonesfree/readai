@@ -1,5 +1,5 @@
 <template name="Edit">
-  <button class="change_mode" data="1" data2="master">Back</button>
+  <button class="edit_change_mode" data="1" data2="master">Master</button>
 
   {{ #if mode1 }}
     <button id="edit_gather_facts">Gather Facts</button>
@@ -8,6 +8,7 @@
   {{ /if }}
 
   {{ #if mode3 }}
+    <button class="edit_change_mode" data="1">Back</button>
     {{ #with testWord }}
       <button id="test_word_ok">OK</button>
       <div id="test_word_wrapper">
@@ -27,7 +28,7 @@
   {{ /if }}
 
   {{ #if mode4 }}
-    <button class="change_mode" data="1">Back</button>
+   <button class="edit_change_mode" data="1">Back</button>
     Drawing Conclusions:
     {{ #with dc_search }}
       <select id="dc_select_grade">
@@ -64,7 +65,7 @@
   {{ /if }}
 
   {{ #if mode2 }}
-    <button class="change_mode" data="1">Back</button>
+    <button class="edit_change_mode" data="1">Back</button>
     Gather Facts:
     {{ #with gf_search }}
       Code <input type="text" id="gs_start" class="input_short gf_src" data="Code" data2="text" value="{{ Code}}">
