@@ -48,10 +48,10 @@ Meteor.startup(() => {
     ].forEach(taskText => insertTask(taskText, user))
   }
 
-  loadGatherFacts();
-  loadGatherFactsAnswers();
-  loadDrawConclusions();
-  loadPowerBuilder();
+  // loadGatherFacts();
+  // loadGatherFactsAnswers();
+  // loadDrawConclusions();
+  // loadPowerBuilder();
 
 });
 

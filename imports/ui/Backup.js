@@ -27,6 +27,22 @@ Template.Backup.helpers({
   mode2() { return get('mode') === 2; },
 });
 Template.Backup.events({
+  'click #restore': function(e){
+    e.stopPropagation();
+    e.preventDefault();
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    $(e.currentTarget).html(wait);
+    Meteor.call('restoreFromText', function(err,results){
+      $(e.currentTarget).html(html);
+      if ( err ) {
+        console.log('Error: Backup.js line 40',err);
+      } else {
+        console.log('restoreFromText',results);
+      }
+    });
+  },
   'click #backup': function(e){
     e.stopPropagation();
     e.preventDefault();
@@ -37,7 +53,7 @@ Template.Backup.events({
     Meteor.call('backupToText', function(err,results){
       $(e.currentTarget).html(html);
       if ( err ) {
-        console.log('Error: Backup.js line 33',err);
+        console.log('Error: Backup.js line 56',err);
       } else {
         console.log('backupToText',results);
       }

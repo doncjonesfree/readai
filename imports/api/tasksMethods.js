@@ -5,13 +5,16 @@ import * as lib from './lib';
 var Future = Npm.require("fibers/future");
 import { fetch, Headers } from "meteor/fetch";
 import { getNextLesson, saveLessonHistory, dcSaveLessonHistory, addPoints } from "../../server/lessons"
-import { backupToText } from '../../server/backup';
+import { backupToText, restoreFromText } from '../../server/backup';
 
 const fs = require('fs');
 const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  'restoreFromText': function(){
+    return restoreFromText();
+  },
   'backupToText': function(){
     return backupToText();
   },
