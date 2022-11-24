@@ -14,17 +14,6 @@
   color: #dcdcdc;
 }
 
-#gf_help {
-  display: inline-block;
-  border: 1px solid gray;
-  color: gray;
-  border-radius: .25em;
-  font-size: .8em;
-  margin-left: 1em;
-  padding: 0 .25em 0 .25em;
-  cursor: pointer;
-}
-
 .lesson_word {
   display: inline-block;
 }
@@ -55,6 +44,7 @@
   border: 1px solid gray;
   border-radius: .5em;
   padding: 0em 1em 1em 1em;
+  font-weight: var(--fw-light);
 }
 .gf_question { margin-top: 1em; margin-bottom: .25em; }
 .gf_answer {
@@ -81,10 +71,15 @@
 .gf_lesson_paragraph {
   font-size: 1.4em;
   margin: 1em 0 0 0;
+  font-weight: var(--fw-light);
 }
 
 .gf_chk_answer {
+  position: relative;
+  top: -2px;
+  margin-right: .5rem;
   width: 2em;
+  font-size: .5rem;
 }
 
 #dictionary_overlay {

@@ -9,6 +9,9 @@
     {{ #with lesson }}
       <div class="gf_lesson_code">
         {{ Code }} {{ Color }}  #{{ Number }}
+        {{ #if local }}
+         &nbsp; ({{ GradeLevel }})
+        {{ /if }}
       </div>
       <div class="gf_lesson_paragraph">
         {{{ Paragraph }}}
@@ -35,7 +38,7 @@
         {{ /if }}
       {{ /each }}
       <br>
-      <button id="gf_done">Done</button>
+      <div class="button" id="gf_done">Done</div>
     </div>
   {{ /if }}
 

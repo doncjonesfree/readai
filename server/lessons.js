@@ -128,7 +128,7 @@ export const getNextLesson = function( StudentId ){
   let retObj = { success: true, history: history, student: student };
   let ret;
 
-  const forceDcLesson = true; // jones - for debugging
+  const forceDcLesson = false; // jones - for debugging
   if ( forceDcLesson ) {
     ret = getDcLesson( student, history );
     console.log('jones124',ret);

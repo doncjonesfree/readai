@@ -30,6 +30,7 @@ Template.GFLesson.helpers({
     let l = get('lesson');
     if ( l && l.lesson ) {
       l.lesson.Paragraph = lib.formatGFParagraph( l.lesson.Paragraph );
+      l.lesson.local = Meteor.isDevelopment;
       return l.lesson;
     }
     return '';
