@@ -15,27 +15,30 @@ Template.Signin.onCreated(function SigninOnCreated() {
   lib.focus( '#email' );
 });
 
+const getValue = function(doc,id){
+  let v = doc[id];
+  if ( ! v ) v = '';
+  return v;
+};
+
 const getFields = function(){
   let fields = [];
   const doc = get('doc');
 
-  const value = function(id){
-    let v = doc[id];
-    if ( ! v ) v = '';
-    return v;
-  };
-  fields.push( { label: 'Email', id: 'email', type: 'email', required: true, value: value('email') });
-  fields.push( { button: 'Sign In', id: 'signin_submit', error: get('error') } );
-  return fields;
+  let op = [];
+  op.push( { label: 'Email', type: 'text', required: true, value: getValue(doc,'email'), id: 'email' })
+  const button2 = '';
+  op.push( { button: 'Sign In', id: 'signin_submit', error: get('error'), button2: button2  } );
+  return op;
 };
 
 Template.Signin.helpers({
   data_entry() {
-    return lib.dataEntryHtml( getFields() );
+    return lib.flexEntryHtml( getFields() );
   },
 });
 
-const signin = function(e, id ){
+const signin = function(id ){
   const wait = '...';
   const html = $(id).html();
   if ( wait === html ) return;
@@ -79,11 +82,13 @@ Template.Signin.events({
   'keydown #email'(e){
     if ( e.which === 13 ) {
       Meteor.setTimeout(function(){
-        signin(e, '#signin_submit');
+        signin('#signin_submit');
       },200);
     }
   },
   'click #signin_submit'(e){
-    signin(e, '#signin_submit');
+    e.stopPropagation();
+    e.preventDefault();
+    signin('#signin_submit');
   },
 });

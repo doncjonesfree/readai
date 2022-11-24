@@ -131,7 +131,7 @@ export const inputCheckboxHtml = function(obj){
 export const inputHtml = function(obj){
   // { label: id: placeholder: value:, title }
   let html = [];
-  html.push('<form>')
+  //html.push('<form>')
     html.push( '<div class="input-wrapper">');
       let ph = '';
       if ( obj.placeholder ) ph = sprintf(' placeholder="%s"',obj.placeholder);
@@ -143,7 +143,7 @@ export const inputHtml = function(obj){
       }
       html.push( sprintf('<input class="input-text" type="text" id="%s" value="%s"%s%s>',obj.id,obj.value,ph,title))
     html.push( '</div>');
-  html.push('</form>');
+  //html.push('</form>');
 
   return html.join('\n');
 };

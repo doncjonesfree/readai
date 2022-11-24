@@ -15,26 +15,28 @@ Template.Signup.onCreated(function HomeOnCreated() {
   lib.focus( '#first_name' );
 });
 
+const getValue = function(doc,id){
+  let v = doc[id];
+  if ( ! v ) v = '';
+  return v;
+};
+
 const getFields = function(){
   let fields = [];
   const doc = get('doc');
 
-  const value = function(id){
-    let v = doc[id];
-    if ( ! v ) v = '';
-    return v;
-  };
-  fields.push( { label: 'First Name', id: 'first_name', type: 'text', required: true, value: value('first_name') });
-  fields.push( { label: 'Last Name', id: 'last_name', type: 'text', required: false, placeholder: '', value: value('last_name') });
-  fields.push( { label: 'Email', id: 'email', type: 'email', required: true, value: value('email') });
-  fields.push( { button: 'Submit', id: 'signup_submit', error: get('error') } );
-  return fields;
+  let op = [];
+  op.push( { label: 'First Name *', type: 'text', required: true, value: getValue(doc,'first_name'), id: 'first_name', message: "you can enter just first name if you like" })
+  op.push( { label: 'Last Name', type: 'text', required: false, value: getValue(doc,'last_name'), id: 'last_name' })
+  op.push( { label: 'Email *', type: 'text', required: true, value: getValue(doc,'email'), id: 'email' })
+  const button2 = '';
+  op.push( { button: 'Submit', id: 'signup_submit', error: get('error'), button2: button2  } );
+  return op;
 };
 
 Template.Signup.helpers({
   data_entry() {
-    const settings = { flexWidth: '60%', longText: '20em', shortText: '5em', labelWidth: '20%', valueWidth: '40%', messageWidth: '40%' };
-    return lib.dataEntryHtml( getFields(), settings );
+    return lib.flexEntryHtml( getFields() );
   },
 });
 
