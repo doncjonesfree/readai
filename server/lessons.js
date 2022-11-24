@@ -5,7 +5,7 @@ export const addPoints = function(students){
   // given a list of students, add "points" to each student record
   const studentList = lib.makeList(students,'_id','');
 
-  const history = LessonHistory.find( { student_id: { $in: studentList }}).fetch();
+  const history = LessonHistory.find( { student_id: { $in: studentList }}, { sort: { when: -1 } } ).fetch();
   const words = WordList.find( { student_id: { $in: studentList } }).fetch();
 
   let obj = {};
@@ -115,23 +115,28 @@ const calcPct  = function( answerCount, incorrect ){
   return 0;
 };
 
+const deleteHistory = function( StudentId ){
+  // for debugging
+  // delete lesson history for the current student
+  const history = LessonHistory.find( { student_id: StudentId }, { sort: { when: -1 } }).fetch();
+  for ( let i=0; i < history.length; i++ ) {
+    const h = history[i];
+    LessonHistory.remove(h._id);
+  }
+};
+
 export const getNextLesson = function( StudentId ){
+  // deleteHistory( StudentId );
   const student = Students.findOne( StudentId );
   const history = LessonHistory.find( { student_id: StudentId }, { sort: { when: -1 } }).fetch();
 
-  // delete lesson history
-  // for ( let i=0; i < history.length; i++ ) {
-  //   const h = history[i];
-  //   LessonHistory.remove(h._id);
-  // }
 
   let retObj = { success: true, history: history, student: student };
   let ret;
 
   const forceDcLesson = false; // jones - for debugging
-  if ( forceDcLesson ) {
+  if ( forceDcLesson && history.length > 0 ) {
     ret = getDcLesson( student, history );
-    console.log('jones124',ret);
     if ( ret ) {
       retObj.lesson_type = 'dc';
       retObj.ret = ret;
@@ -163,6 +168,7 @@ export const getNextLesson = function( StudentId ){
 
 const getGfLesson = function( student, history ){
   // Get next gf lesson
+  //
   const gfResults = getLessonResults( 'gf', history );
   const grade = gfResults.average_grade;
   const done = gfResults.done;
@@ -241,10 +247,11 @@ const getDcLesson = function( student, history ){
     if ( a.QuestionNum > b.QuestionNum ) return 1;
     return 0;
   });
+  if ( recs.length === 0 ) return ''; // should not happen
   const lesson = recs[0];
   // dc lessons start at grade 2.8,  if the student is less than 2.3, then don't
   // do a dc lesson until they have progressed further.
-  // if ( (lesson.GradeLevel - 0.5 ) > grade ) return ''; // not sure about this line
+  if ( grade < 2.3 ) return '';
   return DrawConclusions.find({ Shape: lesson.Shape, Number: lesson.Number, GradeLevel: lesson.GradeLevel },{sort: { QuestionNum: 1 } }).fetch();
 };
 
@@ -253,8 +260,8 @@ const getLessonResults = function( lesson_type, history ){
   for ( let i=0; i < history.length; i++ ) {
     const h = history[i];
     if ( h.lesson_type === lesson_type ) {
-      op.done.push( h._id );
-      if ( op.count < 5 ) {
+      if ( op.count < 5 ) { // look at most recent lessons only
+        op.done.push( h._id );
         op.count += 1;
         let grade = h.grade_level;
         if ( h.pct < 30 ) {
@@ -262,12 +269,17 @@ const getLessonResults = function( lesson_type, history ){
         } else if ( h.pct < 60 ) {
           grade = Math.max(0.5, grade - 1 );
         } else if ( h.pct < 80 ) {
-          // grade = grade;
+          // grade = grade; // leave grade level the same
+        } else if ( h.pct < 100 ) {
+          // small increase
+          grade = Math.min(13, grade + 0.2 );
         } else {
-          // 90% +
-          grade = Math.min(13, grade + 1 );
+          // 100%
+          grade = Math.min(13, grade + 0.5 );
         }
         op.gradeTotal += grade;
+      } else {
+        break;
       }
     }
   }
@@ -298,11 +310,11 @@ const getFirstLesson = function( student ){
 
 const initialGradeLevel = function( age ){
   // estimate initial grade level based on student's age
+  // Start very easy and progress from there
   if (  age <= 5 ) return 0.5;
-  if ( age === 6 || age === 7 ) return 1;
-  if ( age === 8 || age === 9 ) return 2;
-  if ( age === 10 || age === 11 ) return 3;
-  if ( age === 12 || age === 13 ) return 5;
-  if ( age === 14 || age === 15 ) return 7;
-  return 8;
+  if ( age <= 9 ) return 1;
+  if ( age <= 11 ) return 2;
+  if ( age <= 13 ) return 3;
+  if ( age <= 15 ) return 4;
+  return 5;
 };

@@ -328,6 +328,12 @@ Meteor.methods({
     return future.wait();
   },
   'wordExists'( arg ){
+
+    const alertMissingDef = function(word){
+      console.log('Missing definition for %s',word);
+      // TODO: need to email ourselves so we can add it
+    };
+
     const word = arg.toLowerCase();
 
     let retObj = { word: word, audio: false, definition: false };
@@ -335,6 +341,28 @@ Meteor.methods({
     if ( recs.length > 0 ) {
       retObj.audio = true;
       if ( recs[0].definition ) retObj.definition = true;
+    } else if ( Meteor.isDevelopment ) {
+      // in dev mode we can look at public/definitions and see if it was added to definitions
+      const fullPath = sprintf('/Users/donjones/meteor/read/public/definition/%s.mp3',word);
+      if ( fs.existsSync(fullPath) ) {
+        retObj.definition = true;
+        // the definition does exist - add it to the collection
+        if ( recs.length > 0 ) {
+          let doc = {};
+          doc.definition = true;
+          AudioFiles.update(recs[0]._id, { $set: doc });
+        } else {
+          let doc = {};
+          doc.word = word;
+          doc.audio = false;
+          doc.definition = true;
+          AudioFiles.insert(doc);
+        }
+      } else {
+        alertMissingDef(word);
+      }
+    } else {
+      alertMissingDef(word);
     }
 
     return retObj;

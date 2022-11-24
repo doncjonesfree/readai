@@ -17,12 +17,9 @@ Template.GFLesson.onCreated(function GFLessonOnCreated() {
 });
 
 Template.GFLesson.helpers({
-  mode1() {
-    return get('mode') === 1;
-  },
-  mode2() {
-    return get('mode') === 2;
-  },
+  mode1() { return get('mode') === 1; },
+  mode2() { return get('mode') === 2; },
+  mode3() { return get('mode') === 3; },
   points() {
     return get('points');
   },
@@ -113,7 +110,11 @@ const saveLessonHistory = function(lesson,points){
             set('lesson',results.ret);
             set('mode',1);
           } else {
-            console.log('Drawing Conclusion lesson - needs code ');
+            console.log('jones116',results);
+            let obj = results.ret[0];
+            obj.incorrect_count = 0;
+            Session.set('DCLesson_lesson',obj);
+            set('mode',3);
           }
         }
       });
