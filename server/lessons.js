@@ -118,7 +118,7 @@ const calcPct  = function( answerCount, incorrect ){
 const deleteHistory = function( StudentId ){
   // for debugging
   // delete lesson history for the current student
-  const history = LessonHistory.find( { student_id: StudentId }, { sort: { when: -1 } }).fetch();
+  const history = LessonHistory.find( { student_id: StudentId } ).fetch();
   for ( let i=0; i < history.length; i++ ) {
     const h = history[i];
     LessonHistory.remove(h._id);
@@ -129,7 +129,6 @@ export const getNextLesson = function( StudentId ){
   // deleteHistory( StudentId );
   const student = Students.findOne( StudentId );
   const history = LessonHistory.find( { student_id: StudentId }, { sort: { when: -1 } }).fetch();
-
 
   let retObj = { success: true, history: history, student: student };
   let ret;

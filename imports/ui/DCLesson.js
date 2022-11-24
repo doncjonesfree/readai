@@ -6,7 +6,7 @@ const set = function(n,v) { Session.set(pre + n,v) };
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
 Template.DCLesson.onCreated(function DCLessonOnCreated() {
-
+  setd('mode',1);
 });
 
 export const expandShape = function(s){
@@ -50,9 +50,14 @@ export const addDcAnswerCheckbox = function(l){
 };
 
 Template.DCLesson.helpers({
+  mode1: function(){ return get('mode') === 1 },
+  mode2: function(){ return get('mode') === 2 },
   done_button: function(){
-    if ( onLastQuestion() ) return 'Done';
-    return 'Next';
+    if ( onLastQuestion() ) {
+      return 'Done';
+    } else {
+      return 'Next';
+    }
   },
   lesson() {
     let l = get('lesson');
@@ -141,7 +146,8 @@ Template.DCLesson.events({
       lib.setCookie('studentPoints',totalPoints);
       Session.set('header_points',totalPoints)
 
-      Meteor.call('dcSaveLessonHistory',lesson, lib.getCookie('studentId'), function(err,results){
+      const studentId = lib.getCookie('studentId');
+      Meteor.call('dcSaveLessonHistory',lesson, studentId, function(err,results){
         $(e.currentTarget).html(html);
         if ( err ) {
           console.log('Error in DCLesson.js line 131',err);
@@ -151,6 +157,25 @@ Template.DCLesson.events({
       });
       if ( last ) {
         // start a new lesson
+        set('mode',3); // should blank the screen
+        Meteor.call('getNextLesson', studentId, function(err,results){
+          if ( err ) {
+            console.log('Error: DCLesson.js line 162',err);
+          } else {
+            if ( results.lesson_type === 'gf') {
+              Session.set('GFLesson_lesson',results.ret);
+              Session.set('GFLesson_student',results.student);
+              Session.set('GFLesson_name',results.student.name);
+              Session.set('GFLesson_mode',1);
+              set('mode',2);
+            } else {
+              let obj = results.ret[0];
+              obj.incorrect_count = 0;
+              Session.set('DCLesson_lesson',obj);
+              set('mode',1);
+            }
+          }
+        });
       } else {
         loadNextQuestion();
       }

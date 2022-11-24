@@ -1,21 +1,27 @@
 <template name="DCLesson">
-  <h1>
-    Drawing Conclusions Lesson
-    <i class="fa-solid fa-circle-question icon" id="dc_help"></i>
-  </h1>
+  {{ #if mode1 }}
+    <h1>
+      Drawing Conclusions Lesson
+      <i class="fa-solid fa-circle-question icon" id="dc_help"></i>
+    </h1>
 
-  {{ #with lesson }}
-    <div class="dc_lesson_code">
-      {{ Shape }} {{ Number }}  #{{ QuestionNum }} of 10 &nbsp; ({{ GradeLevel }})
-    </div>
-    <div class="dc_lesson_question">
-      {{{ htmlQuestion }}}
-    </div>
-    {{ #each answer }}
-      <div class="dc_lesson_answer_flex">
-        {{{ checkbox }}} {{{ content }}}
+    {{ #with lesson }}
+      <div class="dc_lesson_code">
+        {{ Shape }} {{ Number }}  #{{ QuestionNum }} of 10 &nbsp; ({{ GradeLevel }})
       </div>
-    {{ /each }}
-  {{ /with }}
-  <div class="button" id="dc_done">{{ done_button }}</div>
+      <div class="dc_lesson_question">
+        {{{ htmlQuestion }}}
+      </div>
+      {{ #each answer }}
+        <div class="dc_lesson_answer_flex">
+          {{{ checkbox }}} {{{ content }}}
+        </div>
+      {{ /each }}
+    {{ /with }}
+    <div class="button" id="dc_done">{{ done_button }}</div>
+  {{ /if }}
+
+  {{ #if mode2 }}
+    {{ > DCLesson }}
+  {{ /if }}
 </template>
