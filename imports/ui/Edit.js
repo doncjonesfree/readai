@@ -840,9 +840,14 @@ Template.Edit.events({
   'click #home'() {
     FlowRouter.go('home'); //
   },
-  'click #change_mode'(e) {
-    const m = lib.int( $(e.currentTarget).attr('data'));
-    set('mode',m);
+  'click .change_mode'(e){
+    const m = lib.int( $(e.currentTarget).attr('data') );
+    const pre = $(e.currentTarget).attr('data2');
+    if ( pre ) {
+      Session.set( sprintf('%s_mode',pre),m);
+    } else {
+      set('mode',m);
+    }
   },
   'click #edit_gather_facts'(e){
     set('mode',2);

@@ -71,6 +71,11 @@ const filterInactive = function(list){
 };
 
 Template.users.events({
+  'click .change_mode'(e){
+    const m = lib.int( $(e.currentTarget).attr('data') );
+    const pre = $(e.currentTarget).attr('data2');
+    Session.set( sprintf('%s_mode',pre),m);
+  },
   'click .user_edit_save'(e){
     e.preventDefault();
     const id = $(e.currentTarget).attr('data');
