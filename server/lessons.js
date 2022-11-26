@@ -133,7 +133,7 @@ export const getNextLesson = function( StudentId ){
   let retObj = { success: true, history: history, student: student };
   let ret;
 
-  const forceDcLesson = false; // jones - for debugging
+  const forceDcLesson = true; // jones - for debugging
   if ( forceDcLesson && history.length > 0 ) {
     ret = getDcLesson( student, history );
     if ( ret ) {

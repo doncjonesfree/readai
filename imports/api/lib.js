@@ -324,34 +324,55 @@ export const googlePlaySound = function( arg, callback ){
   // assume word has an mp3 file without looking
   // arg is a single word - but if * as first character, then we
   // should play the definition, not the word.
+  const s3path = 'https://read-audio.s3.us-west-2.amazonaws.com';
   let word = arg;
-  let url = sprintf('/audio/%s.mp3',word.toLowerCase());
+  let url = sprintf('%s/audio/%s.mp3',s3path,word.toLowerCase());
+  let definition = false;
   if ( word.substr(0,1) === '*') {
     // actually we want the definition, not the word itself
     word = word.substring(1);
-    url = sprintf('/definition/%s.mp3',word.toLowerCase());
+    url = sprintf('%s/definition/%s.mp3',s3path,word.toLowerCase());
+    definition = true;
   }
 
   if ( SoundObj ) SoundObj.stop(); // stop the previous sound
 
-  // play the sound
-  SoundObj = new Howl( { src: url });
-  SoundObj.on('end',function(){
-    Meteor.setTimeout(function(){
-      SoundObj = '';
-      if ( callback ) callback();
-    },100);
+  let urlList = [ url ];
+  if ( definition ) {
+    urlList.push('/definition/no_definition_found.mp3');
+  } else {
+    urlList.push('/audio/no_word_found.mp3');
+  }
+
+  play( urlList, 0, function(success){
+    if ( callback ) callback(success);
   });
-  SoundObj.play();
+
 };
 
-export const wordExists = function(word, callback){
-  Meteor.call('wordExists', word , function(err,results){
-    if ( err ) {
-      console.log('Error in lib.js line 76',err);
-    }
-    callback(results);
-  });
+const play = function( list, ix, callback ){
+  // play the sound
+  if ( ix < list.length ) {
+    const url = list[ix];
+    console.log('jones353 attempting',url);
+    SoundObj = new Howl( { src: url });
+    SoundObj.on('end',function(){
+      Meteor.setTimeout(function(){
+        SoundObj = '';
+        callback( true ); // success
+      },100);
+    });
+    SoundObj.on('loaderror',function(){
+      Meteor.setTimeout(function(){
+        SoundObj = '';
+        // try again
+        play( list, ix+1, callback );
+      },100);
+    });
+    SoundObj.play();
+  } else {
+    callback( false );
+  }
 };
 
 const playSound = function(results, callback){

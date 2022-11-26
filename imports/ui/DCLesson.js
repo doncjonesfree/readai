@@ -210,14 +210,8 @@ Template.DCLesson.events({
   'click .word_def': function(e){
     e.preventDefault();
     let word = $(e.currentTarget).attr('data');
-    lib.wordExists(word, function(results){
-      if ( ! results || ! results.definition ) {
-        // no definition found
-        word = 'no_definition_found';
-      }
-      lib.googlePlaySound( '*' + word, function(){
-        console.log('%s definition finished playing',word);
-      });
+    lib.googlePlaySound( '*' + word, function(){
+      console.log('%s definition finished playing',word);
     });
   },
 });

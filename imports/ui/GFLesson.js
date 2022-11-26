@@ -110,7 +110,6 @@ const saveLessonHistory = function(lesson,points){
             set('lesson',results.ret);
             set('mode',1);
           } else {
-            console.log('jones116',results);
             let obj = results.ret[0];
             obj.incorrect_count = 0;
             Session.set('DCLesson_lesson',obj);
@@ -190,21 +189,15 @@ Template.GFLesson.events({
   'click .word_def': function(e){
     e.preventDefault();
     let word = $(e.currentTarget).attr('data');
-    lib.wordExists(word, function(results){
-      if ( ! results || ! results.definition ) {
-        // no definition found
-        word = 'no_definition_found';
-      }
-      lib.googlePlaySound( '*' + word, function(){
-        console.log('%s definition finished playing',word);
-      });
+    lib.googlePlaySound( '*' + word, function(success){
+      console.log('%s definition finished playing, success=%s',word,success);
     });
   },
   'click .lesson_word': function(e){
     e.preventDefault();
     const word = $(e.currentTarget).attr('data');
-    lib.googlePlaySound( word, function(){
-      console.log('Play %s finished',word);
+    lib.googlePlaySound( word, function( success ){
+      console.log('Play %s finished success=%s',word,success);
       const uniqueCount = $(e.currentTarget).attr('data2');
       showDefinitionButton(word,uniqueCount);
     });
