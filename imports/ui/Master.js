@@ -33,4 +33,30 @@ Template.master.events({
     const m = lib.int( $(e.currentTarget).attr('data') );
     set('mode',m);
   },
+  'click #mas_s3'(e){
+    e.stopPropagation();
+    e.preventDefault();
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    $(e.currentTarget).html(wait);
+
+    // Meteor.call('S3getObject', 'audio/a.mp3',function(err,results){
+    //   $(e.currentTarget).html(html);
+    //   if ( err ) {
+    //     console.log('Error: Master.js line 47',err);
+    //   } else {
+    //     console.log('S3getObject',results);
+    //   }
+    // });
+
+    Meteor.call('checkS3', function(err,results){
+      $(e.currentTarget).html(html);
+      if ( err ) {
+        console.log('Error: Master.js line 56',err);
+      } else {
+        console.log('checkS3',results);
+      }
+    });
+  },
 });

@@ -57,3 +57,8 @@ meteor add mrt:moment-timezone
 meteor add ostrio:cookies -- https://atmospherejs.com/ostrio/cookies
 
 added fontawesome - free version - https://fontawesome.com/search?q=calendar&o=r&m=free
+
+meteor add peerlibrary:aws-sdk -- amazon, write to S3 -- apparently not enough
+Video on how to use aws_skl for S3 - https://www.youtube.com/watch?v=yGYeYJpRWPM
+Got config issues with above video.
+Try this video on Monday. https://www.youtube.com/watch?v=xtRYi8ud1sM

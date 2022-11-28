@@ -37,3 +37,4 @@ pauldowman:dotenv
 momentjs:moment
 mrt:moment-timezone
 ostrio:cookies
+peerlibrary:aws-sdk

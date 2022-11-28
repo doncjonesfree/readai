@@ -6,12 +6,34 @@ var Future = Npm.require("fibers/future");
 import { fetch, Headers } from "meteor/fetch";
 import { getNextLesson, saveLessonHistory, dcSaveLessonHistory, addPoints } from "../../server/lessons"
 import { backupToText, restoreFromText } from '../../server/backup';
+import { checkS3 } from '../../server/utils';
+import { getObject } from '../../server/aws';
 
 const fs = require('fs');
 const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  'S3getObject': function( file ){
+    let future=new Future();
+
+    // Check amazon s3 to see which files are missing
+    getObject( file, function( results ){
+      future.return( results );
+    });
+
+    return future.wait();
+  },
+  'checkS3': function(){
+    let future=new Future();
+
+    // Check amazon s3 to see which files are missing
+    checkS3( function( results ){
+      future.return( results );
+    });
+
+    return future.wait();
+  },
   'restoreFromText': function(){
     return restoreFromText();
   },
