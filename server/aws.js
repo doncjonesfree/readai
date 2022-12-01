@@ -7,11 +7,11 @@ const DefaultBucket = 'read-audio';
 export const putObject = function( fullPath, file, callback ){
   let retObj = { file: file };
   const s3 = getS3Object();
-  const data = fs.readFileSync( fullPath, 'binary');
-  const params = { Body: data, Bucket: DefaultBucket, Key: file };
+  // ascii, utf8, base64
+  const data = fs.readFileSync( fullPath, 'utf8');
+  let params = { Body: data, Bucket: DefaultBucket, Key: file };
+  params.ContentType = 'audio/mp3';
   // left off here - probably writing bad data - abandoned is first word
-  console.log('jones13',file);
-  throw 'jones13'
   s3.putObject(params, function(err,data){
     if ( err ) {
       retObj.error = err;
