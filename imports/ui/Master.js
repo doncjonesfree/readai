@@ -29,6 +29,26 @@ Template.master.helpers({
 });
 
 Template.master.events({
+  'click #check_email'(e){
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    $(e.currentTarget).html(wait);
+    // data = { from: to: subject: text: }
+    let data = {};
+    data.from = 'support@ltrfree.comt';
+    data.to = 'doncjones1@gmail.com';
+    data.subject = 'Testing ltr email';
+    data.text = 'This is a test';
+    Meteor.call('sendEmail', data,function(err,results){
+      $(e.currentTarget).html(html);
+      if ( err ) {
+        console.log('Error: Master.js line 41',err);
+      } else {
+        console.log('sendEmail',results);
+      }
+    });
+  },
   'click .change_mode'(e){
     const m = lib.int( $(e.currentTarget).attr('data') );
     set('mode',m);

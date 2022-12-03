@@ -10,10 +10,24 @@ import { checkS3 } from '../../server/utils';
 import { getObject } from '../../server/aws';
 
 const fs = require('fs');
+const mailgun = require("mailgun-js");
 const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  sendEmail: function( data ){
+    // data = { from: to: subject: text: }
+
+    let future=new Future();
+
+    const settings = Meteor.settings.mailgun;
+    const mg = mailgun({apiKey: settings.apiKey, domain: settings.domain});
+    mg.messages().send(data, function (error, body) {
+      future.return( { error: error, body: body } );
+    });
+
+    return future.wait();
+  },
   'S3getObject': function( file ){
     let future=new Future();
 
