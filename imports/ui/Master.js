@@ -36,7 +36,7 @@ Template.master.events({
     $(e.currentTarget).html(wait);
     // data = { from: to: subject: text: }
     let data = {};
-    data.from = 'support@ltrfree.comt';
+    data.from = 'support@ltrfree.com';
     data.to = 'doncjones1@gmail.com';
     data.subject = 'Testing ltr email';
     data.text = 'This is a test';

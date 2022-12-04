@@ -354,7 +354,6 @@ const play = function( list, ix, callback ){
   // play the sound
   if ( ix < list.length ) {
     const url = list[ix];
-    console.log('jones353 attempting',url);
     SoundObj = new Howl( { src: url });
     SoundObj.on('end',function(){
       Meteor.setTimeout(function(){
@@ -363,9 +362,11 @@ const play = function( list, ix, callback ){
       },100);
     });
     SoundObj.on('loaderror',function(){
+      // alert my gmail address so I can correct the missing word / definition
+      sendMissingWordEmail( url );
       Meteor.setTimeout(function(){
         SoundObj = '';
-        // try again
+        // try again - 2nd sound let's them know we don't have that word
         play( list, ix+1, callback );
       },100);
     });
@@ -373,6 +374,43 @@ const play = function( list, ix, callback ){
   } else {
     callback( false );
   }
+};
+
+const sendMissingWordEmail = function( url ){
+  // A word or definition is missing from S3 - send myself an email
+  // https://read-audio.s3.us-west-2.amazonaws.com/audio/wagon.mp3
+  // https://read-audio.s3.us-west-2.amazonaws.com/definition/wagon.mp3
+  let word;
+  let ix = url.indexOf('/audio/');
+  let type = 'word';
+  if ( ix < 0 ) {
+    ix = url.indexOf('/definition/');
+    type = 'definition';
+    word = url.substring(ix+12);
+  } else {
+    word = url.substring(ix+7);
+  }
+  word = word.replace('.mp3','');
+  let data = {};
+  data.from = 'support@ltrfree.com';
+  data.to = 'doncjones1@gmail.com';
+  data.subject = sprintf('Don, "%s" is a missing %s',word,type);
+  let lines = [];
+  lines.push( 'Missing word in ltrfree.com' );
+  lines.push( sprintf('Word: %s',word) );
+  lines.push( sprintf('Type: %s',type) );
+  data.text = lines.join('\n');
+  Meteor.call('sendEmail', data,function(err,results){
+    if ( err ) {
+      console.log('Error: lib.js line 407',err);
+    } else {
+      let ok = false;
+      if ( results && results.body && results.body.message && results.body.message.indexOf('Queued') >= 0 ) ok = true;
+      if ( ! ok ) {
+        console.log('sendEmail error:',results);
+      }
+    }
+  });
 };
 
 const playSound = function(results, callback){
