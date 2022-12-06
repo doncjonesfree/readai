@@ -98,9 +98,35 @@ export const saveLessonHistory = function( doc ){
   // }
 
   doc.when = lib.today();
-  doc.pct = calcPct ( doc.answerCount, doc.incorrect );
-  const id = LessonHistory.insert(doc);
-  return { id: id, doc: doc };
+  if ( doc.thisQuestion ) {
+    doc.pct = calcPct ( doc.thisQuestion, doc.incorrect );
+  } else {
+    doc.pct = calcPct ( doc.answerCount, doc.incorrect );
+  }
+
+  let id = '';
+  let recs = LessonHistory.find({ lesson_id: doc.lesson_id, student_id: doc.student_id }).fetch();
+  let inserted = true;
+  if ( recs.length > 0 ) {
+    // we are updating this lesson with additional information - another question answered
+    inserted = false;
+    let h = {}; // updated fields
+    h.incorrect = recs[0].incorrect;
+    for ( let key in doc.incorrect ) {
+      if ( lib.hasOwnProperty( doc.incorrect, key )) {
+        h.incorrect[key] = doc.incorrect[key];
+      }
+    }
+    h.thisQuestion = doc.thisQuestion;
+    h.pct = doc.pct;
+    h.when = doc.when;
+    h.points = lib.int(recs[0].points) + lib.int(doc.points);
+    LessonHistory.update(recs[0]._id, { $set: h });
+  } else {
+    // no previous answers - just insert
+    id = LessonHistory.insert(doc);
+  }
+  return { id: id, doc: doc, inserted: inserted };
 };
 
 const calcPct  = function( answerCount, incorrect ){
@@ -133,7 +159,7 @@ export const getNextLesson = function( StudentId ){
   let retObj = { success: true, history: history, student: student };
   let ret;
 
-  const forceDcLesson = true; // jones - for debugging
+  const forceDcLesson = false; // jones - for debugging
   if ( forceDcLesson && history.length > 0 ) {
     ret = getDcLesson( student, history );
     if ( ret ) {
@@ -143,31 +169,49 @@ export const getNextLesson = function( StudentId ){
     }
   }
 
+  let dcInProgress = false;
+  let gfInProgress = false;
+  if ( history.length > 0 ) {
+    dcInProgress = history[0].lesson_type === 'dc' && history[0].answerCount < 10;
+    if ( history[0].lesson_type === 'gf' ) {
+      if ( history[0].thisQuestion ) {
+        gfInProgress = history[0].thisQuestion < history[0].answerCount;
+      }
+    }
+  }
   if ( history.length === 0 ) {
     // get gathering facts lesson
     ret = getFirstLesson( student );
     retObj.lesson_type = 'gf';
-  } else if ( history[0].lesson_type === 'gf' || ( history[0].lesson_type === 'dc' && history[0].answerCount < 10 ) ) {
+  } else if ( dcInProgress || ( history[0].lesson_type === 'gf' && ! gfInProgress ) ) {
     // get draw conclusions lesson
     ret = getDcLesson( student, history );
     if ( ret ) {
       retObj.lesson_type = 'dc';
     } else {
-      ret = getGfLesson( student, history );
+      ret = getGfLesson( student, history, gfInProgress );
       retObj.lesson_type = 'gf';
     }
   } else {
     // get gathering facts lesson
-    ret = getGfLesson( student, history );
+    ret = getGfLesson( student, history, gfInProgress );
     retObj.lesson_type = 'gf';
   }
   retObj.ret = ret;
   return retObj;
 };
 
-const getGfLesson = function( student, history ){
+const getGfLesson = function( student, history, gfInProgress ){
   // Get next gf lesson
   //
+
+  if ( gfInProgress ) {
+    // we are in the middle of a lesson, just go to the next question
+    const lesson = GatherFacts.findOne( history[0].lesson_id);
+    lesson.thisQuestion = history[0].thisQuestion + 1;
+    const answers = GatherFactsAnswers.find({ LessonNum: lesson.LessonNum}).fetch();
+    return { answers: answers, lesson: lesson };
+  }
   const gfResults = getLessonResults( 'gf', history );
   const grade = gfResults.average_grade;
   const done = gfResults.done;

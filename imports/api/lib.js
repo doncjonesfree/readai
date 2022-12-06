@@ -38,16 +38,19 @@ export const toObject = function(list,field){
   return obj;
 };
 
-export const calculatePoints = function( lesson ){
+export const calculatePoints = function( lesson, thisQuestion ){
   const correctPoints = 10; // points for every correct answer
   const incorrectPoints = 5; // negagitive points for every incorrect answer
   let points = correctPoints * lesson.answers.length;
+  if ( thisQuestion ) points = correctPoints;
   if ( lesson.incorrect ) {
     for ( let key in lesson.incorrect ) {
       if ( hasOwnProperty(lesson.incorrect,key)) {
-        let v = lesson.incorrect[key];
-        if ( v > 2 ) v = 2;
-        points -= ( incorrectPoints * v );
+        if ( ! thisQuestion || ( thisQuestion === int(key) )) {
+          let v = lesson.incorrect[key];
+          if ( v > 2 ) v = 2;
+          points -= ( incorrectPoints * v );
+        }
       }
     }
   }

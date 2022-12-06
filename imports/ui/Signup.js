@@ -58,7 +58,7 @@ Template.Signup.events({
         if ( err ) {
           console.log('Error: Signup.js line 55',err);
         } else if ( results.length > 0 ) {
-          set('error','That email already exists. Sign in insteada');
+          set('error','That email already exists. Sign in instead');
         } else {
           Meteor.call('collectionInsert', 'Users', data.doc, function(err,results){
             $(e.currentTarget).html(html);

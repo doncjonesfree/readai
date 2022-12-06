@@ -16,6 +16,31 @@ Template.GFLesson.onCreated(function GFLessonOnCreated() {
   setd('mode',1);
 });
 
+const getSeparateQuestions = function(l){
+  // if there are separate questions, return them in an array, else blank
+  let questions = l.lesson.Paragraph.replace(/\r/g,'');
+  const ix1 = questions.indexOf('1.');
+  const ix2 = questions.indexOf('2.');
+  const ix3 = questions.indexOf('3.');
+  if ( ix1 >= 0 && ix2 >= 0 && ix3 >= 0 ) {
+    // break it down in separate questions
+    let op = [];
+    for ( let q=2; q < 100; q++ ) {
+      const ix = questions.indexOf( sprintf('%s.',q));
+      if ( ix < 0 ) {
+        op.push(questions);
+        break;
+      }
+      op.push( questions.substr(0,ix));
+      questions = questions.substring(ix);
+    }
+    let n = 1;
+    if ( l.lesson.thisQuestion ) n = l.lesson.thisQuestion;
+    return { n: n, question: op[n-1] };
+  }
+  return '';
+};
+
 Template.GFLesson.helpers({
   mode1() { return get('mode') === 1; },
   mode2() { return get('mode') === 2; },
@@ -25,25 +50,27 @@ Template.GFLesson.helpers({
   },
   lesson() {
     let l = get('lesson');
-    if ( l && l.lesson ) {
-      l.lesson.Paragraph = lib.formatGFParagraph( l.lesson.Paragraph );
+    if ( l && l.lesson && l.answers ) {
       l.lesson.local = Meteor.isDevelopment;
-      return l.lesson;
-    }
-    return '';
-  },
-  word(){
-    return get('word');
-  },
-  name(){
-    return get('name');
-  },
-  question() {
-    let l = get('lesson');
-    let uniqueCount = 0;
-    if ( l && l.answers ) {
+
+      let uniqueCount = 0;
+
+      // form question
       let op = [];
-      for ( let i=0; i < l.answers.length; i++ ) {
+      let start = 0;
+      let end = l.answers.length;
+      const q = getSeparateQuestions(l);
+      if ( q ) {
+        start = q.n-1;
+        end = q.n;
+        l.lesson.thisQuestion = q.n;
+        l.lesson.Paragraph = lib.formatGFParagraph( q.question );
+      } else {
+        l.lesson.Paragraph = lib.formatGFParagraph( l.lesson.Paragraph );
+        l.lesson.thisQuestion = 0;
+      }
+
+      for ( let i=start; i < end; i++ ) {
         const a = l.answers[i];
         const ret = lib.addDivsForLongerWords( a.Question, uniqueCount );
         const q2 = ret.op;
@@ -66,9 +93,17 @@ Template.GFLesson.helpers({
         }
         op.push(o);
       }
-      return op;
+      l.lesson.question = op;
+
+      return l.lesson;
     }
     return '';
+  },
+  word(){
+    return get('word');
+  },
+  name(){
+    return get('name');
   },
   mode1() { return get('mode') === 1 },
 });
@@ -86,14 +121,15 @@ const showDefinitionButton = function(word,uniqueCount){
   });
 };
 
-const saveLessonHistory = function(lesson,points){
+const saveLessonHistory = function(lesson){
   let obj = {};
   obj.lesson_type = 'gf';
   obj.answerCount = lesson.answers.length;
   obj.incorrect =  lesson.incorrect;
   obj.lesson_id =  lesson.lesson._id;
   obj.grade_level =  lesson.lesson.GradeLevel;
-  obj.points =  points;
+  obj.points =  lesson.points;
+  obj.thisQuestion = lesson.thisQuestion;
   obj.student_id = get('student')._id;
   Meteor.call('saveLessonHistory', obj , function(err,results){
     if ( err ) {
@@ -123,12 +159,19 @@ const saveLessonHistory = function(lesson,points){
 
 Template.GFLesson.events({
   'click #gf_done': function(e){
+    const thisQuestion = lib.int($(e.currentTarget).attr('data'));
     let lesson = get('lesson');
     if ( ! lesson.incorrect ) lesson.incorrect = {};
     let notAnswered = [];
     let incorrect = [];
     let previouslyIncorrect = [];
-    for ( let i=0; i < lesson.answers.length; i++ ) {
+    let start = 0;
+    let end = lesson.answers.length;
+    if ( thisQuestion ) {
+      start = thisQuestion-1;
+      end = thisQuestion;
+    }
+    for ( let i=start; i < end; i++ ) {
       const a = lesson.answers[i];
       if ( a.incorrect ) previouslyIncorrect.push( a.QuestionNum );
       if ( a.selected ) {
@@ -152,16 +195,21 @@ Template.GFLesson.events({
     } else if ( incorrect.length > 0 ) {
       // at least one answer incorrect
       set('lesson',lesson); // save incorrect flag so we can tell screen which ones to highlight
-      let word = 'review_incorrect';
-      if ( incorrect.length === 1 ) word = 'one_incorrect';
-      lib.googlePlaySound( word );
+      // no need to play sound if only one question/answer showing
+      if ( ! thisQuestion ){
+        let word = 'review_incorrect';
+        if ( incorrect.length === 1 ) word = 'one_incorrect';
+        lib.googlePlaySound( word );
+      }
     } else {
+      let points = lib.calculatePoints( lesson, thisQuestion );
       set('lesson',lesson); // save so we can clear incorrect
       const student = get('student');
-      let points = lib.calculatePoints( lesson );
 
       const totalPoints = lib.int( lib.getCookie('studentPoints') ) + points;
       lib.setCookie('studentPoints',totalPoints);
+      lesson.points = points;
+      lesson.thisQuestion = thisQuestion;
 
       set('points','');
       if ( points && student.award_points ) {
@@ -172,11 +220,11 @@ Template.GFLesson.events({
           $('#gf_show_points').hide();
         });
         Session.set('header_points',totalPoints)
-        saveLessonHistory(lesson,points);
+        saveLessonHistory(lesson);
       } else {
         // save points anyway - even if they asked not to show points
         Session.set('header_points',totalPoints)
-        saveLessonHistory(lesson,points);
+        saveLessonHistory(lesson);
       }
     }
   },

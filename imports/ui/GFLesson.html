@@ -13,30 +13,31 @@
       <div class="gf_lesson_paragraph">
         {{{ Paragraph }}}
       </div>
+
+      <br><br>
+      <div class="gf_question_wrapper">
+        {{ #each question }}
+          {{ #if incorrect }}
+            <div class="gf_question_incorrect">{{{ Question }}}</div>
+            {{ #each list }}
+              <div class="gf_answer_incorrect">
+                {{{ checkbox }}} {{{ answer }}}
+              </div>
+            {{ /each}}
+          {{ else }}
+            <div class="gf_question">{{{ Question }}}</div>
+            {{ #each list }}
+              <div class="gf_answer">
+                {{{ checkbox }}} {{{ answer }}}
+              </div>
+            {{ /each}}
+          {{ /if }}
+        {{ /each }}
+        <br>
+        <div class="button" id="gf_done" data="{{ thisQuestion }}">Done</div>
+      </div>
     {{ /with }}
 
-    <br><br>
-    <div class="gf_question_wrapper">
-      {{ #each question }}
-        {{ #if incorrect }}
-          <div class="gf_question_incorrect">{{{ Question }}}</div>
-          {{ #each list }}
-            <div class="gf_answer_incorrect">
-              {{{ checkbox }}} {{{ answer }}}
-            </div>
-          {{ /each}}
-        {{ else }}
-          <div class="gf_question">{{{ Question }}}</div>
-          {{ #each list }}
-            <div class="gf_answer">
-              {{{ checkbox }}} {{{ answer }}}
-            </div>
-          {{ /each}}
-        {{ /if }}
-      {{ /each }}
-      <br>
-      <div class="button" id="gf_done">Done</div>
-    </div>
   {{ /if }}
 
   {{ #if mode3 }}

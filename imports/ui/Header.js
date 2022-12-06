@@ -54,6 +54,9 @@ Template.header.helpers({
 });
 
 Template.header.events({
+  'click .myaccount'(e){
+    FlowRouter.go('myaccount');
+  },
   'click #student_done'(e){
     e.preventDefault();
     FlowRouter.go('home');
