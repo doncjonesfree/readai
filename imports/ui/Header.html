@@ -7,8 +7,7 @@
     <div class="header-right">
       <div class="nav-container">
         {{ #if activeLesson }}
-          {{ points }}
-          {{ name }}
+          {{ name }}: {{ points }}
           <div class="nav-element" id="student_done">done for now</div>
         {{ else }}
           {{ #with user_info }}

@@ -47,6 +47,7 @@ export const dcSaveLessonHistory = function( lesson, studentId ){
     // We have an additional answer to a dc lesson in progress
     const p = retObj.PreviousLessonHistory[0];
     let doc = {};
+    doc.points = p.points + lesson.points;
     doc.answerCount = p.answerCount + 1;
     doc.qnumList = p.qnumList;
     doc.qnumList.push( lesson.QuestionNum );
