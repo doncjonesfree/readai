@@ -29,14 +29,14 @@ export const prettyDateShort = function(d) {
   }
 };
 
-export const toObject = function(list,field){
+export const toObject = function(array,field) {
   let obj = {};
-  for ( let i=0; i < list.length; i++ ) {
-    const l = list[i];
-    obj[ field ] = l;
+  for ( let i=0; i < array.length; i++ ) {
+    let a = array[i];
+    obj[a[ field ]] = a;
   }
   return obj;
-};
+}
 
 export const calculatePoints = function( lesson, thisQuestion ){
   const correctPoints = 10; // points for every correct answer

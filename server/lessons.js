@@ -206,6 +206,7 @@ const getGfLesson = function( student, history, gfInProgress ){
   // Get next gf lesson
   //
 
+  const historyObj = lib.toObject(history,'lesson_id');
   if ( gfInProgress ) {
     // we are in the middle of a lesson, just go to the next question
     const lesson = GatherFacts.findOne( history[0].lesson_id);
@@ -231,7 +232,14 @@ const getGfLesson = function( student, history, gfInProgress ){
     if ( a.Number > b.Number ) return 1;
     return 0;
   });
-  const lesson = recs[0];
+  let lesson = '';
+  for ( let i=0; i < recs.length; i++ ) {
+    const r = recs[i];
+    if ( ! historyObj[ r._id ] ) {
+      lesson = r;
+      break;
+    }
+  }
   const answers = GatherFactsAnswers.find({ LessonNum: lesson.LessonNum}).fetch();
   return { answers: answers, lesson: lesson };
 };
