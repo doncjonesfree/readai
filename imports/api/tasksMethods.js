@@ -4,7 +4,7 @@ import * as lib from './lib';
 
 var Future = Npm.require("fibers/future");
 import { fetch, Headers } from "meteor/fetch";
-import { getNextLesson, saveLessonHistory, dcSaveLessonHistory, addPoints } from "../../server/lessons"
+import { getNextLesson, getEasierGFLesson, saveLessonHistory, dcSaveLessonHistory, addPoints } from "../../server/lessons"
 import { backupToText, restoreFromText } from '../../server/backup';
 import { checkS3 } from '../../server/utils';
 import { getObject } from '../../server/aws';
@@ -136,6 +136,9 @@ Meteor.methods({
   },
   'saveLessonHistory': function( doc ){
     return saveLessonHistory( doc );
+  },
+  'getEasierGFLesson': function( lesson_id, student_id, GradeLevel ){
+    return getEasierGFLesson( lesson_id, student_id, GradeLevel );
   },
   'getNextLesson': function( StudentId ){
     return getNextLesson( StudentId );

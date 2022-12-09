@@ -202,10 +202,31 @@ export const getNextLesson = function( StudentId ){
   return retObj;
 };
 
+export const getEasierGFLesson = function( lesson_id, student_id, GradeLevel ){
+  // Find a lesson easlier than the one given
+  let lessons = GatherFacts.find({ GradeLevel : { $lt: GradeLevel }}, { sort: { GradeLevel: -1 }}).fetch();
+  if ( lessons.length === 0 ) {
+    lessons = GatherFacts.find({}, { sort: { GradeLevel: 1 }}).fetch();
+  }
+  let history = LessonHistory.find( { student_id: student_id } ).fetch();
+  history = lib.toObject( history );
+  let lesson = '';
+  for ( let i=0; i < lessons.length; i++ ) {
+    const l = lessons[i];
+    if ( ! history[ l._id ]) {
+      lesson = l;
+      break;
+    }
+  }
+  if ( lesson ) {
+    const answers = GatherFactsAnswers.find({ LessonNum: lesson.LessonNum}).fetch();
+    const ret = { answers: answers, lesson: lesson };
+    return { ret: ret, lesson_type: 'gf', student: Students.findOne(student_id) };
+  }
+};
+
 const getGfLesson = function( student, history, gfInProgress ){
   // Get next gf lesson
-  //
-
   const historyObj = lib.toObject(history,'lesson_id');
   if ( gfInProgress ) {
     // we are in the middle of a lesson, just go to the next question

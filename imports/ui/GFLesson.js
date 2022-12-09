@@ -158,6 +158,22 @@ const saveLessonHistory = function(lesson){
 };
 
 Template.GFLesson.events({
+  'click #gf_minus': function(e){
+    // pick an easier gf lesson
+    const GradeLevel = get('lesson').lesson.GradeLevel;
+    const lesson_id = get('lesson').lesson._id;
+    const student_id = get('student')._id;
+    Meteor.call('getEasierGFLesson', lesson_id, student_id, GradeLevel, function(err,results){
+      if ( err ) {
+        console.log('Error: GFLesson.js line 166',err);
+      } else {
+        set('student',results.student);
+        set('name',results.student.name);
+        set('lesson',results.ret);
+        set('mode',1);
+      }
+    });
+  },
   'click #gf_done': function(e){
     const thisQuestion = lib.int($(e.currentTarget).attr('data'));
     let lesson = get('lesson');
