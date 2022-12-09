@@ -14,7 +14,26 @@ Template.master.onCreated(function masterOnCreated() {
   // 1: Show list of options
   // 2: List / Edit users
   setd('mode',1);
+  Meteor.call('loadAllStudents',function(err,results){
+    if ( err ) {
+      console.log('Error: Master.js line 19',err);
+    } else {
+      set('student',results);
+      loadHistoryCount();
+    }
+  });
 });
+
+const loadHistoryCount = function(callback){
+  Meteor.call('historyLessonCount',function(err,results){
+    if ( err ) {
+      console.log('Error: Master.js line 19',err);
+    } else {
+      set('lessonCount',results);
+    }
+    if ( callback ) callback();
+  });
+};
 
 Template.master.helpers({
   mode1() { return get('mode') === 1; },
@@ -26,9 +45,31 @@ Template.master.helpers({
   masterUser(){
     return lib.getCookie('ltrMaster');
   },
+  student(){
+    let op = get('student');
+    const lessonCount = get('lessonCount');
+    if ( ! op ) op = [];
+    for ( let i=0; i < op.length; i++ ) {
+      let o = op[i];
+      o.count = lib.int( lessonCount[ o._id] );
+    }
+    return op;
+  },
 });
 
 Template.master.events({
+  'click .mstr_erase_history'(e){
+    // given student id - erase lessons for that student
+    const id = $(e.currentTarget).attr('data');
+    Meteor.call('historyLessonRemove',id,function(err,results){
+      if ( err ) {
+        console.log('Error: Master.js line 66',err);
+      } else {
+        console.log('historyLessonRemove',results);
+        loadHistoryCount();
+      }
+    });
+  },
   'click #check_email'(e){
     const wait = '...';
     const html = $(e.currentTarget).html();

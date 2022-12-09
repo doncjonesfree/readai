@@ -8,6 +8,7 @@
         <button class="change_mode" data="3">Edit</button>
         <button id="mas_s3">Check S3</button>
         <button id="check_email">Check Email</button>
+        <button class="change_mode" data="4">Erase History for...</button>
       {{ /if }}
 
       {{ #if mode2 }}
@@ -17,6 +18,16 @@
       {{ #if mode3 }}
         {{ > Edit }}
       {{ /if }}
+
+      {{ #if mode4 }}
+        <h1>Erase History</h1>
+        <button class="change_mode" data="1">Back</button>
+
+        {{ #each student }}
+          <br>{{ name }} {{ count }} &nbsp; <i class="fa-solid fa-trash icon mstr_erase_history" data="{{ _id }}"></i>
+        {{ /each }}
+      {{ /if }}
+
     {{ else }}
       Permission denied
     {{ /if }}

@@ -172,6 +172,30 @@ Meteor.methods({
     addPoints( recs );
     return recs;
   },
+  'loadAllStudents': function(){
+    return Students.find( {}, { sort: { name: 1 }}).fetch();
+  },
+  'historyLessonRemove': function(id){
+    // given student id - erase all history for that student
+    let retObj = { id: id, removed: 0 };
+    const recs = LessonHistory.find({ student_id: id },{ fields: { student_id: 1 }}).fetch();
+    for ( let i=0; i < recs.length; i++ ) {
+      const r = recs[i];
+      LessonHistory.remove(r._id);
+      retObj.removed += 1;
+    }
+    return retObj;
+  },
+  'historyLessonCount': function(){
+    const recs = LessonHistory.find({},{ fields: { student_id: 1 }}).fetch();
+    let obj = {};
+    for ( let i=0; i < recs.length; i++ ) {
+      const r = recs[i];
+      if ( ! obj[ r.student_id] ) obj[ r.student_id] = 0;
+      obj[ r.student_id] += 1;
+    }
+    return obj;
+  },
   'deleteUser': function(id){
     const doc = { inactive: true };
     Users.update(id, { $set: doc });
