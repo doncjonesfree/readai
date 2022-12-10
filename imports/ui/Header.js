@@ -6,25 +6,78 @@ const get = function(n) { return Session.get(pre + n )};
 const set = function(n,v) { Session.set(pre + n,v) };
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
-const refresh = function(n){
+const refresh = function(arg){
+  const n = sprintf('refresh_%s',arg)
   let v = get(n);
   if ( typeof(v) === 'undefined') v = 0;
   set(n,v+1);
 };
 
-const getRefresh = function(n){
+const getRefresh = function(arg){
+  const n = sprintf('refresh_%s',arg)
   return get(n);
+};
+
+const enterPin = function(pinError){
+  // const pinError = { msg: 'Sorry, incorrect pin', pin: pin };
+  set('pinResponse','');
+  let list = [];
+  list.push( { msg: '' } );
+  let pin = '';
+  if ( pinError ) pin = pinError.pin;
+  const obj = { label: 'Pin #', id: "pin", value: pin, title: 'Enter pin # to go into supervisor mode'};
+  // { label: id: placeholder: value:, title }
+  list.push( { msg: lib.inputHtml(obj) } );
+  if ( pinError ) {
+    list.push( { msg: sprintf('<div class="error">%s</div>',pinError.msg) } );
+  }
+  let options = {};
+  options.setVariables = [ { name: 'header_showMessage', value: false } ];
+  options.title = 'Teacher / Supervisor Mode';
+  options.messages = list;
+  options.setResponse = 'header_pinResponse';
+  options.buttons = [];
+  options.buttons.push( { label: 'Submit', value: 1, cls: 'button' });
+  options.buttons.push( { label: 'Cancel', value: 0, cls: 'button button-cancel' });
+  Meteor.setTimeout(function(){
+    Session.set('Message_options',options);
+    set('showMessage',true);
+    lib.focus('#pin');
+  },400);
+};
+
+const setSupervisorMode = function(){
+  // set supervisor mode if pin is correct
+  const user = lib.getCookie('ltrSignin');
+  const pin = lib.int( $('#pin').val() );
+  console.log('jones23',user.pin,pin);
+  if ( user.pin === pin ) {
+    lib.setCookie('ltrSupervisor',true);
+    refresh('supervisor');
+    console.log('jones23',user.pin,pin);
+  } else {
+    const pinError = { msg: 'Sorry, incorrect pin', pin: pin };
+    enterPin( pinError );
+  }
 };
 
 let Student = '';
 Template.header.helpers({
+  pinResponse(){
+    if ( lib.int(get('pinResponse')) === 1 ) setSupervisorMode();
+  },
+  showMessage(){ return get('showMessage')},
+  supervisor(){
+    const dmy = getRefresh('supervisor');
+    return lib.getCookie('ltrSupervisor');
+  },
   activeLesson() {
     const list = ['Lesson','Progress'];
     return list.indexOf( FlowRouter.getRouteName() ) >= 0;
   },
   user_info() {
     const dmy = getRefresh('user_info');
-    const u = Session.get('currentUser');
+    const u = lib.getCookie('ltrSignin');
     const masterUser = lib.getCookie('ltrMaster');
     if ( ! u ) {
       return { user: false, masterUser: masterUser };
@@ -54,6 +107,9 @@ Template.header.helpers({
 });
 
 Template.header.events({
+  'click .enter_pin'(e){
+    enterPin();
+  },
   'click .myaccount'(e){
     FlowRouter.go('myaccount');
   },

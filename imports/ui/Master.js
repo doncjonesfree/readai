@@ -58,12 +58,22 @@ Template.master.helpers({
 });
 
 Template.master.events({
+  'click #mas_special'(e){
+    // special purpose
+    Meteor.call('special',function(err,results){
+      if ( err ) {
+        console.log('Error: Master.js line 66',err);
+      } else {
+        console.log('special',results);
+      }
+    });
+  },
   'click .mstr_erase_history'(e){
     // given student id - erase lessons for that student
     const id = $(e.currentTarget).attr('data');
     Meteor.call('historyLessonRemove',id,function(err,results){
       if ( err ) {
-        console.log('Error: Master.js line 66',err);
+        console.log('Error: Master.js line 77',err);
       } else {
         console.log('historyLessonRemove',results);
         loadHistoryCount();

@@ -131,6 +131,24 @@ export const inputCheckboxHtml = function(obj){
   return html.join('\n');
 };
 
+const justInfoHtml = function(obj){
+  // { label: placeholder: value:, title }
+  let html = [];
+  html.push( '<div class="input-wrapper">');
+    let ph = '';
+    if ( obj.placeholder ) ph = sprintf(' placeholder="%s"',obj.placeholder);
+    let title = '';
+    if ( obj.title ) title = sprintf(' title="%s"',obj.title);
+    if ( ! obj.value ) obj.value = '';
+    if ( obj.label ) {
+      html.push( sprintf('<label class="input-label" for="%s">%s</label>',obj.id,obj.label));
+    }
+    html.push( sprintf('<input class="input-text" type="text" id="%s" value="%s" %s%s disabled>',obj.id,obj.value,ph,title));
+  html.push( '</div>');
+
+  return html.join('\n');
+};
+
 export const inputHtml = function(obj){
   // { label: id: placeholder: value:, title }
   let html = [];
@@ -162,6 +180,9 @@ export const flexEntryHtml = function(list){
       html.push( buttonHtml( l ) );
     } else if ( l.checkbox ) {
       html.push( inputCheckboxHtml( { id: l.id, label: l.label, title: l.message, value: l.value } ) );
+    } else if ( l.just_info ) {
+      // just showing data - cannot edit
+      html.push( justInfoHtml( { label: l.label, title: l.message, value: l.value } ) );
     } else {
       // { label: id: placeholder: value:, title }
       html.push( inputHtml( { id: l.id, label: l.label, title: l.message, value: l.value } ) );
@@ -227,7 +248,21 @@ export const docFromFields = function( list ){
   let error = '';
   for ( let i=0; i < list.length; i++ ) {
     const l = list[i];
-    if ( ! l.button ) {
+    if ( l.just_info ) {
+      doc[ l.id ] = l.data;
+    } else if ( l.type === 'pin'){
+      // 4 digit pin
+      let v = $('#'+l.id).val();
+      doc[ l.id ] = v;
+      if ( ! error && ! verifyInteger(v) ) error = 'Pin must be a 4 digit #';
+      if ( ! error ) {
+        v = int(v);
+        if ( ! error && v <= 0 ) error = 'Pin must be positive';
+        if ( ! error && v > 9999 ) error = 'Pin must be a 4 digit #';
+        if ( ! error && v < 1000 ) error = 'Pin must be a 4 digit #';
+        if ( ! error ) doc[ l.id ] = v;
+      }
+    } else if ( ! l.button ) {
       if ( $('#'+l.id).attr('type') === 'checkbox') {
         const v = $('#'+l.id).is(':checked');
         doc[ l.id ] = v;

@@ -1,0 +1,32 @@
+.msg_title {
+  font-weight: bold;
+  font-size: 1.6em;
+  margin-bottom: 0em;
+}
+
+.msg_list {
+  margin-top: .5em;
+  margin-bottom: .5em;
+}
+
+.message_popup {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,.4);
+  z-index: 10;
+}
+
+.message_popup_inside{
+  position: relative;
+  border: 2px solid black;
+  border-radius: .5em;
+  padding: 25px;
+  margin: 20% 25% 0 25%;
+  background-color: white;
+  max-height: 350px;
+  overflow: scroll;
+  z-index: 11;
+}

@@ -1,0 +1,11 @@
+<template name="Message">
+  <div class="message_popup">
+    <div class="message_popup_inside">
+       <div class="msg_title">{{ title }}</div>
+       {{ #each list }}
+         <div class="msg_list">{{{ msg }}}</div>
+       {{ /each }}
+       {{{ buttons }}}
+    </div>
+  </div>
+</template>

@@ -15,6 +15,12 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  special: function(){
+    // special purpose - run by master
+    return 'Special is not active';
+    // Users.remove("YnSgvz6gyvJJB4tDn");
+    // return Users.find().fetch();
+  },
   sendEmail: function( data ){
     // data = { from: to: subject: text: }
 

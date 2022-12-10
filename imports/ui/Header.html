@@ -15,7 +15,11 @@
              {{ #if masterUser }}
                <div class="nav-element signout">sign out ({{ user_name }})</div>
              {{ else }}
-               <div class="nav-element myaccount">my account</div>
+               {{ #if supervisor }}
+                 <div class="nav-element myaccount">my account</div>
+               {{ else }}
+               <div class="nav-element enter_pin">enter pin</div>
+               {{ /if }}
                <div class="nav-element signout">sign out ({{ user_name }})</div>
              {{ /if }}
            {{ else }}
@@ -33,4 +37,8 @@
       </div>
     </div>
   </div>
+  {{ #if showMessage }}
+    {{ > Message }}
+  {{ /if }}
+  <input type="hidden" value="{{ pinResponse}}">
 </template>

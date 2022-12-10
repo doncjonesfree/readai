@@ -67,9 +67,11 @@ const signin = function(id ){
           } else {
             if ( master && Meteor.isDevelopment ) {
               lib.setCookie('ltrMaster',true );
+              lib.setCookie('ltrSupervisor',true );
               FlowRouter.go('master');
             } else {
               lib.setCookie('ltrMaster',false );
+              lib.setCookie('ltrSupervisor',false );
               FlowRouter.go('home');
             }
           }

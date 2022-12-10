@@ -32,6 +32,8 @@ import "./Backup.html";
 import "./Backup.js";
 import "./MyAccount.html";
 import "./MyAccount.js";
+import "./Message.html";
+import "./Message.js";
 
 const IS_LOADING_STRING = "isLoading";
 

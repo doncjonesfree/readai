@@ -28,7 +28,8 @@ const getFields = function(){
   let op = [];
   op.push( { label: 'First Name *', type: 'text', required: true, value: getValue(doc,'first_name'), id: 'first_name', message: "you can enter just first name if you like" })
   op.push( { label: 'Last Name', type: 'text', required: false, value: getValue(doc,'last_name'), id: 'last_name' })
-  op.push( { label: 'Email *', type: 'text', required: true, value: getValue(doc,'email'), id: 'email' })
+  op.push( { label: 'Email *', type: 'email', required: true, value: getValue(doc,'email'), id: 'email' })
+  op.push( { label: '4 Digit Pin *', type: 'pin', required: true, value: getValue(doc,'pin'), id: 'pin', message: 'Unlocks parent/supervisor options' })
   const button2 = '';
   op.push( { button: 'Submit', id: 'signup_submit', error: get('error'), button2: button2  } );
   return op;
