@@ -21,11 +21,15 @@ Meteor.methods({
   special: function(){
     // special purpose - run by master
 
-    // let retObj = {};
+    let retObj = {};
     // Users.remove("EvYA7tLewwHZLa9iJ")
     // Students.remove("kCWcXtyTm3usskdW8")
     // retObj.users = Users.find().fetch();
     // retObj.students = Students.find().fetch();
+    // retObj.history = LessonHistory.find({ student_id: 'kCWcXtyTm3usskdW8'}).fetch();
+    // for ( let i=0; i < retObj.history.length; i++ ) {
+    //   LessonHistory.remove(retObj.history[i]._id);
+    // }
     // return retObj;
 
     // Users.remove("NbLsEmJTJZjoxRZSs");

@@ -207,13 +207,13 @@ export const getEasierGFLesson = function( lesson_id, student_id, GradeLevel, di
   // direction = 'easier' or 'harder'
   let lessons;
   if ( direction === 'easier') {
-    lessons = GatherFacts.find({ GradeLevel : { $lt: GradeLevel }}, { sort: { GradeLevel: -1 }}).fetch();
+    lessons = GatherFacts.find({ GradeLevel : { $lt: GradeLevel }}, { sort: { GradeLevel: -1 }, limit: 10}).fetch();
     if ( lessons.length === 0 ) {
       lessons = GatherFacts.find({}, { sort: { GradeLevel: 1 }}).fetch();
     }
   } else {
     // harder
-    lessons = GatherFacts.find({ GradeLevel : { $gt: GradeLevel }}, { sort: { GradeLevel: 1 }}).fetch();
+    lessons = GatherFacts.find({ GradeLevel : { $gt: GradeLevel }}, { sort: { GradeLevel: 1 }, limit: 10 }).fetch();
     if ( lessons.length === 0 ) {
       lessons = GatherFacts.find({}, { sort: { GradeLevel: -1 }}).fetch();
     }
