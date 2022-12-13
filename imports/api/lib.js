@@ -1,6 +1,8 @@
 import { Cookies } from 'meteor/ostrio:cookies';
 const cookies = new Cookies();
 
+export const emailFrom = 'support@ltrfree.com';
+
 export const dateFormat = 'YYYY-MM-DD HH:mm:ss';
 export const today = function() {
     // pacific time zone
@@ -173,11 +175,13 @@ export const inputHtml = function(obj){
       if ( obj.placeholder ) ph = sprintf(' placeholder="%s"',obj.placeholder);
       let title = '';
       if ( obj.title ) title = sprintf(' title="%s"',obj.title);
+      let ac = ''; // autocomplete
+      if ( obj.autocomplete ) ac = sprintf('autocomplete = "%s"',obj.autocomplete);
       if ( ! obj.value ) obj.value = '';
       if ( obj.label ) {
         html.push( sprintf('<label class="input-label" for="%s">%s</label>',obj.id,obj.label));
       }
-      html.push( sprintf('<input class="input-text" type="text" id="%s" value="%s"%s%s>',obj.id,obj.value,ph,title))
+      html.push( sprintf('<input class="input-text" type="text" id="%s" value="%s"%s%s%s>',obj.id,obj.value,ph,title,ac))
     html.push( '</div>');
   //html.push('</form>');
 
@@ -453,7 +457,7 @@ const sendMissingWordEmail = function( url ){
   }
   word = word.replace('.mp3','');
   let data = {};
-  data.from = 'support@ltrfree.com';
+  data.from = emailFrom;
   data.to = 'doncjones1@gmail.com';
   data.subject = sprintf('Don, "%s" is a missing %s',word,type);
   let lines = [];

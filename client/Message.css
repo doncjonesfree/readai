@@ -23,10 +23,21 @@
   position: relative;
   border: 2px solid black;
   border-radius: .5em;
-  padding: 25px;
-  margin: 20% 25% 0 25%;
   background-color: white;
-  max-height: 350px;
   overflow: scroll;
   z-index: 11;
+
+  /* small screen */
+  padding: 5px;
+  margin: 30% 5% 0 5%;
+  max-height: 350px;
+}
+
+@media screen and (min-width: 50em) {
+  /* big screen */
+  div.message_popup_inside {
+    padding: 25px;
+    margin: 20% 25% 0 25%;
+    max-height: 350px;
+  }
 }

@@ -22,10 +22,12 @@ const enterPin = function(pinError){
   // const pinError = { msg: 'Sorry, incorrect pin', pin: pin };
   set('pinResponse','');
   let list = [];
+  list.push( { msg: 'If you forgot your pin, click <a href="#" id="email_pin">email pin</a>.' } );
+  list.push( { msg: 'Check Spam and "All Mail" if you do not see the email.' } );
   list.push( { msg: '' } );
   let pin = '';
   if ( pinError ) pin = pinError.pin;
-  const obj = { label: 'Pin #', id: "pin", value: pin, title: 'Enter pin # to go into supervisor mode'};
+  const obj = { autocomplete: 'off', label: 'Pin #', id: "pin", value: pin, title: 'Enter pin # to go into supervisor mode'};
   // { label: id: placeholder: value:, title }
   list.push( { msg: lib.inputHtml(obj) } );
   if ( pinError ) {
@@ -82,8 +84,6 @@ Template.header.helpers({
     const dmy = getRefresh('user_info');
     const u = lib.getCookie('ltrSignin');
     const masterUser = lib.getCookie('ltrMaster');
-    console.log('jones85a',u);
-    console.log('jones85b',masterUser);
     if ( ! u ) {
       return { user: false, masterUser: masterUser };
     } else {
@@ -112,6 +112,37 @@ Template.header.helpers({
 });
 
 Template.header.events({
+  'click #email_pin'(e){
+    const wait = 'email sent!';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    const user = lib.getCurrentUser();
+
+    let lines = [];
+    lines.push( sprintf('%s,', user.first_name));
+    lines.push('');
+    lines.push(sprintf('Your pin # is %s',user.pin));
+    lines.push('');
+    lines.push('Thank for using our website!');
+    lines.push('');
+    lines.push('Learn to Read Support');
+    let data = {};
+    data.from = lib.emailFrom;
+    data.to = user.email;
+    data.subject = sprintf('%s, here is the pin # you requested', user.first_name);
+    data.text = lines.join('\n');
+
+    // data = { from: to: subject: text: }
+    $(e.currentTarget).html(wait);
+    Meteor.call('sendEmail', data, function(err,results){
+      if ( err ) {
+        console.log('Error in Header.js line 131',err);
+      }
+      Meteor.setTimeout(function(){
+        $(e.currentTarget).html(html);
+      },2000);
+    });
+  },
   'click .hdr_lock'(e){
     e.stopPropagation();
     const v = lib.int( $(e.currentTarget).attr('data')); // 1=enter supervisor mode
