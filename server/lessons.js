@@ -202,11 +202,21 @@ export const getNextLesson = function( StudentId ){
   return retObj;
 };
 
-export const getEasierGFLesson = function( lesson_id, student_id, GradeLevel ){
+export const getEasierGFLesson = function( lesson_id, student_id, GradeLevel, direction ){
   // Find a lesson easlier than the one given
-  let lessons = GatherFacts.find({ GradeLevel : { $lt: GradeLevel }}, { sort: { GradeLevel: -1 }}).fetch();
-  if ( lessons.length === 0 ) {
-    lessons = GatherFacts.find({}, { sort: { GradeLevel: 1 }}).fetch();
+  // direction = 'easier' or 'harder'
+  let lessons;
+  if ( direction === 'easier') {
+    lessons = GatherFacts.find({ GradeLevel : { $lt: GradeLevel }}, { sort: { GradeLevel: -1 }}).fetch();
+    if ( lessons.length === 0 ) {
+      lessons = GatherFacts.find({}, { sort: { GradeLevel: 1 }}).fetch();
+    }
+  } else {
+    // harder
+    lessons = GatherFacts.find({ GradeLevel : { $gt: GradeLevel }}, { sort: { GradeLevel: 1 }}).fetch();
+    if ( lessons.length === 0 ) {
+      lessons = GatherFacts.find({}, { sort: { GradeLevel: -1 }}).fetch();
+    }
   }
   let history = LessonHistory.find( { student_id: student_id } ).fetch();
   history = lib.toObject( history );

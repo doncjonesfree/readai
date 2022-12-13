@@ -146,8 +146,8 @@ Meteor.methods({
   'saveLessonHistory': function( doc ){
     return saveLessonHistory( doc );
   },
-  'getEasierGFLesson': function( lesson_id, student_id, GradeLevel ){
-    return getEasierGFLesson( lesson_id, student_id, GradeLevel );
+  'getEasierGFLesson': function( lesson_id, student_id, GradeLevel, direction ){
+    return getEasierGFLesson( lesson_id, student_id, GradeLevel, direction );
   },
   'getNextLesson': function( StudentId ){
     return getNextLesson( StudentId );
