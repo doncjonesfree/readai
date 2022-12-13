@@ -1,9 +1,15 @@
 import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 import { Session } from 'meteor/session';
+import * as lib from '../api/lib';
+
+const isSupervisor = function(){
+  return lib.int( Session.get('supervisor') );
+};
 
 FlowRouter.route('/', {
   name: 'home',
   action(params, queryParams) {
+    lib.getSupervisorMode();
     BlazeLayout.render('mainContainer', {main: 'Home'});
   }
 });
@@ -11,6 +17,7 @@ FlowRouter.route('/', {
 FlowRouter.route('/signup', {
   name: 'Signup',
   action(params, queryParams) {
+    lib.getSupervisorMode();
     BlazeLayout.render('mainContainer', {main: 'Signup'});
   }
 });
@@ -18,6 +25,7 @@ FlowRouter.route('/signup', {
 FlowRouter.route('/myaccount', {
   name: 'MyAccount',
   action(params, queryParams) {
+    lib.getSupervisorMode();
     BlazeLayout.render('mainContainer', {main: 'MyAccount'});
   }
 });
@@ -25,6 +33,7 @@ FlowRouter.route('/myaccount', {
 FlowRouter.route('/master', {
   name: 'Master',
   action(params, queryParams) {
+    lib.getSupervisorMode();
     BlazeLayout.render('mainContainer', {main: 'master'});
   }
 });
@@ -32,6 +41,7 @@ FlowRouter.route('/master', {
 FlowRouter.route('/backup', {
   name: 'Backup',
   action(params, queryParams) {
+    lib.getSupervisorMode();
     BlazeLayout.render('mainContainer', {main: 'Backup'});
   }
 });
@@ -39,6 +49,7 @@ FlowRouter.route('/backup', {
 FlowRouter.route('/lesson', {
   name: 'Lesson',
   action(params, queryParams) {
+    lib.getSupervisorMode();
     BlazeLayout.render('mainContainer', {main: 'Lesson'});
   }
 });
@@ -46,13 +57,19 @@ FlowRouter.route('/lesson', {
 FlowRouter.route('/progress', {
   name: 'Progress',
   action(params, queryParams) {
-    BlazeLayout.render('mainContainer', {main: 'Progress'});
+    lib.getSupervisorMode();
+    if ( isSupervisor() ) {
+      BlazeLayout.render('mainContainer', {main: 'Progress'});
+    } else {
+      BlazeLayout.render('mainContainer', {main: 'Home'});
+    }
   }
 });
 
 FlowRouter.route('/signin', {
   name: 'Signin',
   action(params, queryParams) {
+    lib.getSupervisorMode();
     BlazeLayout.render('mainContainer', {main: 'Signin'});
   }
 });
@@ -60,6 +77,7 @@ FlowRouter.route('/signin', {
 FlowRouter.route('/edit', {
   name: 'Edit',
   action(params, queryParams) {
+    lib.getSupervisorMode();
     BlazeLayout.render('mainContainer', {main: 'Edit'});
   }
 });
@@ -67,6 +85,7 @@ FlowRouter.route('/edit', {
 FlowRouter.route('/lists/:_id', {
   name: 'Lists.show',
   action(params, queryParams) {
+    lib.getSupervisorMode();
     BlazeLayout.render('mainContainer', {main: 'Lists_show_page'});
   }
 });

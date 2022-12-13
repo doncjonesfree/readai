@@ -33,6 +33,7 @@ const enterPin = function(pinError){
   }
   let options = {};
   options.setVariables = [ { name: 'header_showMessage', value: false } ];
+  options.getVariables = [ { name: 'header_pin', id: '#pin' }];
   options.title = 'Teacher / Supervisor Mode';
   options.messages = list;
   options.setResponse = 'header_pinResponse';
@@ -46,31 +47,33 @@ const enterPin = function(pinError){
   },400);
 };
 
-const setSupervisorMode = function(){
-  // set supervisor mode if pin is correct
-  const user = lib.getCookie('ltrSignin');
-  const pin = lib.int( $('#pin').val() );
-  console.log('jones23',user.pin,pin);
-  if ( user.pin === pin ) {
-    lib.setCookie('ltrSupervisor',true);
-    refresh('supervisor');
-    console.log('jones23',user.pin,pin);
-  } else {
-    const pinError = { msg: 'Sorry, incorrect pin', pin: pin };
-    enterPin( pinError );
-  }
+const isPinValid = function(v){
+  const user = lib.getCurrentUser();
+  if ( user && user.pin === v ) return true;
+  return false;
 };
 
 let Student = '';
 Template.header.helpers({
   pinResponse(){
-    if ( lib.int(get('pinResponse')) === 1 ) setSupervisorMode();
+    if ( lib.int(get('pinResponse')) === 1 ) {
+      // submit`
+      // we are trying to turn on supervisor mode - need to check pin #
+      const v = lib.int( get('pin'));
+      if ( isPinValid(v) ) {
+        lib.setSupervisorMode(1);
+      } else {
+        let pinError = {};
+        pinError.pin = v;
+        pinError.msg = 'Invalid Pin #';
+        enterPin( pinError );
+      }
+    }
+  },
+  supervisor(){
+    return Session.get('supervisor');
   },
   showMessage(){ return get('showMessage')},
-  supervisor(){
-    const dmy = getRefresh('supervisor');
-    return lib.getCookie('ltrSupervisor');
-  },
   activeLesson() {
     const list = ['Lesson','Progress'];
     return list.indexOf( FlowRouter.getRouteName() ) >= 0;
@@ -107,8 +110,16 @@ Template.header.helpers({
 });
 
 Template.header.events({
+  'click .hdr_lock'(e){
+    e.stopPropagation();
+    const v = lib.int( $(e.currentTarget).attr('data')); // 1=enter supervisor mode
+    if ( v ) {
+      enterPin();
+    } else {
+      lib.setSupervisorMode(v);
+    }
+  },
   'click .enter_pin'(e){
-    enterPin();
   },
   'click .myaccount'(e){
     FlowRouter.go('myaccount');

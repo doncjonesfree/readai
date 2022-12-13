@@ -16,6 +16,21 @@ export const getCookie = function(key){
   return cookies.get(key)
 };
 
+export const setSupervisorMode = function(v){
+  setCookie('ltrSupervisor',v);
+  Session.set('supervisor',v);
+};
+
+export const getSupervisorMode = function(){
+  // get the supervisor mode and set session variable
+  const v = int( getCookie('ltrSupervisor') );
+  Session.set('supervisor',v);
+};
+
+export const getSupervisorValue = function(){
+  return Session.get('supervisor');
+};
+
 export const prettyDate = function(d) {
   return moment(d,dateFormat).format('ddd MM/DD/YY h:mm a');
 };

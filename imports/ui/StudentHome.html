@@ -5,7 +5,9 @@
 
   {{ #if mode2 }}
     <div class="nav-container nav-container-left">
+      {{ #if supervisor }}
         <div class="nav-element sh_change_mode" data="3">Add a Student</div>
+      {{ /if }}
       {{ #if inactive_count }}
         <div class="nav-element sh_restore_inactive">Restore Inactive Students ({{ inactive_count }})</div>
       {{ /if }}
@@ -20,13 +22,15 @@
           <div class="sh_student_flex">
             <div class="sh_student sh_student_link" data="{{ _id }}" title="start next lesson">start lesson</div>
           </div>
-          <div class="sh_student_flex">
-            <div class="sh_student_edit sh_student_link" data="{{ _id }}" title="modify name or points awards">edit</div>
-            &nbsp;
-            <div class="sh_student_delete sh_student_link" data="{{ _id }}" title="mark student inactive">delete</div>
-            &nbsp;
-            <div class="sh_student_progress sh_student_link" data="{{ _id }}" title="view student progress">progress</div>
-          </div>
+          {{ #if supervisor }}
+            <div class="sh_student_flex">
+              <div class="sh_student_edit sh_student_link" data="{{ _id }}" title="modify name or points awards">edit</div>
+              &nbsp;
+              <div class="sh_student_delete sh_student_link" data="{{ _id }}" title="mark student inactive">delete</div>
+              &nbsp;
+              <div class="sh_student_progress sh_student_link" data="{{ _id }}" title="view student progress">progress</div>
+            </div>
+          {{ /if }}
         </div>
       {{ /each }}
       </div>

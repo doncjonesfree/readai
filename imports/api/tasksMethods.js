@@ -15,6 +15,9 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  isPinValid: function( v, user ){
+    return v === user.pin;
+  },
   special: function(){
     // special purpose - run by master
     return 'Special is not active';

@@ -71,6 +71,9 @@ Template.StudentHome.helpers({
   mode2() { return get('mode') === 2; },
   mode3() { return get('mode') === 3; },
   mode4() { return get('mode') === 4; },
+  supervisor(){
+    return lib.getSupervisorValue()
+  },
   addingStudent() {
     if ( get('student_id') ) return false;
     return true;

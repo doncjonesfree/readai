@@ -17,20 +17,21 @@
              {{ else }}
                {{ #if supervisor }}
                  <div class="nav-element myaccount">my account</div>
-               {{ else }}
-               <div class="nav-element enter_pin">enter pin</div>
                {{ /if }}
-               <div class="nav-element signout">sign out ({{ user_name }})</div>
+               <div class="nav-element signout">
+                 sign out ({{ user_name }})
+                 {{ #if supervisor }}
+                   <i class="fa-solid fa-lock-open icon hdr_lock" data="0" title="exit supervisor mode"></i>
+                 {{ else }}
+                   <i class="fa-solid fa-lock icon hdr_lock" data="1" title="click to turn on supervisor mode"></i>
+                 {{ /if }}
+               </div>
              {{ /if }}
            {{ else }}
-             {{ #if isMasterUser }}
-               <div class="nav-element signout">sign out (Master)</div>
-             {{ else }}
-               <div class="nav-element">about us</div>
-               <div class="nav-element">donate</div>
-               <div class="nav-element" id="signup">sign up (free)</div>
-               <div class="nav-element" id="signin">sign in</div>
-             {{ /if }}
+             <div class="nav-element">about us</div>
+             <div class="nav-element">donate</div>
+             <div class="nav-element" id="signup">sign up (free)</div>
+             <div class="nav-element" id="signin">sign in</div>
            {{ /if }}
           {{ /with }}
         {{ /if }}
