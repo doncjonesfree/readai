@@ -61,6 +61,11 @@ const studentFields = function(){
   let checked = '';
   if ( doc.award_points ) checked = 'checked';
   op.push( { label: 'Award Points', checkbox: true, value: checked, id: 'award_points', message: 'Award points for correct answers' })
+
+  checked = '';
+  if ( doc.set_difficulty ) checked = 'checked';
+  op.push( { label: 'Set Difficulty', checkbox: true, value: checked, id: 'set_difficulty', message: 'Student can alter lesson difficulty' })
+
   const button2 = { button: 'Cancel', cls: 'sh_change_mode button-cancel', data: '2'};
   op.push( { button: 'Save', id: 'student_save', error: get('error'), button2: button2  } );
   return op;
