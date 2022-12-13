@@ -47,7 +47,6 @@ Template.GFLesson.helpers({
   mode3() { return get('mode') === 3; },
   set_difficulty(){
     const student = get('student');
-    console.log('jones50',student);
     return student.set_difficulty;
   },
   points() {

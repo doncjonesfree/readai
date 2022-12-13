@@ -3,6 +3,10 @@
     <h1>
       Drawing Conclusions Lesson
       <i class="fa-solid fa-circle-question icon" id="dc_help"></i>
+      {{ #if set_difficulty }}
+        <i class="fa-solid fa-circle-minus icon dc_minus" data="easier" title="find an easier lesson"></i>
+        <i class="fa-solid fa-circle-plus icon dc_minus" data="harder" title="find a harder lesson"></i>
+      {{ /if }}
     </h1>
 
     {{ #with lesson }}

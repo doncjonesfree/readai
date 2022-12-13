@@ -52,6 +52,10 @@ export const addDcAnswerCheckbox = function(l){
 Template.DCLesson.helpers({
   mode1: function(){ return get('mode') === 1 },
   mode2: function(){ return get('mode') === 2 },
+  set_difficulty(){
+    const student = lib.getCookie('student');
+    return student.set_difficulty;
+  },
   done_button: function(){
     if ( onLastQuestion() ) {
       return 'Done';
@@ -109,6 +113,38 @@ const loadNextQuestion = function(){
 };
 
 Template.DCLesson.events({
+  'click .dc_minus': function(e){
+    // pick an easier gf lesson
+    const direction = $(e.currentTarget).attr('data'); // easier / harder
+    const classes = $(e.currentTarget).attr('class');
+    const wait = 'fa-circle-pause';
+    if ( classes.indexOf(wait) >= 0 ) return;
+    let cls;
+    if ( direction === 'easier') {
+      cls = 'fa-circle-minus';
+    } else {
+      cls = 'fa-circle-plus';
+    }
+    $(e.currentTarget).removeClass(cls);
+    $(e.currentTarget).addClass(wait);
+
+    const GradeLevel = get('lesson').GradeLevel;
+    const lesson_id = get('lesson')._id;
+    const student = lib.getCookie('student');
+    const student_id = student._id;
+    Meteor.call('getEasierDCLesson', lesson_id, student_id, GradeLevel, direction, function(err,results){
+      $(e.currentTarget).removeClass(wait);
+      $(e.currentTarget).addClass(cls);
+      if ( err ) {
+        console.log('Error: DCLesson.js line 139',err);
+      } else {
+        let obj = results.ret[0];
+        obj.incorrect_count = 0;
+        Session.set('DCLesson_lesson',obj);
+        set('mode',1);
+      }
+    });
+  },
   'click #dc_done': function(e){
     e.stopPropagation();
     e.preventDefault();

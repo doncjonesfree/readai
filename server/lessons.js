@@ -218,8 +218,8 @@ export const getEasierGFLesson = function( lesson_id, student_id, GradeLevel, di
       lessons = GatherFacts.find({}, { sort: { GradeLevel: -1 }}).fetch();
     }
   }
-  let history = LessonHistory.find( { student_id: student_id } ).fetch();
-  history = lib.toObject( history );
+  let history = LessonHistory.find( { student_id: student_id, lesson_type: 'gf' } ).fetch();
+  history = lib.toObject( history, 'lesson_id' );
   let lesson = '';
   for ( let i=0; i < lessons.length; i++ ) {
     const l = lessons[i];
@@ -273,6 +273,41 @@ const getGfLesson = function( student, history, gfInProgress ){
   }
   const answers = GatherFactsAnswers.find({ LessonNum: lesson.LessonNum}).fetch();
   return { answers: answers, lesson: lesson };
+};
+
+export const getEasierDCLesson = function( lesson_id, student_id, GradeLevel, direction ){
+  // Find a lesson easlier than the one given
+  // direction = 'easier' or 'harder'
+  let lessons;
+  if ( direction === 'easier') {
+    lessons = DrawConclusions.find({ GradeLevel : { $lt: GradeLevel }, QuestionNum: 1}, { sort: { GradeLevel: -1 }, limit: 10}).fetch();
+    if ( lessons.length === 0 ) {
+      lessons = DrawConclusions.find({}, { sort: { GradeLevel: 1 }, QuestionNum: 1 }).fetch();
+    }
+  } else {
+    // harder
+    lessons = DrawConclusions.find({ GradeLevel : { $gt: GradeLevel }, QuestionNum: 1 }, { sort: { GradeLevel: 1 }, limit: 10 }).fetch();
+    if ( lessons.length === 0 ) {
+      lessons = DrawConclusions.find({}, { sort: { GradeLevel: -1 }, QuestionNum: 1 }).fetch();
+    }
+  }
+  let history = LessonHistory.find( { student_id: student_id, lesson_type: 'dc' } ).fetch();
+  history = lib.toObject( history, 'lesson_id' );
+  let lesson = '';
+  for ( let i=0; i < lessons.length; i++ ) {
+    const l = lessons[i];
+    if ( ! history[ l._id ]) {
+      lesson = l;
+      break;
+    }
+  }
+  if ( lesson ) {
+    const ret = DrawConclusions.find({ Shape: lesson.Shape, Number: lesson.Number, GradeLevel: lesson.GradeLevel },{sort: { QuestionNum: 1 } }).fetch();
+    let retObj = {};
+    retObj.lesson_type = 'dc';
+    retObj.ret = ret;
+    return retObj;
+  }
 };
 
 const getDcLesson = function( student, history ){
