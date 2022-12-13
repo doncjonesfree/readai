@@ -25,6 +25,14 @@ const getValue = function(doc,id){
 const accountFields = function(){
   const doc = get('doc');
   let op = [];
+
+  let list = [];
+  list.push('First Name and Email are required.');
+  list.push('The 4 digit pin is required to enable "teacher" or "supervisor" mode.');
+  list.push('In teacher/supervisor mode you can add students, view progress and quiz on words.');
+  list.push('This website is free of charge!');
+  op.push( { paragraph: list });
+
   op.push( { label: 'First Name *', type: 'text', required: true, value: getValue(doc,'first_name'), id: 'first_name', message: "you can enter just first name if you like" })
   op.push( { label: 'Last Name', type: 'text', required: false, value: getValue(doc,'last_name'), id: 'last_name' })
   op.push( { label: 'Email *', type: 'email', required: true, value: getValue(doc,'email'), id: 'email' })

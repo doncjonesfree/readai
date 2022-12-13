@@ -20,9 +20,18 @@ Meteor.methods({
   },
   special: function(){
     // special purpose - run by master
-    return 'Special is not active';
-    // Users.remove("YnSgvz6gyvJJB4tDn");
+
+    // let retObj = {};
+    // Users.remove("EvYA7tLewwHZLa9iJ")
+    // Students.remove("kCWcXtyTm3usskdW8")
+    // retObj.users = Users.find().fetch();
+    // retObj.students = Students.find().fetch();
+    // return retObj;
+
+    // Users.remove("NbLsEmJTJZjoxRZSs");
     // return Users.find().fetch();
+
+    return 'Special is not active';
   },
   sendEmail: function( data ){
     // data = { from: to: subject: text: }

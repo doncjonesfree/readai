@@ -390,6 +390,11 @@ body {
   margin-bottom: .5em;
 }
 
+.paragraph {
+  font-size: .8rem;
+  margin-top: .5rem;
+}
+
 #edit_paragraph {
   margin-top: 1em;
   width: 90%;

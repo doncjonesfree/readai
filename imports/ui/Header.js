@@ -82,6 +82,8 @@ Template.header.helpers({
     const dmy = getRefresh('user_info');
     const u = lib.getCookie('ltrSignin');
     const masterUser = lib.getCookie('ltrMaster');
+    console.log('jones85a',u);
+    console.log('jones85b',masterUser);
     if ( ! u ) {
       return { user: false, masterUser: masterUser };
     } else {

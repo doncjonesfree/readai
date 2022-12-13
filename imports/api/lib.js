@@ -189,7 +189,15 @@ export const flexEntryHtml = function(list){
   let html = [];
   for ( let i=0; i < list.length; i++ ) {
     const l = list[i];
-    if ( l.button ) {
+    if ( l.paragraph ) {
+      html.push('<div class="paragraph">');
+      for ( let i2=0; i2 < l.paragraph.length; i2++ ){
+        const p = l.paragraph[i2];
+        if ( i2 > 0 ) html.push('<br>');
+        html.push(p);
+      }
+      html.push('</div>');
+    } else if ( l.button ) {
       // const button2 = { button: 'Cancel', cls: 'sh_change_mode', data: '2'};
       // op.push( { button: 'Save', id: 'student_save', error: get('error'), button2: button2  } );
       html.push( buttonHtml( l ) );
