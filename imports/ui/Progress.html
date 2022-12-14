@@ -78,6 +78,38 @@
           {{ /each }}
         </select>
 
+        <table>
+        <tr class="tr-heading">
+          <td class="thide"><br>When</td>
+          <td class="t-ss-max4"><br>Lesson Type</td>
+          <td class="">Appr.<br>Grade</td>
+          <td class="">Pct<br>Correct</td>
+          <td class=""><br># Missed</td>
+          <td class=""><br>Options</td>
+        </tr>
+        {{ #each lesson }}
+          <tr>
+            <td class="thide">{{ when }}</td>
+            <td class="t-ss-max4">{{ lesson_type }}</td>
+            <td class="">{{ grade_level }}</td>
+            <td class="">{{ pct }}</td>
+            <td class="">
+              {{ missed }}
+              {{ #if reviewed }}
+                (reviewed)
+              {{ /if }}
+            </td>
+            <td class="">
+              {{ #if review }}
+                <a href="#" class="pr_lesson_review" data="{{ _id }}">review</a>
+              {{ /if }}
+            </td>
+          </tr>
+        {{ /each }}
+
+        </table>
+
+        <!--
       <div class="pr_lesson_flex_heading">
         <div class="pr_lesson_when"><br>When</div>
         <div class="pr_lesson_type"><br>Lesson Type</div>
@@ -105,6 +137,7 @@
           </div>
         </div>
       {{ /each }}
+    -->
     {{ /if }}
 
     <div class="popup" id="pr_word_popup">

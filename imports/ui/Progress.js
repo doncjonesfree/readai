@@ -251,10 +251,16 @@ Template.Progress.helpers({
 
     let op = filter( get('history') );
     if ( ! op ) op = [];
+    op.sort( function(a,b){
+      if ( a.when < b.when ) return -1;
+      if ( a.when > b.when ) return 1;
+      return 0;
+    });
     for ( let i=0; i < op.length; i++ ) {
       let o = op[i];
       if ( i % 2 === 1 ) o.cls = 'rpt_highlight';
       o.when = lib.prettyDate( o.when );
+      o.pct = sprintf('%.1f',o.pct);
       let dc = true;
       if ( o.lesson_type === 'dc') {
         o.lesson_type = 'Drawing Conclusions';
