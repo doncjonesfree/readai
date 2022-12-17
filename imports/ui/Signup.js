@@ -28,10 +28,13 @@ const getFields = function(){
   let op = [];
 
   let list = [];
-  list.push('First Name and Email are required.');
-  list.push('The 4 digit pin is required to enable "teacher" or "supervisor" mode.');
-  list.push('In teacher/supervisor mode you can add students, view progress and quiz on words.');
+  list.push('<div class="warning">This screen is to sign up as s new user.</div>');
+  list.push('<div class="warning">If you have already signed up, click "sign in" instead.</div>');
+  list.push('First Name, Email and Pin are required.');
+  list.push('The 4 digit pin is required to enable teacher/supervisor" mode.');
+  list.push('In teacher/supervisor mode you can add students and view progress.');
   list.push('This website is free of charge!');
+  list.push('<div class="warning">Please make sure your email is correct!</div>');
   op.push( { paragraph: list });
 
   op.push( { label: 'First Name *', type: 'text', required: true, value: getValue(doc,'first_name'), id: 'first_name', message: "you can enter just first name if you like" })

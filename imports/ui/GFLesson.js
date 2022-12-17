@@ -14,6 +14,7 @@ Template.GFLesson.onCreated(function GFLessonOnCreated() {
   // 2 = blank screen while loading lesson
   set('points','');
   setd('mode',1);
+  Session.set('pre',pre);
 });
 
 const getSeparateQuestions = function(l){
@@ -41,13 +42,17 @@ const getSeparateQuestions = function(l){
   return '';
 };
 
+const setDifficulty = function(){
+  const student = get('student');
+  return student.set_difficulty;
+};
+
 Template.GFLesson.helpers({
   mode1() { return get('mode') === 1; },
   mode2() { return get('mode') === 2; },
   mode3() { return get('mode') === 3; },
   set_difficulty(){
-    const student = get('student');
-    return student.set_difficulty;
+    return setDifficulty();
   },
   points() {
     return get('points');
@@ -264,6 +269,7 @@ Template.GFLesson.events({
     }
   },
   'click #gf_help': function(e){
+    // older question mark we are no longer using
     const word = 'gather_facts_help';
     lib.googlePlaySound( word, function(){
       console.log('%s finished playing',word);

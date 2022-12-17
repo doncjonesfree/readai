@@ -1,12 +1,13 @@
 <template name="StudentHome">
+  {{ > instructions }}
   {{ #if mode1 }}
     loading...
   {{ /if }}
 
   {{ #if mode2 }}
-    <div class="nav-container nav-container-left">
+    <div class="nav-container nav-container-left nav-container-indent">
       {{ #if supervisor }}
-        <div class="nav-element sh_change_mode" data="3">Add a Student</div>
+        <div class="nav-element sh_change_mode" data="3" title="Add a new student">Add a Student</div>
       {{ /if }}
       {{ #if inactive_count }}
         <div class="nav-element sh_restore_inactive">Restore Inactive Students ({{ inactive_count }})</div>
@@ -24,7 +25,7 @@
           </div>
           {{ #if supervisor }}
             <div class="sh_student_flex">
-              <div class="sh_student_edit sh_student_link" data="{{ _id }}" title="modify name or points awards">edit</div>
+              <div class="sh_student_edit sh_student_link" data="{{ _id }}" title="modify student name">edit</div>
               &nbsp;
               <div class="sh_student_delete sh_student_link" data="{{ _id }}" title="mark student inactive">delete</div>
               &nbsp;

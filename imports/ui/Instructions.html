@@ -1,0 +1,8 @@
+<template name="instructions">
+  {{ #if ins_enabled }}
+    <i class="fa-solid fa-volume-off icon ins_change" data="0" style="display: inline;" title="click to turn off verbal instructions"></i>
+  {{ else }}
+    <i class="fa-solid fa-volume-xmark icon ins_change" data="1" style="display: inline;" title="click to turn off verbal instructions"></i>
+  {{ /if }}
+  <input type="hidden" value="{{ screen }}">
+</template>

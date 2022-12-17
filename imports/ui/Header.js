@@ -159,6 +159,7 @@ Template.header.events({
   },
   'click #student_done'(e){
     e.preventDefault();
+    lib.stopAudio();
     FlowRouter.go('home');
   },
   'click #signup'(e){

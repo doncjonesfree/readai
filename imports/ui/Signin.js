@@ -26,6 +26,12 @@ const getFields = function(){
   const doc = get('doc');
 
   let op = [];
+
+  let list = [];
+  list.push('If you not signed up yet, please click "sign up" instead.');
+  list.push('<div class="warning">Make sure your volume is on!</div>');
+  op.push( { paragraph: list });
+
   op.push( { label: 'Email', type: 'text', required: true, value: getValue(doc,'email'), id: 'email' })
   const button2 = '';
   op.push( { button: 'Sign In', id: 'signin_submit', error: get('error'), button2: button2  } );

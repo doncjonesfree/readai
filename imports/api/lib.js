@@ -30,7 +30,27 @@ export const getSupervisorMode = function(){
 };
 
 export const getSupervisorValue = function(){
-  return Session.get('supervisor');
+  return int( Session.get('supervisor') );
+};
+
+export const changeInstructionAudio = function(v){
+  // turn on or off instructions
+  const pre = Session.get('pre');
+  let u = getCookie('ltrSignin');
+  if ( ! u.verbal ) u.verbal = {};
+  u.verbal[ pre ] = v;
+  setCookie('ltrSignin',u);
+  Session.set('currentUser',u);
+
+  //Update user information in the collection
+  const doc = { verbal: u.verbal };
+  Meteor.call('collectionUpdate', 'Users', u._id, doc ,function(err,results){
+    if ( err ) {
+      console.log('Error: lib.js line 50',err);
+    } else {
+      console.log('changeInstructionAudio',doc);
+    }
+  });
 };
 
 export const prettyDate = function(d) {
@@ -201,6 +221,8 @@ export const flexEntryHtml = function(list){
         html.push(p);
       }
       html.push('</div>');
+    } else if ( l.hidden ) {
+      html.push( sprintf('<input type="hidden" id="%s" value="%s">',l.id, l.value ) );
     } else if ( l.button ) {
       // const button2 = { button: 'Cancel', cls: 'sh_change_mode', data: '2'};
       // op.push( { button: 'Save', id: 'student_save', error: get('error'), button2: button2  } );
@@ -384,6 +406,15 @@ export const lookupAndPlay = function( pre, e, word, callback, count ){
 };
 
 let SoundObj = '';
+let PreviousSound = '';
+
+export const stopAudio = function(){
+  // stop any audio that may be running
+  if ( SoundObj ) {
+    console.log('Sound off');
+    SoundObj.stop(); // stop the previous sound
+  }
+};
 
 export const googlePlaySound = function( arg, callback ){
   // assume word has an mp3 file without looking
@@ -391,13 +422,21 @@ export const googlePlaySound = function( arg, callback ){
   // should play the definition, not the word.
   const s3path = 'https://read-audio.s3.us-west-2.amazonaws.com';
   let word = arg;
+  if ( word === PreviousSound ) return; // don't repeat the same sound
+  PreviousSound = word;
   let url = sprintf('%s/audio/%s.mp3',s3path,word.toLowerCase());
   let definition = false;
+  let instruction = false;
   if ( word.substr(0,1) === '*') {
     // actually we want the definition, not the word itself
     word = word.substring(1);
     url = sprintf('%s/definition/%s.mp3',s3path,word.toLowerCase());
     definition = true;
+  } else if ( word.substr(0,1) === '$') {
+    // instructions
+    instruction = true;
+    word = word.substring(1);
+    url = sprintf('/audio/%s.mp3',word);
   }
 
   if ( SoundObj ) SoundObj.stop(); // stop the previous sound
@@ -405,8 +444,10 @@ export const googlePlaySound = function( arg, callback ){
   let urlList = [ url ];
   if ( definition ) {
     urlList.push('/definition/no_definition_found.mp3');
+  } else if ( instruction ) {
+    urlList.push('/audio/instructions_not_found.mp3');
   } else {
-    urlList.push('/audio/no_word_found.mp3');
+    urlList.push('/definition/no_definition_found.mp3');
   }
 
   play( urlList, 0, function(success){

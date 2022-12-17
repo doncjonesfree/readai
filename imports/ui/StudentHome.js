@@ -18,6 +18,7 @@ Template.StudentHome.onCreated(function StudentHomeOnCreated() {
   setd('students',[]);
   setd('error','');
   setd('doc',{});
+  Session.set('pre',pre);
   loadStudents( 'setMode' );
 });
 
@@ -58,9 +59,13 @@ const studentFields = function(){
   let op = [];
   op.push( { label: 'Name', type: 'text', required: true, value: getValue(doc,'name'), id: 'name', message: "you can enter just first name if you like" })
   op.push( { label: 'Year Born', type: 'year', required: true, short: true, value: getValue(doc,'year_of_birth'), id: 'year_of_birth', message: "used to determine starting point for lessons" })
-  let checked = '';
-  if ( doc.award_points ) checked = 'checked';
-  op.push( { label: 'Award Points', checkbox: true, value: checked, id: 'award_points', message: 'Award points for correct answers' })
+
+  // auto set award points
+  // let checked = '';
+  // if ( doc.award_points ) checked = 'checked';
+  // op.push( { label: 'Award Points', checkbox: true, value: checked, id: 'award_points', message: 'Award points for correct answers' })
+
+  op.push( { hidden: true, label: 'Award Points', checkbox: true, value: 1, id: 'award_points', message: 'Award points for correct answers' })
 
   checked = '';
   if ( doc.set_difficulty ) checked = 'checked';

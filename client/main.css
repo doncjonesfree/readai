@@ -41,6 +41,7 @@
   --color-primary: #696969;
   --color-light-grey: #f1f2f2;
   --color-error: red;
+  --color-warning: #339900;
 
   --color-button: rgb(90,131,180);
   --color-button-hover: rgb(54,54,54);
@@ -100,6 +101,10 @@
 .nav-container-left {
   justify-content: flex-start;
   gap: 1.5rem;
+}
+
+.nav-container-indent {
+  margin-left: 1rem;
 }
 
 .nav-element {
@@ -728,4 +733,26 @@ select {
   font-size: 1.2em;
   border-radius: .25em;
   padding: .25em;
+}
+
+.warning {
+  display: inline;
+  color: var(--color-warning);
+  font-weight: bold;
+}
+
+.ins_change {
+  /* just used for speaker icon for verbal instructions */
+  position: fixed;
+  /* small screen */
+  left: 18px;
+  top: 85px;
+}
+
+@media screen and (min-width: 50em) {
+  /* big screen */
+  i.ins_change {
+    left: 240px;
+    top: 60px;
+  }
 }
