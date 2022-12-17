@@ -221,6 +221,7 @@ Template.DCLesson.events({
     }
   },
   'click #dc_help': function(e){
+    // removed from html 
     let word = 'dc_help2'; // next
     if ( onLastQuestion() ) word = 'dc_help';
     lib.googlePlaySound( word, function(){

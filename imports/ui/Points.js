@@ -7,23 +7,42 @@ const get = function(n) { return Session.get(pre + n )};
 const set = function(n,v) { Session.set(pre + n,v) };
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
+let Points = 0;
 Template.Points.onCreated(function PointsOnCreated() {
+  Points = get('points');
+  set('points','');
+  refresh('points');
 });
 
+const refresh = function(arg){
+  const n = sprintf('refresh_%s',arg)
+  let v = get(n);
+  if ( typeof(v) === 'undefined') v = 0;
+  set(n,v+1);
+};
+
+const getRefresh = function(arg){
+  const n = sprintf('refresh_%s',arg)
+  return get(n);
+};
+
 Template.Points.helpers({
-  points() { return get('points'); },
+  points() {
+    const dmy = getRefresh('points');
+    return Points;
+  },
   totalPoints() {
-    // $('#student_total_points').position();
+    if ( ! Points ) return;
     $('#points').show();
     const word = 'ding';
     lib.googlePlaySound( word, function(){
-      console.log('jones19 ding played');
+      console.log('ding played');
     });
 
     let originalPos = { left: 490, top: 350 };
     Meteor.setTimeout(function(){
       const pos = $('#student_total_points').position();
-      originalPos = $('#points').position();
+      if ( $('#points').length ) originalPos = $('#points').position();
       let left = 750;
       let top = 60;
       if ( pos ) {
@@ -41,6 +60,7 @@ Template.Points.helpers({
       $('#points').hide();
       $('#points').css('left', sprintf('%spx',originalPos.left));
       $('#points').css('top', sprintf('%spx',originalPos.top));
+      set('points','');
     },3000);
     return get('totalPoints');
   },

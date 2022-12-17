@@ -8,7 +8,7 @@ const set = function(n,v) { Session.set(pre + n,v) };
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
 let User = '';
-let Supervisor = '';
+let Supervisor = ''; //
 
 Template.instructions.onCreated(function instructionsOnCreated() {
   User = lib.getCurrentUser();

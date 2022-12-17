@@ -133,6 +133,8 @@ const showDefinitionButton = function(word,uniqueCount){
 };
 
 const saveLessonHistory = function(lesson){
+  set('showPoints',false);
+
   let obj = {};
   obj.lesson_type = 'gf';
   obj.answerCount = lesson.answers.length;
@@ -202,6 +204,8 @@ Template.GFLesson.events({
   },
   'click #gf_done': function(e){
     // Done button clicked - see if answers are correct
+    e.stopPropagation();
+    e.preventDefault();
     const thisQuestion = lib.int($(e.currentTarget).attr('data'));
     let lesson = get('lesson');
     if ( ! lesson.incorrect ) lesson.incorrect = {};
@@ -255,10 +259,15 @@ Template.GFLesson.events({
       lesson.points = points;
       lesson.thisQuestion = thisQuestion;
 
+      // scroll to the top
+      $('html, body').animate({scrollTop: '0px'}, 300);
       Session.set('Points_points',points);
       Session.set('Points_totalPoints',totalPoints);
       set('showPoints',true);
-      saveLessonHistory(lesson);
+      Meteor.setTimeout(function(){
+        // give show points time - then change the lesson
+        saveLessonHistory(lesson);
+      },3000);
     }
   },
   'click #gf_help': function(e){
