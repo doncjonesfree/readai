@@ -10,7 +10,7 @@ FlowRouter.route('/', {
   name: 'home',
   action(params, queryParams) {
     lib.getSupervisorMode();
-    Session.set('StudentHome_pre','StudentHome_')
+    Session.set('pre','StudentHome_')
     BlazeLayout.render('mainContainer', {main: 'Home'});
   }
 });
@@ -59,6 +59,7 @@ FlowRouter.route('/progress', {
   name: 'Progress',
   action(params, queryParams) {
     lib.getSupervisorMode();
+    Session.set('pre','Progress_')
     if ( isSupervisor() ) {
       BlazeLayout.render('mainContainer', {main: 'Progress'});
     } else {

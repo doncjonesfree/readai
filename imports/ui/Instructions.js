@@ -47,7 +47,18 @@ Template.instructions.helpers({
 });
 
 const gfLesson = function(){
-  const student = Session.get('GFLesson_student');
+  const student = lib.getCookie('student');
+  const setDiff = student.set_difficulty;
+
+  let file = '$gf_msg';
+  if ( setDiff ) {
+    file = '$gf_diff_msg';
+  }
+  if ( file ) play(file);
+};
+
+const dcLesson = function(){
+  const student = lib.getCookie('student');
   const setDiff = student.set_difficulty;
 
   let file = '$gf_msg';
@@ -110,6 +121,10 @@ const playInstructions = function(){
 
     case 'GFLesson_':
     gfLesson();
+    break;
+
+    case 'DCLesson_':
+    dcLesson();
     break;
   }
 };

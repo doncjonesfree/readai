@@ -428,8 +428,7 @@ export const googlePlaySound = function( arg, callback ){
   let word = arg;
   const delta = epoch() - PreviousTime;
   // play the same sound if the previous play was more than 2 seconds ago
-  if ( word === PreviousSound && delta < 2000 ) return; // don't repeat the same sound
-  PreviousSound = word;
+  if ( arg === PreviousSound && delta < 2000 ) return; // don't repeat the same sound
   let url = sprintf('%s/audio/%s.mp3',s3path,word.toLowerCase());
   let definition = false;
   let instruction = false;
@@ -445,7 +444,15 @@ export const googlePlaySound = function( arg, callback ){
     url = sprintf('/audio/%s.mp3',word);
   }
 
-  if ( SoundObj ) SoundObj.stop(); // stop the previous sound
+  if ( SoundObj ) {
+    if ( PreviousSound && PreviousSound.substr(0,1) === '$') {
+      // turn off blinking if we were interrupted while playing instructions
+      Session.set('instructions_ins_playing',false);
+    }
+
+    SoundObj.stop(); // stop the previous sound
+  }
+  PreviousSound = arg;
 
   let urlList = [ url ];
   if ( definition ) {

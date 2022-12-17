@@ -8,6 +8,7 @@ const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 Template.DCLesson.onCreated(function DCLessonOnCreated() {
   setd('mode',1);
   setd('showPoints',false);
+  Session.set('pre',pre);
 });
 
 export const expandShape = function(s){
@@ -59,11 +60,7 @@ Template.DCLesson.helpers({
     return student.set_difficulty;
   },
   done_button: function(){
-    if ( onLastQuestion() ) {
-      return 'Done';
-    } else {
-      return 'Next';
-    }
+    return 'Done';
   },
   lesson() {
     let l = get('lesson');
@@ -148,6 +145,7 @@ Template.DCLesson.events({
     });
   },
   'click #dc_done': function(e){
+    // See if answer is correct
     e.stopPropagation();
     e.preventDefault();
     let word;
