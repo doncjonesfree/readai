@@ -144,6 +144,7 @@ Template.header.events({
     });
   },
   'click .hdr_lock'(e){
+    // turn supervisor mode on or off
     e.stopPropagation();
     const v = lib.int( $(e.currentTarget).attr('data')); // 1=enter supervisor mode
     if ( v ) {

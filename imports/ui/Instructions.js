@@ -13,6 +13,7 @@ let Supervisor = '';
 Template.instructions.onCreated(function instructionsOnCreated() {
   User = lib.getCurrentUser();
   setd('ins_playing',false);
+  setd('play',false);
 });
 
 const enabled = function(){
@@ -29,8 +30,11 @@ const enabled = function(){
 Template.instructions.helpers({
   mode1() { return get('mode') === 1; },
   ins_playing: function(){ return get('ins_playing'); },
-  ins_enabled: function(){
-    return enabled();
+  ins_enabled: function(){ return enabled(); },
+  play: function(){
+    const p = get('play');
+    if ( p ) playInstructions();
+    return p;
   },
   screen() {
     const screen = Session.get('pre');

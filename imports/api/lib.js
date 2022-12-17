@@ -21,6 +21,9 @@ export const getCookie = function(key){
 export const setSupervisorMode = function(v){
   setCookie('ltrSupervisor',v);
   Session.set('supervisor',v);
+
+  // tell instructions to play
+  Session.set('instructions_play',true);
 };
 
 export const getSupervisorMode = function(){
