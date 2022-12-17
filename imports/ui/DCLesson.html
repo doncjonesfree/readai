@@ -23,6 +23,9 @@
       {{ /each }}
     {{ /with }}
     <div class="button" id="dc_done">{{ done_button }}</div>
+    {{ #if showPoints }}
+      {{ > Points }}
+    {{ /if }}
   {{ /if }}
 
   {{ #if mode2 }}

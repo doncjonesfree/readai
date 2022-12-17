@@ -42,13 +42,13 @@
       </div>
     {{ /with }}
 
+    {{ #if showPoints }}
+      {{ > Points }}
+    {{ /if }}
   {{ /if }}
 
   {{ #if mode3 }}
     {{> DCLesson }}
   {{ /if }}
 
-  {{ #if showPoints }}
-    {{ > Points }}
-  {{ /if }}
 </template>

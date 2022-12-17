@@ -7,6 +7,7 @@ const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
 Template.DCLesson.onCreated(function DCLessonOnCreated() {
   setd('mode',1);
+  setd('showPoints',false);
 });
 
 export const expandShape = function(s){
@@ -52,6 +53,7 @@ export const addDcAnswerCheckbox = function(l){
 Template.DCLesson.helpers({
   mode1: function(){ return get('mode') === 1 },
   mode2: function(){ return get('mode') === 2 },
+  showPoints() { return get('showPoints'); },
   set_difficulty(){
     const student = lib.getCookie('student');
     return student.set_difficulty;
@@ -180,7 +182,10 @@ Template.DCLesson.events({
 
       const totalPoints = lib.int( lib.getCookie('studentPoints') ) + points;
       lib.setCookie('studentPoints',totalPoints);
-      Session.set('header_points',totalPoints)
+
+      Session.set('Points_points',points);
+      Session.set('Points_totalPoints',totalPoints);
+      set('showPoints',true);
 
       const studentId = lib.getCookie('studentId');
       Meteor.call('dcSaveLessonHistory',lesson, studentId, function(err,results){
