@@ -42,6 +42,7 @@
   --color-light-grey: #f1f2f2;
   --color-error: red;
   --color-warning: #339900;
+  --color-ins-playing: rgba(178,34,34,.4);
 
   --color-button: rgb(90,131,180);
   --color-button-hover: rgb(54,54,54);
@@ -743,15 +744,47 @@ select {
 
 .ins_change {
   /* just used for speaker icon for verbal instructions */
+  display: inline;
   position: fixed;
+  color: var(--color-button);
+  cursor: pointer;
   /* small screen */
   left: 18px;
   top: 85px;
 }
 
+.ins_playing {
+  display: inline;
+  position: fixed;
+  color: var(--color-ins-playing);
+  cursor: pointer;
+
+  animation: blink-animation 1s steps(5, start) infinite;
+  -webkit-animation: blink-animation 1s steps(5, start) infinite;
+
+  /* small screen */
+  left: 18px;
+  top: 85px;
+}
+
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+
 @media screen and (min-width: 50em) {
   /* big screen */
   i.ins_change {
+    left: 240px;
+    top: 60px;
+  }
+  i.ins_playing {
     left: 240px;
     top: 60px;
   }

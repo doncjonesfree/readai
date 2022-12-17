@@ -12,11 +12,7 @@ let Supervisor = '';
 
 Template.instructions.onCreated(function instructionsOnCreated() {
   User = lib.getCurrentUser();
-  console.log('jones15a User',User);
-  console.log('jones15c Supervisor',lib.getSupervisorValue());
-  Meteor.setTimeout(function(){
-    set('screen', Session.get('pre') );
-  },500);
+  setd('ins_playing',false);
 });
 
 const enabled = function(){
@@ -32,14 +28,15 @@ const enabled = function(){
 
 Template.instructions.helpers({
   mode1() { return get('mode') === 1; },
+  ins_playing: function(){ return get('ins_playing'); },
   ins_enabled: function(){
     return enabled();
   },
   screen() {
-    let screen = get('screen');
+    const screen = Session.get('pre');
     if ( screen ) {
       playInstructions();
-      return get('screen');
+      return Session.get('pre');
     }
     return '';
   },
@@ -53,13 +50,20 @@ const gfLesson = function(){
   if ( setDiff ) {
     file = '$gf_diff_msg';
   }
-  console.log('jones56',file);
   if ( file ) play(file);
 };
 
+let JustPlayed = ''; // file we just played
 const play = function(file){
+  if ( JustPlayed === file ) {
+    console.log('Just played %s - ignore. pre=%s',file,Session.get('pre'));
+    return; // ignore
+  }
   // play the file
+  JustPlayed = file;
+  set('ins_playing',true);
   lib.googlePlaySound( file, function(){
+    set('ins_playing',false);
     console.log('%s finished playing',file);
   });
 };
@@ -92,12 +96,10 @@ const playInstructions = function(){
   if ( ! enabled() ) return;
   const delta = lib.epoch() - LastPlay;
   if ( delta < 1000 ) {
-    console.log('jones60a wait');
     return;
   }
   LastPlay = lib.epoch();
-  console.log('jones60b play');
-  switch ( get('screen')) {
+  switch ( Session.get('pre') ) {
     case 'StudentHome_':
     studentHome();
     break;
@@ -108,22 +110,23 @@ const playInstructions = function(){
   }
 };
 
+const playClicked = function(e){
+  e.stopPropagation();
+  e.preventDefault();
+  const wait = '...';
+  const html = $(e.currentTarget).html();
+  if ( wait === html ) return;
+  const v = lib.int( $(e.currentTarget).attr('data'));
+  lib.changeInstructionAudio(v);
+  if ( ! v ) play( '$verbal_off');
+};
+
 Template.instructions.events({
+  'click .ins_playing'(e){
+    playClicked(e);
+  },
   'click .ins_change'(e){
-    // restore all inactive students
-    e.stopPropagation();
-    e.preventDefault();
-    const wait = '...';
-    const html = $(e.currentTarget).html();
-    if ( wait === html ) return;
-    const v = lib.int( $(e.currentTarget).attr('data'));
-    lib.changeInstructionAudio(v);
-    console.log('jones99',v);
-    if ( ! v ) {
-      lib.googlePlaySound( '$verbal_off', function(){
-        console.log('Verbal instructions off');
-      });
-    }
+    playClicked(e);
   },
 });
 

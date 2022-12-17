@@ -10,6 +10,7 @@ FlowRouter.route('/', {
   name: 'home',
   action(params, queryParams) {
     lib.getSupervisorMode();
+    Session.set('StudentHome_pre','StudentHome_')
     BlazeLayout.render('mainContainer', {main: 'Home'});
   }
 });
