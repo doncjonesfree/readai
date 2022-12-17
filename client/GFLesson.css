@@ -52,7 +52,7 @@
 
 .gf_question_wrapper {
   border: 1px solid gray;
-  border-radius: .5em;
+  border-radius: var(--border-radius);
   padding: 0em 1em 1em 1em;
   font-weight: var(--fw-light);
 }

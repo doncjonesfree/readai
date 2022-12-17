@@ -36,6 +36,8 @@ import "./Message.html";
 import "./Message.js";
 import "./Instructions.html";
 import "./Instructions.js";
+import "./Points.html";
+import "./Points.js";
 
 const IS_LOADING_STRING = "isLoading";
 

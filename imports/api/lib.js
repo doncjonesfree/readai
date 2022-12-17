@@ -410,6 +410,7 @@ export const lookupAndPlay = function( pre, e, word, callback, count ){
 
 let SoundObj = '';
 let PreviousSound = '';
+let PreviousTime = 0;
 
 export const stopAudio = function(){
   // stop any audio that may be running
@@ -425,7 +426,9 @@ export const googlePlaySound = function( arg, callback ){
   // should play the definition, not the word.
   const s3path = 'https://read-audio.s3.us-west-2.amazonaws.com';
   let word = arg;
-  if ( word === PreviousSound ) return; // don't repeat the same sound
+  const delta = epoch() - PreviousTime;
+  // play the same sound if the previous play was more than 2 seconds ago
+  if ( word === PreviousSound && delta < 2000 ) return; // don't repeat the same sound
   PreviousSound = word;
   let url = sprintf('%s/audio/%s.mp3',s3path,word.toLowerCase());
   let definition = false;
@@ -454,6 +457,7 @@ export const googlePlaySound = function( arg, callback ){
   }
 
   play( urlList, 0, function(success){
+    PreviousTime = epoch();
     if ( callback ) callback(success);
   });
 

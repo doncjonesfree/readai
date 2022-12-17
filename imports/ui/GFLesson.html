@@ -48,5 +48,7 @@
     {{> DCLesson }}
   {{ /if }}
 
-  <div id="gf_show_points">{{ points }} Points!</div>
+  {{ #if showPoints }}
+    {{ > Points }}
+  {{ /if }}
 </template>

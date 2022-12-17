@@ -47,6 +47,8 @@
   --color-button: rgb(90,131,180);
   --color-button-hover: rgb(54,54,54);
 
+  --border-radius: .5rem;
+
   --fw-light: 200;
 
   --fs-300: .5em;
@@ -788,4 +790,18 @@ select {
     left: 240px;
     top: 60px;
   }
+}
+
+#points {
+  position: fixed;
+  top: 50%;
+  left: 35%;
+  border: 1px solid red;
+  background-color: red;
+  color: white;
+  border-radius: var(--border-radius);
+
+  width: 15rem;
+  text-align: center;
+  font-size: 2rem;
 }

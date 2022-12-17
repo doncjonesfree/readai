@@ -14,6 +14,7 @@ Template.GFLesson.onCreated(function GFLessonOnCreated() {
   // 2 = blank screen while loading lesson
   set('points','');
   setd('mode',1);
+  setd('showPoints',false);
   Session.set('pre',pre);
 });
 
@@ -51,6 +52,7 @@ Template.GFLesson.helpers({
   mode1() { return get('mode') === 1; },
   mode2() { return get('mode') === 2; },
   mode3() { return get('mode') === 3; },
+  showPoints() { return get('showPoints'); },
   set_difficulty(){
     return setDifficulty();
   },
@@ -199,6 +201,7 @@ Template.GFLesson.events({
     });
   },
   'click #gf_done': function(e){
+    // Done button clicked - see if answers are correct
     const thisQuestion = lib.int($(e.currentTarget).attr('data'));
     let lesson = get('lesson');
     if ( ! lesson.incorrect ) lesson.incorrect = {};
@@ -242,6 +245,7 @@ Template.GFLesson.events({
         lib.googlePlaySound( word );
       }
     } else {
+      // all answers correct
       let points = lib.calculatePoints( lesson, thisQuestion );
       set('lesson',lesson); // save so we can clear incorrect
       const student = get('student');
@@ -251,21 +255,10 @@ Template.GFLesson.events({
       lesson.points = points;
       lesson.thisQuestion = thisQuestion;
 
-      set('points','');
-      if ( points && student.award_points ) {
-        set('points',points);
-        $('#gf_show_points').show();
-        const word = 'ding';
-        lib.googlePlaySound( word, function(){
-          $('#gf_show_points').hide();
-        });
-        Session.set('header_points',totalPoints)
-        saveLessonHistory(lesson);
-      } else {
-        // save points anyway - even if they asked not to show points
-        Session.set('header_points',totalPoints)
-        saveLessonHistory(lesson);
-      }
+      Session.set('Points_points',points);
+      Session.set('Points_totalPoints',totalPoints);
+      set('showPoints',true);
+      saveLessonHistory(lesson);
     }
   },
   'click #gf_help': function(e){
