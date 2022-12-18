@@ -747,7 +747,7 @@ select {
 .ins_change {
   /* just used for speaker icon for verbal instructions */
   display: inline;
-  position: fixed;
+  position: absolute;
   color: var(--color-button);
   cursor: pointer;
   /* small screen */
@@ -757,7 +757,7 @@ select {
 
 .ins_playing {
   display: inline;
-  position: fixed;
+  position: absolute;
   color: var(--color-ins-playing);
   cursor: pointer;
 
