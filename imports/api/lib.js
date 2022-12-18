@@ -864,6 +864,14 @@ export const int = function(n) {
   return op;
 };
 
+export const isVerbalOn = function( field ){
+  const user = getCurrentUser();
+  if ( user.verbal && typeof(user.verbal[ field ]) !== 'undefined') {
+    return user.verbal[ field ];
+  }
+  return true;
+};
+
 export const verifyFloat = function(arg) {
     if (typeof(arg) === 'number') return true;
     if (typeof(arg) !== 'string') return false;
@@ -876,3 +884,31 @@ export const verifyFloat = function(arg) {
     }
     return true;
 };
+
+export const dcWrongAudio = { file: '$dc_wrong', text: `
+Please read the passage again.
+[sPause sec=0.2 ePause]
+Click on any words you don't know.
+[sPause sec=0.2 ePause]
+Then try another answer.
+`}
+
+export const gfWrongAudio2 = { file: '$gf_wrong2', text: `
+Your incorrect answers are in red.
+[sPause sec=0.2 ePause]
+Please read the passage again.
+[sPause sec=0.2 ePause]
+Click on any words you don't know.
+[sPause sec=0.2 ePause]
+Then try another answer.
+`}
+
+export const gfWrongAudio1 = { file: '$gf_wrong1', text: `
+Your incorrect answer is in red.
+[sPause sec=0.2 ePause]
+Please read the passage again.
+[sPause sec=0.2 ePause]
+Click on any words you don't know.
+[sPause sec=0.2 ePause]
+Then try another answer.
+`}

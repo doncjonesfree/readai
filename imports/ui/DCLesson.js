@@ -158,11 +158,15 @@ Template.DCLesson.events({
     } else if ( lesson.answer_selected ) {
       word = 'wrong_answer';
       lesson.incorrect_count += 1;
+      const verbalOn = lib.isVerbalOn('DCLesson_');
+      if ( verbalOn ) {
+        // give instructions
+        word = lib.dcWrongAudio.file;
+      }
       set('lesson',lesson);
     } else {
       // no answer given
-      word = 'answer_question2'; // next
-      if ( last ) word = 'answer_question';
+      word = 'answer_question';
     }
     lib.googlePlaySound( word, function(){
       console.log('%s finished playing',word);
@@ -221,7 +225,7 @@ Template.DCLesson.events({
     }
   },
   'click #dc_help': function(e){
-    // removed from html 
+    // removed from html
     let word = 'dc_help2'; // next
     if ( onLastQuestion() ) word = 'dc_help';
     lib.googlePlaySound( word, function(){

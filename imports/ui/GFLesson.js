@@ -243,11 +243,19 @@ Template.GFLesson.events({
       // at least one answer incorrect
       set('lesson',lesson); // save incorrect flag so we can tell screen which ones to highlight
       // no need to play sound if only one question/answer showing
-      if ( ! thisQuestion ){
-        let word = 'review_incorrect';
-        if ( incorrect.length === 1 ) word = 'one_incorrect';
-        lib.googlePlaySound( word );
+      const verbalOn = lib.isVerbalOn('GFLesson_');
+      let word;
+      if ( verbalOn ) {
+        word = lib.gfWrongAudio2.file;
+        if ( incorrect.length === 1 ) word = lib.gfWrongAudio1.file;
+        if ( thisQuestion ){
+          // only showing one question - very early reader
+          word = lib.dcWrongAudio.file;
+        }
+      } else {
+        word = 'wrong_answer';
       }
+      lib.googlePlaySound( word );
     } else {
       // all answers correct
       let points = lib.calculatePoints( lesson, thisQuestion );
