@@ -64,3 +64,5 @@ Got config issues with above video.
 Try this video on Monday. https://www.youtube.com/watch?v=xtRYi8ud1sM
 
 meteor npm install --save mailgun-js   ( https://www.npmjs.com/package/mailgun-js )
+
+meteor npm install --save openai   ( https://www.npmjs.com/package/openai )

@@ -8,6 +8,7 @@ import { getNextLesson, getEasierGFLesson, getEasierDCLesson, saveLessonHistory,
 import { backupToText, restoreFromText } from '../../server/backup';
 import { checkS3 } from '../../server/utils';
 import { getObject } from '../../server/aws';
+import { openAiWordDef } from "../../server/openai"
 
 const fs = require('fs');
 const mailgun = require("mailgun-js");
@@ -15,6 +16,41 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  openAiWordDef: function(word){
+    // AudioFiles has all words in GF and DC lessons
+    let future=new Future();
+
+    let retObj = { added: 0, errors: [] };
+
+    const addDef = function( list, ix, callback ){
+      if ( ix < list.length && ix < 5 ) { // jones
+        const r = list[ix];
+        if ( ix % 100 === 0 ) console.log('%s of %s errors:%s',ix,list.length,retObj.errors.length );
+        openAiWordDef( r.word, function( results ){
+          if ( results && results.choices && results.choices.length > 0 ) {
+            let doc = {};
+            doc.word = r.word;
+            doc.text = results.choices[0].text;
+            // Need to create a new collection and write out definitions here!
+            // left off here 
+            console.log('%s: %s',doc.word,doc.text);
+          } else {
+            retObj.errors.push( r.word );
+          }
+          addDef( list, ix+1, callback );
+        });
+      } else {
+        callback();
+      }
+    };
+
+    const recs = AudioFiles.find().fetch();
+    addDef( recs, 0, function(){
+      future.return( retObj );
+    });
+
+    return future.wait();
+  },
   isPinValid: function( v, user ){
     return v === user.pin;
   },

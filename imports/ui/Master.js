@@ -58,11 +58,25 @@ Template.master.helpers({
 });
 
 Template.master.events({
+  'click #mas_openai'(e){
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    $(e.currentTarget).html(wait);
+    Meteor.call('openAiWordDef','Dick',function(err,results){
+      $(e.currentTarget).html(html);
+      if ( err ) {
+        console.log('Error: Master.js line 64',err);
+      } else {
+        console.log('openAiWordDef',results);
+      }
+    });
+  },
   'click #mas_special'(e){
     // special purpose
     Meteor.call('special',function(err,results){
       if ( err ) {
-        console.log('Error: Master.js line 66',err);
+        console.log('Error: Master.js line 74',err);
       } else {
         console.log('special',results);
       }
