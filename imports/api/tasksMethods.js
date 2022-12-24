@@ -1,5 +1,5 @@
 import { check } from 'meteor/check';
-import { Students, TasksCollection, GatherFacts, GatherFactsAnswers, AudioFiles, DrawConclusions, Users, LessonHistory, WordList } from '/imports/db/Collections';
+import { Students, TasksCollection, GatherFacts, GatherFactsAnswers, AudioFiles, DrawConclusions, Users, LessonHistory, WordList, Definitions } from '/imports/db/Collections';
 import * as lib from './lib';
 
 var Future = Npm.require("fibers/future");
@@ -18,29 +18,50 @@ const textToSpeech = require('@google-cloud/text-to-speech');
 Meteor.methods({
   openAiWordDef: function(word){
     // AudioFiles has all words in GF and DC lessons
+
     let future=new Future();
 
     let retObj = { added: 0, errors: [] };
 
+    const defs = Definitions.find().fetch();
+    let defObj = {};
+    for ( let i=0; i < defs.length; i++ ) {
+      const d = defs[i];
+      if ( d.text ) defObj[ d.word ] = true;
+    }
+
     const addDef = function( list, ix, callback ){
-      if ( ix < list.length && ix < 5 ) { // jones
+      if ( ix < list.length ) { // jones
         const r = list[ix];
         if ( ix % 100 === 0 ) console.log('%s of %s errors:%s',ix,list.length,retObj.errors.length );
-        openAiWordDef( r.word, function( results ){
-          if ( results && results.choices && results.choices.length > 0 ) {
-            let doc = {};
-            doc.word = r.word;
-            doc.text = results.choices[0].text;
-            // Need to create a new collection and write out definitions here!
-            // left off here 
-            console.log('%s: %s',doc.word,doc.text);
-          } else {
-            retObj.errors.push( r.word );
-          }
+        if ( defObj[ r.word ] ) {
+          // ignore and go to next word - we already have this one
           addDef( list, ix+1, callback );
-        });
+        } else if ( r.word === 'enter' || r.word === 'entered') {
+          console.log('jones41 skipped %s',r.word);
+          addDef( list, ix+1, callback );
+        } else {
+          Meteor.setTimeout(function(){ // wait before calling
+            openAiWordDef( r.word, function( ret ){
+              if ( ret.txt ) {
+                let doc = {};
+                doc.word = r.word;
+                doc.text = ret.txt;
+                Definitions.insert(doc);
+                retObj.added += 1;
+                console.log('added:%s %s: %s',retObj.added,doc.word,doc.text);
+                addDef( list, ix+1, callback );
+              } else {
+                ret.word = r.word;
+                ret.success = false;
+                retObj.errors.push( ret );
+                callback( ret );
+              }
+            });
+          },0);
+        }
       } else {
-        callback();
+        callback( { success: true });
       }
     };
 

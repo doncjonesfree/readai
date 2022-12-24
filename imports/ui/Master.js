@@ -57,19 +57,37 @@ Template.master.helpers({
   },
 });
 
+let AiWaitTime = 1000;
+const getAllAiWordDefs = function( callback ){
+  Meteor.call('openAiWordDef','',function(err,results){
+    if ( err ) {
+      console.log('Error: Master.js line 63',err);
+    } else {
+      console.log('openAiWordDef',results);
+      if ( ! results.errors || results.errors.length === 0 ) {
+        callback(); // done
+      } else {
+        console.log('Waiting %s',AiWaitTime);
+        Meteor.setTimeout(function(){
+          AiWaitTime += 1000;
+          if ( AiWaitTime > 60000 ) AiWaitTime = 60000;
+          getAllAiWordDefs( callback );
+        },AiWaitTime);
+      }
+    }
+  });
+};
+
 Template.master.events({
   'click #mas_openai'(e){
     const wait = '...';
     const html = $(e.currentTarget).html();
     if ( wait === html ) return;
+    AiWaitTime = 1000;
     $(e.currentTarget).html(wait);
-    Meteor.call('openAiWordDef','Dick',function(err,results){
+    getAllAiWordDefs( function(){
       $(e.currentTarget).html(html);
-      if ( err ) {
-        console.log('Error: Master.js line 64',err);
-      } else {
-        console.log('openAiWordDef',results);
-      }
+      console.log('getAllAiWordDefs done');
     });
   },
   'click #mas_special'(e){
