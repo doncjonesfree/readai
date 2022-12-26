@@ -7,7 +7,7 @@ import { fetch, Headers } from "meteor/fetch";
 import { getNextLesson, getEasierGFLesson, getEasierDCLesson, saveLessonHistory, dcSaveLessonHistory, addPoints } from "../../server/lessons"
 import { backupToText, restoreFromText } from '../../server/backup';
 import { checkS3 } from '../../server/utils';
-import { getObject } from '../../server/aws';
+import { getObject, uploadS3 } from '../../server/aws';
 import { openAiWordDef } from "../../server/openai"
 
 const fs = require('fs');
@@ -24,6 +24,7 @@ Meteor.methods({
     let retObj = { added: 0, errors: [] };
 
     const defs = Definitions.find().fetch();
+    console.log('jones27 defs found %s',defs.length);
     let defObj = {};
     for ( let i=0; i < defs.length; i++ ) {
       const d = defs[i];
@@ -41,24 +42,22 @@ Meteor.methods({
           console.log('jones41 skipped %s',r.word);
           addDef( list, ix+1, callback );
         } else {
-          Meteor.setTimeout(function(){ // wait before calling
-            openAiWordDef( r.word, function( ret ){
-              if ( ret.txt ) {
-                let doc = {};
-                doc.word = r.word;
-                doc.text = ret.txt;
-                Definitions.insert(doc);
-                retObj.added += 1;
-                console.log('added:%s %s: %s',retObj.added,doc.word,doc.text);
-                addDef( list, ix+1, callback );
-              } else {
-                ret.word = r.word;
-                ret.success = false;
-                retObj.errors.push( ret );
-                callback( ret );
-              }
-            });
-          },0);
+          openAiWordDef( r.word, function( ret ){
+            if ( ret.txt ) {
+              let doc = {};
+              doc.word = r.word;
+              doc.text = ret.txt;
+              Definitions.insert(doc);
+              retObj.added += 1;
+              console.log('added:%s %s: %s',retObj.added,doc.word,doc.text);
+              addDef( list, ix+1, callback );
+            } else {
+              ret.word = r.word;
+              ret.success = false;
+              retObj.errors.push( ret );
+              callback( ret );
+            }
+          });
         }
       } else {
         callback( { success: true });
@@ -66,7 +65,14 @@ Meteor.methods({
     };
 
     const recs = AudioFiles.find().fetch();
-    addDef( recs, 0, function(){
+    // get rid of words already defined in recs list
+    let recs2 = [];
+    for ( let i=0; i < recs.length; i++ ) {
+      const r = recs[i];
+      if ( ! defObj[ r.word ] ) recs2.push(r);
+    }
+    console.log('jones74 %s left to define',recs2.length);
+    addDef( recs2, 0, function(){
       future.return( retObj );
     });
 
@@ -382,7 +388,8 @@ Meteor.methods({
     }
     return { error: sprintf('No collection "%s"',collection)}
   },
-  'fillInDefinitions'(){
+  'definitionsToS3'(){
+    // Take text definition, convert to speech and store in S3
     let future=new Future();
 
     const processUndefinedWords = function( list, ix, op, callback ){
@@ -391,30 +398,37 @@ Meteor.methods({
         const r = list[ix];
         op.count += 1;
         // Written to process a list of words, but here we just want to process one word
-        getDefs( [r], 0, [], function(results){
-          // results = [ { id: word: def: } ]
-          if ( r.def ) {
-            Meteor.setTimeout(function(){
-              googleCreateMp3(r.word, r.def );
-              let doc = { definition: true };
-              AudioFiles.update(r.id, { $set: doc });
-              processUndefinedWords( list, ix+1, op, callback );
-            },6000);
-          } else {
-            let doc = { definition: 'failed' };
-            op.failed += 1;
-            AudioFiles.update(r.id, { $set: doc });
-            processUndefinedWords( list, ix+1, op, callback );
-          }
-        });
+        if ( r.text ) {
+          Meteor.setTimeout(function(){
+
+            // convert definition to speech (mp3)
+            const directory = '/Users/donjones/Downloads/tempAudio';
+            console.log('processing %s (%s of %s)',r.word,ix,list.length);
+            googleCreateMp3( { word: r.word, sentences: r.text, createOnly: true, outputTo: directory }, function(){
+              // upload mp3 to amazon S3
+              const fullPath = sprintf('%s/%s.mp3',directory,r.word);
+              const file = sprintf('AIDefinition/%s.mp3',r.word);
+              uploadS3( fullPath, file,  Meteor.bindEnvironment( function(){
+                let doc = { uploaded: true };
+                Definitions.update(r._id, { $set: doc });
+                processUndefinedWords( list, ix+1, op, callback );
+              }));
+            });
+          },6000); // wait 6 seconds before each call to avoid making too many calls
+        } else {
+          let doc = { definition: 'failed' };
+          op.failed.push( r.text );
+          processUndefinedWords( list, ix+1, op, callback );
+        }
       } else {
         callback( op );
       }
     };
 
-    const recs = AudioFiles.find({ definition: false },{ limit: 2 }).fetch();
-    processUndefinedWords( recs, 0, { count: 0, failed: 0 }, function( processResults ){
-      future.return( processResults );
+    const recs = Definitions.find({ uploaded: { $ne: true }}).fetch();
+    // recs = [ { word: text: } ];
+    processUndefinedWords( recs, 0, { count: 0, failed: [] }, function( processResults ){
+      future.return( { results: processResults, rec: recs } );
     });
 
     return future.wait();
@@ -455,7 +469,7 @@ Meteor.methods({
           // Max 11 requests per minute allowed from google
           Meteor.setTimeout(function(){
             console.log('Creating mp3 for "%s" %s of %s',word,ix+1,allWords.length);
-            googleCreateMp3(word);
+            googleCreateMp3({ word: word });
             count += 1;
             makeAudio(ix+1, callback);
           },6000);
@@ -485,7 +499,7 @@ Meteor.methods({
       const recs = AudioFiles.find( { word: word }).fetch();
       if ( recs.length > 0 ) return recs[0];
 
-      googleCreateMp3(word);
+      googleCreateMp3({ word: word });
     }
   },
   'textToSpeech'( text ){ // deprecated
@@ -640,9 +654,15 @@ Meteor.methods({
   }
 });
 
-const googleCreateMp3 = function(word, sentences ){
+const googleCreateMp3 = function( arg, callback ){
   // Create mp3 file and store results in audio collection
   // create the mp3 file
+
+  const word = arg.word;
+  const sentences = arg.sentences;
+  const createOnly = arg.createOnly;
+  const outputTo = arg.outputTo;
+
   const client = new textToSpeech.TextToSpeechClient();
 
   let text = word;
@@ -661,23 +681,33 @@ const googleCreateMp3 = function(word, sentences ){
     const writeFile = util.promisify(fs.writeFile);
 
     let fullPath;
-    if ( sentences ) {
+    if ( outputTo ) {
+      fullPath = sprintf("%s/%s.mp3",outputTo,word);
+    } else if ( sentences ) {
       fullPath = sprintf("/Users/donjones/meteor/read/public/definition/%s.mp3",word);
     } else {
       fullPath = sprintf("/Users/donjones/meteor/read/public/audio/%s.mp3",word);
     }
     await writeFile( fullPath,response.audioContent,'binary');
   };
-  convertTextToMp3();
-  let doc = { word: word, url: sprintf('/audio/%s.mp3',word)};
-  if ( sentences ) doc.definition = true;
-  const recs = AudioFiles.find( { word: word }).fetch();
-  if ( recs.length === 0 ) {
-    // Only insert if not alread in the collection
-    AudioFiles.insert(doc); // make a note so we don't have to generate this word again
-  } else if ( sentences ) {
-    const doc = { definition: true };
-    AudioFiles.update(recs[0]._id, { $set: doc });
+  if ( createOnly ) {
+    return convertTextToMp3()
+    .then(res => {
+      if ( callback ) callback();
+    })
+  } else {
+    convertTextToMp3();
+
+    let doc = { word: word, url: sprintf('/audio/%s.mp3',word)};
+    if ( sentences ) doc.definition = true;
+    const recs = AudioFiles.find( { word: word }).fetch();
+    if ( recs.length === 0 ) {
+      // Only insert if not alread in the collection
+      AudioFiles.insert(doc); // make a note so we don't have to generate this word again
+    } else if ( sentences ) {
+      const doc = { definition: true };
+      AudioFiles.update(recs[0]._id, { $set: doc });
+    }
   }
 };
 
@@ -796,14 +826,14 @@ const createAudio = function( list, ix, callback ){
       createDefinitionAudio( [o], function(defResults ){
         if ( o.needWord ) {
           console.log('createAudio word=%s %s of %s (needs word)',o.word,ix+1,list.length);
-          googleCreateMp3(o.word);
+          googleCreateMp3({ word: o.word });
         }
         createAudio( list, ix+1, callback );
       });
     } else {
       if ( o.needWord ) {
         console.log('createAudio word=%s %s of %s (needs word)',o.word,ix+1,list.length);
-        googleCreateMp3(o.word);
+        googleCreateMp3( { word: o.word });
       } else {
         console.log('createAudio word=%s %s of %s (all good)',o.word,ix+1,list.length);
       }
@@ -877,7 +907,7 @@ const createDefinitionAudio = function( allWords, callback ){
               } else {
                 console.log('Creating definition mp3 for "%s" %s of %s',word,ix+1,allWords.length);
               }
-              googleCreateMp3(word, list.join('\n\n'));
+              googleCreateMp3({ word: word, sentences: list.join('\n\n') } );
               count.added += 1;
               makeAudio(ix+1, callback);
             },6000);

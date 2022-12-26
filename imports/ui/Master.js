@@ -78,7 +78,25 @@ const getAllAiWordDefs = function( callback ){
   });
 };
 
+const convertDefinitionsToS3 = function(callback){
+  // Take text definition of each word, convert to speech and store in S3
+};
+
 Template.master.events({
+  'click #mas_def_to_s3'(e){
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    $(e.currentTarget).html(wait);
+    Meteor.call('definitionsToS3',function(err,results){
+      $(e.currentTarget).html(html);
+      if ( err ) {
+        console.log('Error: Master.js line 94',err);
+      } else {
+        console.log('definitionsToS3',results);
+      }
+    });
+  },
   'click #mas_openai'(e){
     const wait = '...';
     const html = $(e.currentTarget).html();

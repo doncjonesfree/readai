@@ -4,7 +4,53 @@ const fs = require('fs');
 
 const DefaultBucket = 'read-audio';
 
+export const uploadS3 = function( fullPath, file, callback ){
+  // seems to work for mp3 files
+
+  // Create an S3 client
+  const s3 = getS3Object();
+
+  // Set the bucket and key for the file you want to upload
+  const bucket = DefaultBucket;
+  const key = file;
+
+  // Read the file into a buffer
+  const fileBuffer = fs.readFileSync(fullPath);
+
+  // Set the content type and other metadata for the file
+  const word = getWord( file );
+  const params = {
+    Bucket: bucket,
+    Key: key,
+    Body: fileBuffer,
+    ContentType: 'audio/mpeg',
+    Metadata: {
+      'artist': 'Learn To Read',
+      'title': sprintf('Definition for "%s"',word)
+    }
+  };
+
+  // Upload the file to S3
+  s3.upload(params, function(err, data) {
+    if (err) {
+      console.log('uploadS3 Error!',err);
+    } else {
+      console.log(`Successfully uploaded ${key} to ${bucket}`);
+    }
+    callback();
+  });
+};
+
+const getWord = function( file ){
+  // extract the word out of the S3 key to be uploaded
+  let op = file.replace(".mp3",'');
+  const ix = op.indexOf('/');
+  if ( ix > 0 ) op = op.substring(ix+1);
+  return op;
+};
+
 export const putObject = function( fullPath, file, callback ){
+  // This doesn't work for mp3 files. It sends data, but file contents wrong
   let retObj = { file: file };
   const s3 = getS3Object();
   // ascii, utf8, base64
