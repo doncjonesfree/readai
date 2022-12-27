@@ -8,7 +8,7 @@ import { getNextLesson, getEasierGFLesson, getEasierDCLesson, saveLessonHistory,
 import { backupToText, restoreFromText } from '../../server/backup';
 import { checkS3 } from '../../server/utils';
 import { getObject, uploadS3 } from '../../server/aws';
-import { openAiWordDef } from "../../server/openai"
+import { openAiWordDef, getKeywords } from "../../server/openai"
 
 const fs = require('fs');
 const mailgun = require("mailgun-js");
@@ -16,6 +16,15 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  getKeywords: function(){
+    let future=new Future();
+
+    getKeywords( function( results ){
+      future.return( results );
+    });
+
+    return future.wait();
+  },
   openAiWordDef: function(word){
     // AudioFiles has all words in GF and DC lessons
 

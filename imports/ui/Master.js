@@ -70,7 +70,7 @@ const getAllAiWordDefs = function( callback ){
         console.log('Waiting %s',AiWaitTime);
         Meteor.setTimeout(function(){
           AiWaitTime += 1000;
-          if ( AiWaitTime > 60000 ) AiWaitTime = 60000;
+          if ( AiWaitTime > 40000 ) AiWaitTime = 40000;
           getAllAiWordDefs( callback );
         },AiWaitTime);
       }
@@ -83,6 +83,20 @@ const convertDefinitionsToS3 = function(callback){
 };
 
 Template.master.events({
+  'click #mas_get_keywords'(e){
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    $(e.currentTarget).html(wait);
+    Meteor.call('getKeywords',function(err,results){
+      $(e.currentTarget).html(html);
+      if ( err ) {
+        console.log('Error: Master.js line 94',err);
+      } else {
+        console.log('getKeywords',results);
+      }
+    });
+  },
   'click #mas_def_to_s3'(e){
     const wait = '...';
     const html = $(e.currentTarget).html();

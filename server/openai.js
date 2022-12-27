@@ -1,47 +1,16 @@
+import { GatherFacts, GatherFactsAnswers, DrawConclusions } from '/imports/db/Collections';
 const { Configuration, OpenAIApi } = require("openai");
 
 const configuration = new Configuration({
   apiKey: Meteor.settings.openapi
 });
 
-// export async function openAiWordDef( word, callback ) {
-//   // Replace '<YOUR_API_KEY>' with your actual API key
-//   const apiKey = Meteor.settings.openapi;
-//   console.log('jones18 word=%s',word);
-//
-//   const prompt = sprintf('Q: Can you define the word %s suitable for a small child without using the word %s in the definition?\nA:',word,word);
-//   console.log('jones18 prompt=%s',prompt);
-//
-//   // Set the request parameters
-//   const params = {
-//     model: "text-davinci-003",
-//     prompt: prompt,
-//     temperature: 0,
-//     max_tokens: 100,
-//     top_p: 1,
-//     frequency_penalty: 0.0,
-//     presence_penalty: 0.0,
-//     stop: ["\n"],
-//   };
-//
-//   // Send the request to the API
-//   const response = await fetch('https://api.openai.com/v1/text/create-completion', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Authorization': `Bearer ${apiKey}`
-//     },
-//     body: JSON.stringify(params)
-//   });
-//
-//   // Extract the generated text from the response
-//   const json = await response.json();
-//   console.log('jones33a',json);
-//   const generatedText = json.data.text;
-//
-//   // Display the generated text in the console
-//   console.log('jones33b',generatedText);
-// }
+export const getKeywords = function( callback ){
+  let retObj = { success: true, message: 'not yet implemented' };
+
+  retObj.GatherFacts = GatherFacts.find({},{ sort: { GradeLevel: 1 }}).fetch();
+  callback( retObj );
+};
 
 export async function openAiWordDef( word, callback ) {
   let results = await openAiWordDef2( word );
