@@ -10,7 +10,7 @@
   "dependencies": {
     "@babel/runtime": "^7.15.4",
     "@google-cloud/text-to-speech": "^4.0.0",
-    "axios": "^1.2.1",
+    "axios": "^1.2.2",
     "bcrypt": "^5.0.1",
     "jquery": "^3.6.0",
     "mailgun-js": "^0.22.0",

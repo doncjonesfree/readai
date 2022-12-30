@@ -9,6 +9,7 @@ import { backupToText, restoreFromText } from '../../server/backup';
 import { checkS3 } from '../../server/utils';
 import { getObject, uploadS3 } from '../../server/aws';
 import { openAiWordDef, getKeywords } from "../../server/openai"
+import { getAssemblyAIToken } from '../../server/assemblyai';
 
 const fs = require('fs');
 const mailgun = require("mailgun-js");
@@ -20,6 +21,18 @@ Meteor.methods({
     let future=new Future();
 
     getKeywords( function( results ){
+      future.return( results );
+    });
+
+    return future.wait();
+  },
+  getAssemblyAIKey: function(){
+    return Meteor.settings.AssemblyAI;
+  },
+  getAssemblyAIToken: function(){
+    let future=new Future();
+
+    getAssemblyAIToken( function( results ){
       future.return( results );
     });
 
@@ -412,17 +425,26 @@ Meteor.methods({
 
             // convert definition to speech (mp3)
             const directory = '/Users/donjones/Downloads/tempAudio';
-            console.log('processing %s (%s of %s)',r.word,ix,list.length);
-            googleCreateMp3( { word: r.word, sentences: r.text, createOnly: true, outputTo: directory }, function(){
-              // upload mp3 to amazon S3
-              const fullPath = sprintf('%s/%s.mp3',directory,r.word);
-              const file = sprintf('AIDefinition/%s.mp3',r.word);
-              uploadS3( fullPath, file,  Meteor.bindEnvironment( function(){
-                let doc = { uploaded: true };
-                Definitions.update(r._id, { $set: doc });
-                processUndefinedWords( list, ix+1, op, callback );
-              }));
-            });
+            if ( r.word === 'really') {
+              r.text = r.text.replace(/ exceptionally;/g,'');
+              console.log('jones429',r.text.length, r.text);
+            }
+            if ( r.text.length >= 5000 ) {
+              console.log('skipped %s (%s of %s) too long',r.word,ix,list.length);
+              processUndefinedWords( list, ix+1, op, callback );
+            } else {
+              console.log('processing %s (%s of %s)',r.word,ix,list.length);
+              googleCreateMp3( { word: r.word, sentences: r.text, createOnly: true, outputTo: directory }, function(){
+                // upload mp3 to amazon S3
+                const fullPath = sprintf('%s/%s.mp3',directory,r.word);
+                const file = sprintf('AIDefinition/%s.mp3',r.word);
+                uploadS3( fullPath, file,  Meteor.bindEnvironment( function(){
+                  let doc = { uploaded: true };
+                  Definitions.update(r._id, { $set: doc });
+                  processUndefinedWords( list, ix+1, op, callback );
+                }));
+              });
+            }
           },6000); // wait 6 seconds before each call to avoid making too many calls
         } else {
           let doc = { definition: 'failed' };

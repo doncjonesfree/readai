@@ -24,33 +24,6 @@ Template.master.onCreated(function masterOnCreated() {
   });
 });
 
-let Word = '';
-let WordAttemptCount = 0;
-// speech recognition from ChatGPT - using browser recognition
-// const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-// const recognition = new SpeechRecognition();
-//
-// recognition.continuous = true;
-// recognition.interimResults = true;
-//
-// let transcript = '';
-//
-// recognition.onresult = (event) => {
-//   const result = event.results[event.resultIndex];
-//   const interimTranscript = result[0].transcript;
-//
-//   WordAttemptCount += 1;
-//
-//   if (result.isFinal) {
-//     transcript += interimTranscript;
-//   } else {
-//     transcript = interimTranscript;
-//   }
-//
-//   console.log('jones47a',transcript);
-//   if ( transcript.indexOf( Word ) >= 0 ) console.log('jones47b found %s attempt=%s',Word,WordAttemptCount);
-// };
-
 const loadHistoryCount = function(callback){
   Meteor.call('historyLessonCount',function(err,results){
     if ( err ) {
@@ -105,32 +78,11 @@ const getAllAiWordDefs = function( callback ){
   });
 };
 
-const convertDefinitionsToS3 = function(callback){
-  // Take text definition of each word, convert to speech and store in S3
-};
-
 Template.master.events({
-  'click #mas_start_recognition'(e){
-    console.log('disabled - failed in Firefox');
-    // Browser recognition does not appear reliable enough - try assembly ai
-    // let list = [];
-    // Word = 'recognize';
-    // WordAttemptCount = 0;
-    // list.push( { msg: 'Say the word shown above.' })
-    // let options = {};
-    // options.setVariables = [ { name: 'master_mode', value: 1 } ];
-    // options.getVariables = [];
-    // options.title = Word;
-    // options.messages = list;
-    // options.setResponse = 'master_wordResponse';
-    // options.buttons = [];
-    // options.buttons.push( { label: 'Close', value: 0, cls: 'button' });
-    // Session.set('Message_options',options);
-    // set('mode',5);
-    //
-    // Meteor.setTimeout(function(){
-    //   recognition.start();
-    // },500);
+  'click #mas_assemblyai_token'(e){
+    lib.getAudio( 'canvas', function(results){
+      console.log('jones357',results);
+    });
   },
   'click #mas_get_keywords'(e){
     const wait = '...';

@@ -36,6 +36,175 @@ export const getSupervisorValue = function(){
   return int( Session.get('supervisor') );
 };
 
+const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+
+export const alphaOnly = function(word){
+  // return lower case letters only
+  let op = [];
+  for ( let i=0; i < word.length; i++ ) {
+    const c = word.substr(i,1);
+    if ( alphabet.indexOf(c) >= 0 ) op.push(c);
+  }
+  return op.join('');
+};
+
+export const getAudio = function( word, callback ){
+  // get audio and see if it matches the word given
+
+  if ( Meteor.isServer ) {
+    callback( false );
+    return;
+  }
+
+  let isRecording = false;
+  let socket;
+  let recorder;
+  let startRecordingTime = 0;
+
+  const closeRecording = function(){
+    if (socket) {
+      socket.send(JSON.stringify({terminate_session: true}));
+      socket.close();
+      socket = null;
+    }
+
+    if (recorder) {
+      recorder.pauseRecording();
+      recorder = null;
+    }
+    isRecording = false;
+  };
+
+  const wordCount = function(msg){
+    let count = 0;
+    const list = msg.split(' ');
+    for ( let i=0; i < list.length; i++ ) {
+      const w = list[i].trim();
+      if ( w ) count += 1;
+    }
+    return count;
+  };
+
+  // runs real-time transcription and handles global variables
+  const run = async ( data, callback ) => {
+    if (isRecording) {
+      closeRecording();
+    } else {
+      // data is passed in, not called from here
+      // const response = await fetch('http://localhost:8000'); // get temp session token from server.js (backend)
+      // const data = await response.json();
+
+      if(data.error){
+        alert(data.error)
+      }
+
+      const { token } = data;
+
+      // establish wss with AssemblyAI (AAI) at 16000 sample rate
+      socket = await new WebSocket(`wss://api.assemblyai.com/v2/realtime/ws?sample_rate=16000&token=${token}`);
+
+      // handle incoming messages to display transcription to the DOM
+      const texts = {};
+      socket.onmessage = (message) => {
+        let msg = '';
+        const res = JSON.parse(message.data);
+        texts[res.audio_start] = res.text;
+        const keys = Object.keys(texts);
+        keys.sort((a, b) => a - b);
+        for (const key of keys) {
+          if (texts[key]) {
+            msg += ` ${texts[key]}`;
+          }
+        }
+        const words = wordCount(msg);
+        if ( startRecordingTime ) {
+          const delta = epoch() - startRecordingTime;
+          // stop on the 2nd word or 5 seconds, whichever comes first
+          if ( match(word,msg) || words > 1 || delta >= 5000 ) {
+            closeRecording();
+            callback(msg);
+          }
+        }
+      };
+
+      socket.onerror = (event) => {
+        console.error('socket onerror',event);
+        socket.close();
+      }
+
+      socket.onclose = event => {
+        console.log('socket onclose',event);
+        socket = null;
+      }
+
+      socket.onopen = () => {
+        // once socket is open, begin recording
+        // messageEl.style.display = '';
+        console.log('socket onopen');
+        startRecordingTime = 0;
+        navigator.mediaDevices.getUserMedia({ audio: true })
+          .then((stream) => {
+            recorder = new RecordRTC(stream, {
+              type: 'audio',
+              mimeType: 'audio/webm;codecs=pcm', // endpoint requires 16bit PCM audio
+              recorderType: StereoAudioRecorder,
+              timeSlice: 250, // set 250 ms intervals of data that sends to AAI
+              desiredSampRate: 16000,
+              numberOfAudioChannels: 1, // real-time requires only one channel
+              bufferSize: 4096,
+              audioBitsPerSecond: 128000,
+              ondataavailable: (blob) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                  const base64data = reader.result;
+
+                  // audio data must be sent as a base64 encoded string
+                  if (socket) {
+                    socket.send(JSON.stringify({ audio_data: base64data.split('base64,')[1] }));
+                  }
+                };
+                reader.readAsDataURL(blob);
+              },
+            });
+
+            recorder.startRecording();
+            startRecordingTime = epoch();
+          })
+          .catch((err) => console.error(err));
+      };
+      isRecording = true;
+    }
+  };
+
+  const match = function(argWord,words){
+    const word = alphaOnly( argWord.trim().toLowerCase() );
+    const list = words.toLowerCase().split(' ');
+    for ( let i=0; i < list.length; i++ ) {
+      const w = alphaOnly( list[i].trim() );
+      if ( w === word ) return true;
+    }
+    return false;
+  };
+
+  // first get a token from the server
+  Meteor.call('getAssemblyAIToken',function(err,results){
+    if ( err ) {
+      console.log('Error: lib.js line 50',err);
+      callback( { error: 'Error getting token'});
+    } else {
+      if ( results.token ) {
+        run( results, function(words){
+          // words is the words that were returned
+          callback( { match: match(word,words), word: word, words: words });
+        });
+      } else {
+        console.log('Error: lib.js line 58',err);
+        callback( { error: 'No token'});
+      }
+    }
+  });
+};
+
 export const changeInstructionAudio = function(v){
   // turn on or off instructions
   const pre = Session.get('pre');

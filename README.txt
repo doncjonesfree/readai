@@ -68,3 +68,11 @@ meteor npm install --save mailgun-js   ( https://www.npmjs.com/package/mailgun-j
 meteor npm install --save openai   ( https://www.npmjs.com/package/openai )
 
 meteor npm install -- save axios  (https://www.npmjs.com/package/axios) for http access for AssemblyAI speech to text
+
+For Javascript example of calling AssemblyAI - realtime:
+https://github.com/AssemblyAI/realtime-transcription-browser-js-example/blob/master/js/server.js
+
+meteor add froatsnook:request  https://atmospherejs.com/froatsnook/request
+did not do: meteor npm install --save request
+
+Added RecordRTC.js for getting microphone input. https://recordrtc.org/
