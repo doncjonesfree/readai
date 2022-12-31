@@ -12,8 +12,13 @@
         <button id="mas_openai">Test OpenAI</button>
         <button id="mas_def_to_s3">Def to S3</button>
         <button id="mas_assemblyai_token">AssemblyAI</button>
-        <button id="mas_get_keywords">Get Keywords</button>
+        <button id="mas_word_audio">Word Audio</button>
         <button id="mas_special">Special</button>
+
+        {{ #if word_audio }}
+          {{ > WordAudio }}
+        {{ /if }}
+
       {{ /if }}
 
       {{ #if mode2 }}

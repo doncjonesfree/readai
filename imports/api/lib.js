@@ -69,6 +69,7 @@ export const getAudio = function( word, callback ){
     }
 
     if (recorder) {
+      console.log('jones72',recorder);
       recorder.pauseRecording();
       recorder = null;
     }

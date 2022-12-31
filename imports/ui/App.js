@@ -38,6 +38,8 @@ import "./Instructions.html";
 import "./Instructions.js";
 import "./Points.html";
 import "./Points.js";
+import "./WordAudio.html";
+import "./WordAudio.js";
 
 const IS_LOADING_STRING = "isLoading";
 

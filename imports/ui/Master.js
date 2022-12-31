@@ -14,6 +14,7 @@ Template.master.onCreated(function masterOnCreated() {
   // 1: Show list of options
   // 2: List / Edit users
   setd('mode',1);
+  setd('word_audio',false);
   Meteor.call('loadAllStudents',function(err,results){
     if ( err ) {
       console.log('Error: Master.js line 19',err);
@@ -42,6 +43,7 @@ Template.master.helpers({
   mode4() { return get('mode') === 4; },
   mode5() { return get('mode') === 5; },
   mode6() { return get('mode') === 6; },
+  word_audio() { return get('word_audio'); },
   masterUser(){
     return lib.getCookie('ltrMaster');
   },
@@ -83,6 +85,11 @@ Template.master.events({
     lib.getAudio( 'canvas', function(results){
       console.log('jones357',results);
     });
+  },
+  'click #mas_word_audio'(e){
+    Session.set('WordAudio_word','canvas');
+    Session.set('WordAudio_session_reset','master_word_audio');
+    set('word_audio',true);
   },
   'click #mas_get_keywords'(e){
     const wait = '...';

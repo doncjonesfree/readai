@@ -41,14 +41,15 @@ Template.Message.helpers({
 
 const submit = function( response ){
   const options = get('options');
+  // let options = {};
   // options.setVariables = [ { name: 'proofs_showMessage', value: false } ];
   // options.getVariables = [ { name: 'header_pin', id: '#pin' }];
   // options.title = 'Verify Proof Sent';
   // options.messages = list;
   // options.setResponse = 'proofs_popupResponse';
   // options.buttons = [];
-  // options.buttons.push( { label: 'Proof Sent', value: 1, cls: 'ep_button' });
-  // options.buttons.push( { label: 'Cancel', value: 0, cls: 'ep_button3' });
+  // options.buttons.push( { label: 'Proof Sent', value: 1, cls: 'button' });
+  // options.buttons.push( { label: 'Cancel', value: 0, cls: 'button button-cancel' });
 
   for ( let i=0; i < options.setVariables.length; i++ ) {
     const o = options.setVariables[i];
