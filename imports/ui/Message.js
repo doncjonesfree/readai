@@ -16,6 +16,17 @@ Template.Message.helpers({
     }
     return '';
   },
+  mPoints: function(){
+    const options = get('options');
+    console.log('jones21',options);
+    if ( options.points ) {
+      Session.set('Points_points',options.points);
+      Session.set('Points_totalPoints',options.totalPoints);
+      // options.points = 0;
+      // set('options',options);
+      return true;
+    }
+  },
   list: function(){
     const options = get('options');
     if ( options ) {

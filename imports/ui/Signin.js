@@ -28,7 +28,7 @@ const getFields = function(){
   let op = [];
 
   let list = [];
-  list.push('If you not signed up yet, please click "sign up" instead.');
+  list.push('If you have not signed up yet, please click "sign up" instead.');
   list.push('<div class="warning">Make sure your volume is on!</div>');
   op.push( { paragraph: list });
 

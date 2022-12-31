@@ -51,6 +51,8 @@ export const alphaOnly = function(word){
 export const getAudio = function( word, callback ){
   // get audio and see if it matches the word given
 
+  const delay = 3000; // time we wait for word to be pronounced
+
   if ( Meteor.isServer ) {
     callback( false );
     return;
@@ -69,8 +71,8 @@ export const getAudio = function( word, callback ){
     }
 
     if (recorder) {
-      console.log('jones72',recorder);
-      recorder.pauseRecording();
+      // recorder.pauseRecording();
+      recorder.stopRecording();
       recorder = null;
     }
     isRecording = false;
@@ -121,7 +123,7 @@ export const getAudio = function( word, callback ){
         if ( startRecordingTime ) {
           const delta = epoch() - startRecordingTime;
           // stop on the 2nd word or 5 seconds, whichever comes first
-          if ( match(word,msg) || words > 1 || delta >= 5000 ) {
+          if ( match(word,msg) || words > 1 || delta >= delay ) {
             closeRecording();
             callback(msg);
           }
@@ -287,6 +289,11 @@ export const currentMoment = function(){
   // may force to a certain time for testing
   // return moment('2021-03-18 12:00:00',dateFormat);
   return moment().tz('America/Los_Angeles');
+};
+
+export const redBallHtml = function(){
+  // red ball shows that recording is going on in a popup
+  return '<div class="red-ball"> &nbsp; </div>';
 };
 
 export const buttonHtml = function(obj){

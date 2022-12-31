@@ -15,6 +15,7 @@ Template.WordAudio.onCreated(function WordAudioOnCreated() {
 });
 
 const loadPopup = function(){
+  // Load the popup, get voice input and compare to target word
   let list = [];
   list.push( { msg: 'Say the Word...' } );
   let options = {};
@@ -36,12 +37,16 @@ const loadPopup = function(){
 
   lib.googlePlaySound( '$say_the_word', function(){
     options.title = word;
-    options.messages = [];
+    options.messages = [ { msg: lib.redBallHtml() } ];
     Session.set('Message_options',options);
 
     lib.getAudio( word, function(results){
-      console.log('jones37a audio results',results);
+      console.log('jones37b audio results',results);
       if ( results.match ) {
+        options.messages = [];
+        options.points = 5;
+        options.totalPoints = 100;
+        Session.set('Message_options',options);
         lib.googlePlaySound( '$correct', function(){
         });
       } else {
@@ -49,8 +54,14 @@ const loadPopup = function(){
           lib.getAudio( word, function(results){
             console.log('jones37b audio results',results);
             if ( results.match ) {
+              options.messages = [];
+              options.points = 5;
+              options.totalPoints = 100;
+              Session.set('Message_options',options);
               lib.googlePlaySound( '$correct' );
             } else {
+              options.messages = [];
+              Session.set('Message_options',options);
               console.log('jones55 give up');
               lib.googlePlaySound( '$save_for_later' );
             }

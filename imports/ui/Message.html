@@ -6,6 +6,9 @@
          <div class="msg_list">{{{ msg }}}</div>
        {{ /each }}
        {{{ buttons }}}
+       {{ #if mPoints }}
+         {{ > Points }}
+       {{ /if }}
     </div>
   </div>
 </template>

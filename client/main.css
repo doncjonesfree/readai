@@ -40,7 +40,8 @@
   --color-border: #d3d3d3;
   --color-primary: #696969;
   --color-light-grey: #f1f2f2;
-  --color-error: red;
+  --color-error: rgb(187,54,50);
+  --color-recording: rgb(187,54,50,.6);
   --color-warning: #339900;
   --color-ins-playing: rgba(178,34,34,.4);
 
@@ -116,6 +117,15 @@
 
 .nav-element:hover {
   color: var(--color-link);
+}
+
+.red-ball {
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-recording);
+  border-radius: 10px;
+  animation: blink-animation 1s steps(5, start) infinite;
+  -webkit-animation: blink-animation 1s steps(5, start) infinite;
 }
 
 /* standard input css */
