@@ -54,6 +54,8 @@ export const addDcAnswerCheckbox = function(l){
 Template.DCLesson.helpers({
   mode1: function(){ return get('mode') === 1 },
   mode2: function(){ return get('mode') === 2 },
+  local: function(){ return Meteor.isDevelopment; },
+  wordAudio() { return get('wordAudio'); },
   showPoints() { return get('showPoints'); },
   set_difficulty(){
     const student = lib.getCookie('student');
@@ -111,7 +113,24 @@ const loadNextQuestion = function(){
   });
 };
 
+const lessonFail = function(){
+  // lets_look_at_some_of_the_words.mp3
+  lib.googlePlaySound( '$lets_look_at_some_of_the_words' );
+  const lesson = get('lesson');
+  let list = [];
+  list.push( lesson.Question );
+  for ( let i=1; i <= 4; i++ ) {
+    const k = sprintf('Answer%s',i);
+    if ( lesson[k] ) list.push(lesson[k] );
+  }
+  const text = list.join(' ');
+  lib.quizHardestWords(text, 'DCLesson_wordAudio');
+};
+
 Template.DCLesson.events({
+  'click #test_lesson_fail': function(e){
+    lessonFail();
+  },
   'click .dc_minus': function(e){
     // pick an easier gf lesson
     const direction = $(e.currentTarget).attr('data'); // easier / harder

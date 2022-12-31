@@ -20,10 +20,9 @@ Template.Message.helpers({
     const options = get('options');
     console.log('jones21',options);
     if ( options.points ) {
+      const totalPoints = lib.int( lib.getCookie('studentPoints') ) + options.points;
       Session.set('Points_points',options.points);
-      Session.set('Points_totalPoints',options.totalPoints);
-      // options.points = 0;
-      // set('options',options);
+      Session.set('Points_totalPoints',totalPoints);
       return true;
     }
   },

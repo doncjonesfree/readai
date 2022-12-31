@@ -57,6 +57,9 @@ const isPinValid = function(v){
 
 let Student = '';
 Template.header.helpers({
+  local(){
+    return Meteor.isDevelopment;
+  },
   pinResponse(){
     if ( lib.int(get('pinResponse')) === 1 ) {
       // submit`

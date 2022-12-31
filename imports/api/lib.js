@@ -36,6 +36,19 @@ export const getSupervisorValue = function(){
   return int( Session.get('supervisor') );
 };
 
+export const quizHardestWords = function(text, ses ){
+  console.log('jones124',text);
+  Meteor.call('getHardestWords', text, function(err,wordList){
+    console.log('jones132 getHardestWords',wordList);
+    if ( err ) {
+      console.log('Error: DCLesson.js line 134',err);
+    } else {
+      Session.set('WordAudio_wordList',wordList);
+      Session.set(ses,true);
+    }
+  });
+};
+
 const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 
 export const alphaOnly = function(word){

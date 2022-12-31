@@ -8,7 +8,7 @@ import { getNextLesson, getEasierGFLesson, getEasierDCLesson, saveLessonHistory,
 import { backupToText, restoreFromText } from '../../server/backup';
 import { checkS3 } from '../../server/utils';
 import { getObject, uploadS3 } from '../../server/aws';
-import { openAiWordDef, getKeywords } from "../../server/openai"
+import { openAiQuestion, getKeywords, getHardestWords } from "../../server/openai"
 import { getAssemblyAIToken } from '../../server/assemblyai';
 
 const fs = require('fs');
@@ -17,6 +17,65 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  testVocabulary: function( word, wordList ){
+    let retObj = { word: word, wordList: wordList };
+
+    const stripWord = function(r){
+      // strip the word from the definition.  Sometimes the word is included even though we asked that it be omitted
+      const lcText = r.text.toLowerCase();
+      const ix = lcText.indexOf( r.word );
+      if ( ix >= 0 ) {
+        return sprintf('%s__________%s',r.text.substr(0,ix), r.text.substring(ix + r.word.length ));
+      }
+      return r.text;
+    };
+
+    const formList = function(){
+      let op = [];
+      let obj = {};
+      // first creat the entry for the "word"
+      for ( let i=0; i < retObj.recs.length; i++ ) {
+        const r = retObj.recs[i];
+        if ( r.word === word ) {
+          op.push( { word: r.word, definition: stripWord(r), random: Math.floor(Math.random() * 100) } );
+          obj[ r.word ] = true;
+          break;
+        }
+      }
+      // now fill in the rest
+      let count = 0;
+      while ( true ) {
+        count += 1;
+        if ( count > 100 ) break; // prevents infinite loop - shouldn't happen
+        const ix = Math.floor(Math.random() * retObj.recs.length );
+        const r = retObj.recs[ix];
+        if ( ! obj[ r.word ] ) {
+          obj[ r.word ] = true;
+          op.push( { word: r.word, definition: stripWord(r), random: Math.floor(Math.random() * 100) } );
+          if ( op.length >= 4 ) break;
+        }
+      }
+      op.sort( function(a,b){
+        if ( a.random < b.random ) return -1;
+        if ( a.random > b.random ) return 1;
+        return 0;
+      });
+      return op;
+    };
+
+    retObj.recs = Definitions.find( { word: { $in: wordList }}).fetch();
+    retObj.list = formList();
+    return retObj.list;
+  },
+  getHardestWords: function( text ){
+    let future=new Future();
+
+    getHardestWords(text,function(results){
+      future.return( results );
+    });
+
+    return future.wait();
+  },
   burned: function(){
     const doc = { uploaded: false };
     Definitions.update("atrjvXCPWnNSBohLJ", { $set: doc });
@@ -43,7 +102,7 @@ Meteor.methods({
 
     return future.wait();
   },
-  openAiWordDef: function(word){
+  openAiQuestion: function(word){
     // AudioFiles has all words in GF and DC lessons
 
     let future=new Future();
@@ -68,7 +127,8 @@ Meteor.methods({
           console.log('jones41 skipped %s',r.word);
           addDef( list, ix+1, callback );
         } else {
-          openAiWordDef( r.word, function( ret ){
+          const prompt = sprintf('Q: Can you define the word %s suitable for a small child without using the word %s in the definition?\nA:\nA:',r.word,r.word);
+          openAiQuestion( prompt, function( ret ){
             if ( ret.txt ) {
               let doc = {};
               doc.word = r.word;
