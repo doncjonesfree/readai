@@ -651,7 +651,7 @@ const play = function( list, ix, callback ){
   // play the sound
   if ( ix < list.length ) {
     const url = list[ix];
-    SoundObj = new Howl( { src: url });
+    SoundObj = new Howl( { src: url, html5: true });
     SoundObj.on('end',function(){
       Meteor.setTimeout(function(){
         SoundObj = '';
