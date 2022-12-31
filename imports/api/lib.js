@@ -612,7 +612,8 @@ export const googlePlaySound = function( arg, callback ){
   if ( word.substr(0,1) === '*') {
     // actually we want the definition, not the word itself
     word = word.substring(1);
-    url = sprintf('%s/definition/%s.mp3',s3path,word.toLowerCase());
+    //url = sprintf('%s/definition/%s.mp3',s3path,word.toLowerCase());
+    url = sprintf('%s/AIDefinition/%s.mp3',s3path,word.toLowerCase());
     definition = true;
   } else if ( word.substr(0,1) === '$') {
     // instructions

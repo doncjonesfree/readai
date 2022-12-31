@@ -17,6 +17,11 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  burned: function(){
+    const doc = { uploaded: false };
+    Definitions.update("atrjvXCPWnNSBohLJ", { $set: doc });
+    return Definitions.find({ word: 'burned'}).fetch();
+  },
   getKeywords: function(){
     let future=new Future();
 
@@ -46,7 +51,6 @@ Meteor.methods({
     let retObj = { added: 0, errors: [] };
 
     const defs = Definitions.find().fetch();
-    console.log('jones27 defs found %s',defs.length);
     let defObj = {};
     for ( let i=0; i < defs.length; i++ ) {
       const d = defs[i];
@@ -93,7 +97,6 @@ Meteor.methods({
       const r = recs[i];
       if ( ! defObj[ r.word ] ) recs2.push(r);
     }
-    console.log('jones74 %s left to define',recs2.length);
     addDef( recs2, 0, function(){
       future.return( retObj );
     });
@@ -427,7 +430,6 @@ Meteor.methods({
             const directory = '/Users/donjones/Downloads/tempAudio';
             if ( r.word === 'really') {
               r.text = r.text.replace(/ exceptionally;/g,'');
-              console.log('jones429',r.text.length, r.text);
             }
             if ( r.text.length >= 5000 ) {
               console.log('skipped %s (%s of %s) too long',r.word,ix,list.length);
@@ -697,7 +699,16 @@ const googleCreateMp3 = function( arg, callback ){
   const client = new textToSpeech.TextToSpeechClient();
 
   let text = word;
-  if ( sentences ) text = sentences;
+  if ( sentences ) {
+    text = sentences;
+    if ( typeof(text) === 'object' ) {
+      if ( text.txt ) {
+        text = text.txt;
+      } else {
+        console.log('Object error in googleCreateMp3 line 712',arg);  throw 'Error';
+      }
+    }
+  }
   async function convertTextToMp3(){
     let request = {
       input: { text: text },

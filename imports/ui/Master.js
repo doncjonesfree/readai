@@ -81,9 +81,14 @@ const getAllAiWordDefs = function( callback ){
 };
 
 Template.master.events({
-  'click #mas_assemblyai_token'(e){
-    lib.getAudio( 'canvas', function(results){
-      console.log('jones357',results);
+  'click #mas_burned'(e){
+    // burned failed in definition
+    Meteor.call('burned',function(err,results){
+      if ( err ) {
+        console.log('Error: Master.js line 89',err);
+      } else {
+        console.log('burned',results);
+      }
     });
   },
   'click #mas_word_audio'(e){
