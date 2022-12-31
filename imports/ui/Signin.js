@@ -71,7 +71,7 @@ const signin = function(id ){
           if ( err ) {
             console.log('Error: Signin.js line 61',err);
           } else {
-            if ( master && Meteor.isDevelopment ) {
+            if ( master ) { // jones - temporary, was Meteor.isDevelopment
               lib.setCookie('ltrMaster',true );
               lib.setCookie('ltrSupervisor',true );
               FlowRouter.go('master');
