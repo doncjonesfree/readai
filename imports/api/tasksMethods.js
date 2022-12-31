@@ -378,7 +378,9 @@ Meteor.methods({
         // don't let master users through unless in dev mode
         for ( let i=0; i < recs.length; i++ ) {
           const r = recs[i];
-          if ( list.indexOf(r.email) < 0 || Meteor.isDevelopment ) op.push(r);
+          // jones - temporarily let master user in production mode
+          // if ( list.indexOf(r.email) < 0 || Meteor.isDevelopment ) op.push(r);
+          op.push(r);
         }
         return op;
       break;
