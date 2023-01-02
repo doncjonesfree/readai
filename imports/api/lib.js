@@ -61,6 +61,16 @@ export const alphaOnly = function(word){
   return op.join('');
 };
 
+export const addToWordPoints = function( word, definition, points ){
+  const t = getCookie('studentPoints');
+  setCookie('studentPoints', int(t) + int(points) );
+  Meteor.call('addToWordPoints', getCookie('student'),word,definition,points,function(err,results){
+    if ( err ) {
+      console.log('Error: lib.js line 69 addToWordPoints',err);
+    }
+  });
+};
+
 export const getAudio = function( word, callback ){
   // get audio and see if it matches the word given
 

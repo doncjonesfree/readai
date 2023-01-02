@@ -1,5 +1,5 @@
 import { check } from 'meteor/check';
-import { Students, TasksCollection, GatherFacts, GatherFactsAnswers, AudioFiles, DrawConclusions, Users, LessonHistory, WordList, Definitions } from '/imports/db/Collections';
+import { Students, TasksCollection, GatherFacts, GatherFactsAnswers, AudioFiles, DrawConclusions, Users, LessonHistory, WordList, Definitions, WordPoints } from '/imports/db/Collections';
 import * as lib from './lib';
 
 var Future = Npm.require("fibers/future");
@@ -17,6 +17,32 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  addToWordPoints: function( student, word, definition, points ){
+    // definition: if true, then the points were awarded for the definition selected correctly
+    let retObj = { student: student, word: word, definition: definition, points: points };
+    const recs = WordPoints.find( { word: word, student_id: student._id }).fetch();
+    retObj.recs = recs;
+    let doc = {};
+    if ( recs.length === 0 ) {
+      doc.student_id = student._id;
+      doc.word = word;
+      doc.knowsDefinition = definition;
+      doc.points = points;
+      doc.created = lib.today();
+      retObj.doc = doc;
+      retObj.inserted = true;
+      WordPoints.insert(doc);
+    } else {
+      const r = recs[0]; // should only be one record
+      if ( ! r.knowsDefinition ) doc.knowsDefinition = definition;
+      doc.points = r.points + points;
+      doc.updated = lib.today();
+      retObj.doc = doc;
+      retObj.inserted = false;
+      WordPoints.update(r._id, { $set: doc });
+    }
+    return { success: true };
+  },
   testVocabulary: function( word, wordList ){
     let retObj = { word: word, wordList: wordList };
 

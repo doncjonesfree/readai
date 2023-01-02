@@ -1,5 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
+export const WordPoints = new Mongo.Collection('word_points'); // points awarded for knowing words 
 export const Definitions = new Mongo.Collection('definitions'); // definitions from OpenAI
 export const WordList = new Mongo.Collection('word_list'); // study words
 export const LessonHistory = new Mongo.Collection('lesson_history');

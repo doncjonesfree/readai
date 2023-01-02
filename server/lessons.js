@@ -1,4 +1,4 @@
-import { Students, GatherFacts, GatherFactsAnswers, DrawConclusions, LessonHistory, WordList } from '/imports/db/Collections';
+import { Students, GatherFacts, GatherFactsAnswers, DrawConclusions, LessonHistory, WordList, WordPoints } from '/imports/db/Collections';
 import * as lib from '../imports/api/lib';
 
 export const addPoints = function(students){
@@ -7,6 +7,8 @@ export const addPoints = function(students){
 
   const history = LessonHistory.find( { student_id: { $in: studentList }}, { sort: { when: -1 } } ).fetch();
   const words = WordList.find( { student_id: { $in: studentList } }).fetch();
+  const wordPoints = WordPoints.find( { student_id: { $in: studentList } }).fetch();
+
 
   let obj = {};
   for ( let i=0; i < history.length; i++ ) {
@@ -18,6 +20,13 @@ export const addPoints = function(students){
   }
   for ( let i=0; i < words.length; i++ ) {
     const h = words[i];
+    if ( h.points ) {
+      if ( ! obj[ h.student_id ] ) obj[ h.student_id ] = 0;
+      obj[ h.student_id ] += h.points;
+    }
+  }
+  for ( let i=0; i < wordPoints.length; i++ ) {
+    const h = wordPoints[i];
     if ( h.points ) {
       if ( ! obj[ h.student_id ] ) obj[ h.student_id ] = 0;
       obj[ h.student_id ] += h.points;

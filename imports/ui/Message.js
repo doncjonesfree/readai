@@ -17,12 +17,16 @@ Template.Message.helpers({
     return '';
   },
   mPoints: function(){
-    const options = get('options');
+    let options = get('options');
     console.log('jones21',options);
     if ( options.points ) {
       const totalPoints = lib.int( lib.getCookie('studentPoints') ) + options.points;
       Session.set('Points_points',options.points);
       Session.set('Points_totalPoints',totalPoints);
+      // Meteor.setTimeout(function(){
+      //   options.points = 0;
+      //   set('options',options);
+      // },2000);
       return true;
     }
   },

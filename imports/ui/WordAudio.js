@@ -7,6 +7,9 @@ const get = function(n) { return Session.get(pre + n )};
 const set = function(n,v) { Session.set(pre + n,v) };
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
+let DefWrongCount = 0; // # of wrong definitions
+let DefAlreadyAnsweredCorrectly = false; // true if definition already answered correctly
+
 Template.WordAudio.onCreated(function WordAudioOnCreated() {
   setd('popup',false);
   set('pastWords',{});
@@ -63,6 +66,8 @@ const loadPopup = function(){
   // options.buttons.push( { label: 'Try Again', value: 1, cls: 'button' });
   // options.buttons.push( { label: 'Cancel', value: 0, cls: 'button button-cancel' });
   Session.set('Message_options',options);
+  DefWrongCount = 0;
+  DefAlreadyAnsweredCorrectly = false;
   set('popup',true);
 
   lib.googlePlaySound( '$say_the_word', function(){
@@ -72,25 +77,34 @@ const loadPopup = function(){
 
     lib.getAudio( word, function(results){
       if ( debug ) {
-        options.messages = [ { msg: sprintf('heard: "%s"',results.words) } ];
+        if ( results.words ) {
+          options.messages = [ { msg: sprintf('heard: "%s"',results.words) } ];
+        } else {
+          options.messages = [ { msg: 'I heard nothing' } ];
+        }
         Session.set('Message_options',options);
       }
       if ( results.match ) {
         options.messages = [];
         options.points = 5;
         Session.set('Message_options',options);
+        lib.addToWordPoints( word, false, options.points );
         testVocabulary( word );
       } else {
         lib.googlePlaySound( '$try_again', function(){
           lib.getAudio( word, function(results){
             if ( debug ) {
-              options.messages.push( { msg: sprintf('heard: "%s"',results.words) } );
-              Session.set('Message_options',options);
+              if ( results.words ) {
+                options.messages = [ { msg: sprintf('heard: "%s"',results.words) } ];
+              } else {
+                options.messages = [ { msg: 'I heard nothing' } ];
+              }
             }
             if ( results.match ) {
               options.messages = [];
               options.points = 5;
               Session.set('Message_options',options);
+              lib.addToWordPoints( word, false, options.points );
               testVocabulary( word );
             } else {
               lib.googlePlaySound( '$the_word_is', function(){
@@ -153,20 +167,48 @@ Template.WordAudio.events({
       loadPopup();
     } else {
       set('popup',false);
+      let t = Session.get('DCLesson_wordAudio');
+      if ( t ) Session.set('DCLesson_wordAudio',false);
+      t = Session.get('GFLesson_wordAudio');
+      if ( t ) Session.set('GFLesson_wordAudio',false);
     }
     console.log('jones121',v);
   },
   'click .wa_chk'(e){
-    const word = $(e.currentTarget).attr('data'); // selected word
     const correctWord = get('currentWord');
+    if ( DefAlreadyAnsweredCorrectly ) {
+      $('.wa_chk').each(function(i, obj) {
+        const w = $(obj).attr('data');
+        if ( w === correctWord ) {
+          $(obj).prop('checked',true);
+        } else {
+          $(obj).prop('checked',false);
+        }
+      });
+      return;
+    }
+    const word = $(e.currentTarget).attr('data'); // selected word
     $('.wa_chk').each(function(i, obj) {
       const w = $(obj).attr('data');
       if ( w !== word ) $(obj).prop('checked',false);
     });
     if ( word === correctWord ) {
-      console.log('jones127 correct');
-      lib.googlePlaySound( '$correct' );
+      DefAlreadyAnsweredCorrectly = true;
+      console.log('jones127 correct DefWrongCount=%s',DefWrongCount);
+      let options = Session.get('Message_options');
+      if ( DefWrongCount === 0 ) {
+        options.points = 0;
+        Session.set('Message_options',options);
+      }
+      lib.googlePlaySound( '$correct', function(){
+        if ( DefWrongCount === 0 ) {
+          options.points = 5;
+          Session.set('Message_options',options);
+          lib.addToWordPoints( word, true, options.points );
+        }
+      });
     } else {
+      DefWrongCount += 1;
       lib.googlePlaySound( 'wrong_answer' );
     }
   },
