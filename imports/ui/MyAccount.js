@@ -67,14 +67,15 @@ Template.MyAccount.events({
     let data = lib.docFromFields( accountFields() );
     set('doc',data.doc);
     set('error',data.error);
-    const id = get('id');
     if ( ! data.error ) {
       // updating
       const prevDoc = lib.getCookie('ltrSignin');
+      const id = prevDoc._id;
       // If they changed email - verified no longer true
       if ( prevDoc.email !== data.doc.email ) data.doc.verified = false;
       let doc = lib.copy( data.doc );
-      doc._id === id;
+      doc._id = id;
+      delete doc[undefined];
       lib.setCookie('ltrSignin',doc);
 
       $(e.currentTarget).html(wait);
