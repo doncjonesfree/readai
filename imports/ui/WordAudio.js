@@ -12,7 +12,7 @@ let DefAlreadyAnsweredCorrectly = false; // true if definition already answered 
 
 Template.WordAudio.onCreated(function WordAudioOnCreated() {
   setd('popup',false);
-  set('pastWords',{});
+  setd('pastWords',{});
   loadPopup();
 });
 
@@ -33,22 +33,11 @@ const nextWord = function(){
   return w;
 };
 
-const wordsLeft = function(){
-  // how many words left to process
-  let pastWords = get('pastWords');
-
-  let wordList = get('wordList');
-  let count = 0;
-  for ( let i=0; i < wordList.length; i++ ) {
-    const w = wordList[i];
-    if ( ! pastWords[w] ) count += 1;
-  }
-  return count;
-};
-
+let AudioSkipped = false;
 const loadPopup = function(){
   // Load the popup, get voice input and compare to target word
   const debug = true; // jones
+  AudioSkipped = false;
   let list = [];
   list.push( { msg: 'Say the Word...' } );
   let options = {};
@@ -70,17 +59,28 @@ const loadPopup = function(){
   DefAlreadyAnsweredCorrectly = false;
   set('popup',true);
 
+  const wa_style = 'position: relative; left: 30px; top: -22px;';
   lib.googlePlaySound( '$say_the_word', function(){
     options.title = word;
-    options.messages = [ { msg: lib.redBallHtml() } ];
+    let html = [];
+    html.push(lib.redBallHtml());
+    html.push( sprintf('<a href="#" id="wa_skip" style="%s">skip</a>',wa_style) );
+    options.messages = [ { msg: html.join('\n') } ];
     Session.set('Message_options',options);
 
     lib.getAudio( word, function(results){
+      if ( AudioSkipped ) return;
       if ( debug ) {
         if ( results.words ) {
           options.messages = [ { msg: sprintf('heard: "%s"',results.words) } ];
         } else {
           options.messages = [ { msg: 'I heard nothing' } ];
+        }
+        if ( ! results.match ) {
+          let html = [];
+          html.push(lib.redBallHtml());
+          html.push( sprintf('<a href="#" id="wa_skip" style="%s">skip</a>',wa_style) );
+          options.messages.push( { msg: html.join('\n') } );
         }
         Session.set('Message_options',options);
       }
@@ -93,6 +93,7 @@ const loadPopup = function(){
       } else {
         lib.googlePlaySound( '$try_again', function(){
           lib.getAudio( word, function(results){
+            if ( AudioSkipped ) return;
             if ( debug ) {
               if ( results.words ) {
                 options.messages = [ { msg: sprintf('heard: "%s"',results.words) } ];
@@ -161,9 +162,17 @@ Template.WordAudio.helpers({
 });
 
 Template.WordAudio.events({
+  'click #wa_skip'(e){
+    // audio input may not be working - move on to vocabulary for the word
+    AudioSkipped = true;
+    let options = Session.get('Message_options');
+    options.messages = [];
+    Session.set('Message_options',options);
+    testVocabulary( options.title );
+  },
   'click .wa_button'(e){
     const v = lib.int( $(e.currentTarget).attr('data'));
-    if ( v && wordsLeft() > 0 ) {
+    if ( v && lib.wordsLeft() > 0 ) {
       loadPopup();
     } else {
       set('popup',false);

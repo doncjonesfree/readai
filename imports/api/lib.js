@@ -1,4 +1,6 @@
 import { Cookies } from 'meteor/ostrio:cookies';
+// import { wordsLeft } from '../ui/WordAudio';
+
 const cookies = new Cookies();
 
 export const emailFrom = 'support@ltrfree.com';
@@ -36,17 +38,35 @@ export const getSupervisorValue = function(){
   return int( Session.get('supervisor') );
 };
 
-export const quizHardestWords = function(text, ses ){
-  console.log('jones124',text);
+export const quizHardestWords = function(text, info, ses ){
+  // info = { type: 'dc', id: lesson._id }
   Meteor.call('getHardestWords', text, function(err,wordList){
-    console.log('jones132 getHardestWords',wordList);
     if ( err ) {
       console.log('Error: DCLesson.js line 134',err);
     } else {
       Session.set('WordAudio_wordList',wordList);
-      Session.set(ses,true);
+      Session.set('WordAudio_info',info);
+      if ( wordsLeft() > 0 ) {
+        Session.set(ses,true);
+      } else {
+        googlePlaySound('$sorry_no_words_left');
+      }
     }
   });
+};
+
+export const wordsLeft = function(){
+  // how many words left to process
+  let pastWords = Session.get('WordAudio_pastWords');
+  if ( ! pastWords ) pastWords = {};
+  let wordList = Session.get('WordAudio_wordList');
+  if ( ! wordList ) wordList = [];
+  let count = 0;
+  for ( let i=0; i < wordList.length; i++ ) {
+    const w = wordList[i];
+    if ( ! pastWords[w] ) count += 1;
+  }
+  return count;
 };
 
 const alphabet = 'abcdefghijklmnopqrstuvwxyz';

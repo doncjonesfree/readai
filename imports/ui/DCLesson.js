@@ -124,13 +124,11 @@ const lessonFail = function(){
     if ( lesson[k] ) list.push(lesson[k] );
   }
   const text = list.join(' ');
-  lib.quizHardestWords(text, 'DCLesson_wordAudio');
+  console.log('jones127',text);
+  lib.quizHardestWords(text, { type: 'dc', id: lesson._id }, 'DCLesson_wordAudio');
 };
 
 Template.DCLesson.events({
-  'click #test_lesson_fail': function(e){
-    lessonFail();
-  },
   'click .dc_minus': function(e){
     // pick an easier gf lesson
     const direction = $(e.currentTarget).attr('data'); // easier / harder
@@ -174,22 +172,25 @@ Template.DCLesson.events({
     if ( lesson.answer_selected && lesson.answer_selected === lesson.Correct ) {
       word = 'right_answer';
       correct = true;
+      lib.googlePlaySound( word );
     } else if ( lesson.answer_selected ) {
-      word = 'wrong_answer';
+      // incorrect answer selected
       lesson.incorrect_count += 1;
-      const verbalOn = lib.isVerbalOn('DCLesson_');
-      if ( verbalOn ) {
-        // give instructions
-        word = lib.dcWrongAudio.file;
-      }
       set('lesson',lesson);
+
+      lessonFail();
+
+      // word = 'wrong_answer';
+      // const verbalOn = lib.isVerbalOn('DCLesson_');
+      // if ( verbalOn ) {
+      //   // give instructions
+      //   word = lib.dcWrongAudio.file;
+      // }
     } else {
       // no answer given
       word = 'answer_question';
+      lib.googlePlaySound( word );
     }
-    lib.googlePlaySound( word, function(){
-      console.log('%s finished playing',word);
-    });
     if ( correct ) {
       // go to next question
       const wait = '...';
