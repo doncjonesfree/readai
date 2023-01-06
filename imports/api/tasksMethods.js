@@ -48,6 +48,8 @@ Meteor.methods({
 
     const stripWord = function(r){
       // strip the word from the definition.  Sometimes the word is included even though we asked that it be omitted
+      console.log('jones51a',r);
+      console.log('jones51b',r.text);
       const lcText = r.text.toLowerCase();
       const ix = lcText.indexOf( r.word );
       if ( ix >= 0 ) {

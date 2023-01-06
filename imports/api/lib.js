@@ -41,6 +41,7 @@ export const getSupervisorValue = function(){
 export const quizHardestWords = function(text, info, ses ){
   // info = { type: 'dc', id: lesson._id }
   Meteor.call('getHardestWords', text, function(err,wordList){
+    console.log('jones44',wordList);
     if ( err ) {
       console.log('Error: DCLesson.js line 134',err);
     } else {

@@ -52,6 +52,7 @@ Template.GFLesson.helpers({
   mode1() { return get('mode') === 1; },
   mode2() { return get('mode') === 2; },
   mode3() { return get('mode') === 3; },
+  wordAudio() { return get('wordAudio'); },
   showPoints() { return get('showPoints'); },
   set_difficulty(){
     return setDifficulty();
@@ -170,6 +171,32 @@ const saveLessonHistory = function(lesson){
   });
 };
 
+const clean = function(arg){
+  // remove &quot; and ___
+  let s = arg.replace(/&quot;/g,'');
+  s = s.replace(/_/g,'');
+  s = s.replace(/\?/g,'');
+  s = s.replace(/\./g,'');
+  return s;
+};
+
+const lessonFail = function(){
+  // lets_look_at_some_of_the_words.mp3
+  lib.googlePlaySound( '$lets_look_at_some_of_the_words' );
+  const lesson = get('lesson');
+  let list = [];
+  list.push( getSeparateQuestions(lesson).question );
+  const ix = lesson.lesson.thisQuestion;
+  const a = lesson.answers[ix-1];
+  for ( let i=1; i <= 4; i++ ) {
+    const k = sprintf('Answer%s',i);
+    if ( a[k] ) list.push(a[k] );
+  }
+  const text = clean( list.join(' ') );
+  console.log('jones181 text',text);
+  lib.quizHardestWords(text, { type: 'gf', id: lesson._id }, 'GFLesson_wordAudio');
+};
+
 Template.GFLesson.events({
   'click .gf_minus': function(e){
     // pick an easier gf lesson
@@ -243,19 +270,22 @@ Template.GFLesson.events({
       // at least one answer incorrect
       set('lesson',lesson); // save incorrect flag so we can tell screen which ones to highlight
       // no need to play sound if only one question/answer showing
-      const verbalOn = lib.isVerbalOn('GFLesson_');
-      let word;
-      if ( verbalOn ) {
-        word = lib.gfWrongAudio2.file;
-        if ( incorrect.length === 1 ) word = lib.gfWrongAudio1.file;
-        if ( thisQuestion ){
-          // only showing one question - very early reader
-          word = lib.dcWrongAudio.file;
-        }
-      } else {
-        word = 'wrong_answer';
-      }
-      lib.googlePlaySound( word );
+
+      lessonFail();
+
+      // const verbalOn = lib.isVerbalOn('GFLesson_');
+      // let word;
+      // if ( verbalOn ) {
+      //   word = lib.gfWrongAudio2.file;
+      //   if ( incorrect.length === 1 ) word = lib.gfWrongAudio1.file;
+      //   if ( thisQuestion ){
+      //     // only showing one question - very early reader
+      //     word = lib.dcWrongAudio.file;
+      //   }
+      // } else {
+      //   word = 'wrong_answer';
+      // }
+      // lib.googlePlaySound( word );
     } else {
       // all answers correct
       let points = lib.calculatePoints( lesson, thisQuestion );

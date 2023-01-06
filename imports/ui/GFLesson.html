@@ -42,6 +42,9 @@
       </div>
     {{ /with }}
 
+    {{ #if wordAudio }}
+      {{ > WordAudio }}
+    {{ /if }}
     {{ #if showPoints }}
       {{ > Points }}
     {{ /if }}

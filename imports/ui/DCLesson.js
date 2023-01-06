@@ -124,7 +124,6 @@ const lessonFail = function(){
     if ( lesson[k] ) list.push(lesson[k] );
   }
   const text = list.join(' ');
-  console.log('jones127',text);
   lib.quizHardestWords(text, { type: 'dc', id: lesson._id }, 'DCLesson_wordAudio');
 };
 
