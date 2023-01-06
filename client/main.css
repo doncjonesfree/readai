@@ -49,7 +49,7 @@
 
   --color-link: rgb(93,149,240);
   --color-border: #d3d3d3;
-  --color-primary: #696969;
+  --color-primary: black; /* #696969; */
   --color-light-grey: #f1f2f2;
   --color-error: rgb(187,54,50);
   --color-recording: rgb(187,54,50,.6);

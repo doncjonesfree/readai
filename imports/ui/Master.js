@@ -61,11 +61,11 @@ Template.master.helpers({
 
 let AiWaitTime = 1000;
 const getAllAiWordDefs = function( callback ){
-  Meteor.call('openAiWordDef','',function(err,results){
+  Meteor.call('openAiQuestion','',function(err,results){
     if ( err ) {
       console.log('Error: Master.js line 63',err);
     } else {
-      console.log('openAiWordDef',results);
+      console.log('openAiQuestion',results);
       if ( ! results.errors || results.errors.length === 0 ) {
         callback(); // done
       } else {
@@ -137,7 +137,12 @@ Template.master.events({
   },
   'click #mas_special'(e){
     // special purpose
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( wait === html ) return;
+    $(e.currentTarget).html(wait);
     Meteor.call('special',function(err,results){
+      $(e.currentTarget).html(html);
       if ( err ) {
         console.log('Error: Master.js line 74',err);
       } else {

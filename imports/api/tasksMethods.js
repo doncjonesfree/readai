@@ -48,8 +48,6 @@ Meteor.methods({
 
     const stripWord = function(r){
       // strip the word from the definition.  Sometimes the word is included even though we asked that it be omitted
-      console.log('jones51a',r);
-      console.log('jones51b',r.text);
       const lcText = r.text.toLowerCase();
       const ix = lcText.indexOf( r.word );
       if ( ix >= 0 ) {
@@ -130,46 +128,65 @@ Meteor.methods({
 
     return future.wait();
   },
-  openAiQuestion: function(word){
+  openAiQuestion: function(){
     // AudioFiles has all words in GF and DC lessons
 
     let future=new Future();
 
-    let retObj = { added: 0, errors: [] };
+    let retObj = { added: 0, updated: 0 , errors: [] };
 
     const defs = Definitions.find().fetch();
     let defObj = {};
     for ( let i=0; i < defs.length; i++ ) {
       const d = defs[i];
-      if ( d.text ) defObj[ d.word ] = true;
+      if ( d.text ) {
+        if ( typeof(d.text) === 'string' && d.text ) {
+          // we already have this definition - no need to repeat
+          defObj[ d.word ] = 1;
+        } else if ( d.text.txt && ! d.error ) {
+          // Not normal case - text should just be a string.
+          defObj[ d.word ] = 1;
+        } else {
+          defObj[ d.word ] = d._id; // indicates which record should be changed
+        }
+      }
     }
 
     const addDef = function( list, ix, callback ){
       if ( ix < list.length ) { // jones
+        // if ( ix < list.length && retObj.added < 1 && retObj.updated < 1 ) { // jones
         const r = list[ix];
         if ( ix % 100 === 0 ) console.log('%s of %s errors:%s',ix,list.length,retObj.errors.length );
-        if ( defObj[ r.word ] ) {
+        const v = defObj[ r.word ];
+        if ( v && v === 1 ) {
           // ignore and go to next word - we already have this one
           addDef( list, ix+1, callback );
-        } else if ( r.word === 'enter' || r.word === 'entered') {
-          console.log('jones41 skipped %s',r.word);
-          addDef( list, ix+1, callback );
+        // } else if ( r.word === 'enter' || r.word === 'entered') {
+        //   console.log('jones41 skipped %s',r.word);
+        //   addDef( list, ix+1, callback );
         } else {
-          const prompt = sprintf('Q: Can you define the word %s suitable for a small child without using the word %s in the definition?\nA:\nA:',r.word,r.word);
+          const prompt = sprintf('Q: Can you define the word "%s" suitable for a small child without using the word "%s" in the definition?\nA:\nA:',r.word,r.word);
           openAiQuestion( prompt, function( ret ){
-            if ( ret.txt ) {
-              let doc = {};
-              doc.word = r.word;
-              doc.text = ret.txt;
-              Definitions.insert(doc);
-              retObj.added += 1;
-              console.log('added:%s %s: %s',retObj.added,doc.word,doc.text);
-              addDef( list, ix+1, callback );
-            } else {
+            if ( ret.error || ! ret.txt ) {
+              // error
               ret.word = r.word;
               ret.success = false;
               retObj.errors.push( ret );
               callback( ret );
+            } else {
+              let doc = {};
+              doc.word = r.word;
+              doc.text = ret.txt;
+              doc.needsSpeech = true; // needs text to speech
+              if ( v ) {
+                Definitions.update(v, { $set: doc });
+                retObj.updated += 1;
+              } else {
+                Definitions.insert(doc);
+                retObj.added += 1;
+              }
+              console.log('added:%s updated:%s %s: %s',retObj.added,retObj.updated,doc.word,doc.text);
+              addDef( list, ix+1, callback );
             }
           });
         }
@@ -183,7 +200,8 @@ Meteor.methods({
     let recs2 = [];
     for ( let i=0; i < recs.length; i++ ) {
       const r = recs[i];
-      if ( ! defObj[ r.word ] ) recs2.push(r);
+      const v = defObj[ r.word ];
+      if ( ! v || typeof(v) === 'string' ) recs2.push(r);
     }
     addDef( recs2, 0, function(){
       future.return( retObj );
@@ -198,6 +216,17 @@ Meteor.methods({
     // special purpose - run by master
 
     let retObj = {};
+
+    retObj.Definitions = Definitions.find({},{ fields: { word: 1, text: 1 }}).fetch();
+    retObj.bad = [];
+    for ( let i=0; i < retObj.Definitions.length; i++ ) {
+      let d = retObj.Definitions[i];
+      if ( typeof(d.text) !== 'string' ) {
+        if ( ! d.text.txt || d.text.error ) retObj.bad.push(d);
+      }
+    }
+    return retObj;
+
     // Users.remove("EvYA7tLewwHZLa9iJ")
     // Students.remove("kCWcXtyTm3usskdW8")
     // retObj.users = Users.find().fetch();
@@ -515,7 +544,6 @@ Meteor.methods({
         // Written to process a list of words, but here we just want to process one word
         if ( r.text ) {
           Meteor.setTimeout(function(){
-
             // convert definition to speech (mp3)
             const directory = '/Users/donjones/Downloads/tempAudio';
             if ( r.word === 'really') {
@@ -531,7 +559,7 @@ Meteor.methods({
                 const fullPath = sprintf('%s/%s.mp3',directory,r.word);
                 const file = sprintf('AIDefinition/%s.mp3',r.word);
                 uploadS3( fullPath, file,  Meteor.bindEnvironment( function(){
-                  let doc = { uploaded: true };
+                  let doc = { uploaded: true, needsSpeech: false };
                   Definitions.update(r._id, { $set: doc });
                   processUndefinedWords( list, ix+1, op, callback );
                 }));
@@ -548,7 +576,8 @@ Meteor.methods({
       }
     };
 
-    const recs = Definitions.find({ uploaded: { $ne: true }}).fetch();
+    //const recs = Definitions.find({ uploaded: { $ne: true }}).fetch();
+    const recs = Definitions.find({ needsSpeech: true }).fetch();
     // recs = [ { word: text: } ];
     processUndefinedWords( recs, 0, { count: 0, failed: [] }, function( processResults ){
       future.return( { results: processResults, rec: recs } );
