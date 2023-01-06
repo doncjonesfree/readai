@@ -82,8 +82,6 @@ export const alphaOnly = function(word){
 };
 
 export const addToWordPoints = function( word, definition, points ){
-  const t = getCookie('studentPoints');
-  setCookie('studentPoints', int(t) + int(points) );
   Meteor.call('addToWordPoints', getCookie('student'),word,definition,points,function(err,results){
     if ( err ) {
       console.log('Error: lib.js line 69 addToWordPoints',err);
