@@ -19,6 +19,11 @@ export const getHardestWords = function( text, callback ){
     return s;
   };
 
+  const getError = function( response ){
+    if ( response.errorText ) return { error: sprintf('Error #%s: %s',response.error,response.errorText) };
+    return { error: sprintf('Error %s',response.error) };
+  };
+
   const combine = function(){
     let obj = {};
 
@@ -51,21 +56,29 @@ export const getHardestWords = function( text, callback ){
     for ( let i=0; i < op.length; i++ ) {
       op2.push( op[i].word );
     }
-    return op2;
+    return { list: op2 };
   };
 
   const prompt = sprintf('Q: Please isolate the key words in the following "%s"\nA:\nA:',text);
   retObj.prompt = prompt;
   openAiQuestion( prompt, function(response){
-    retObj.response1 = trim(response);
+    if ( typeof(response) === 'object' && response.error ) {
+      callback( getError( response ) );
+    } else {
+      retObj.response1 = trim(response);
 
-    const prompt2 = sprintf('Q: Please isolate the 5 hardest words in the following "%s"\nA:\nA:',text);
-    retObj.prompt2 = prompt2;
-    openAiQuestion( prompt2, function(response2){
-      retObj.response2 = trim(response2);
-      retObj.response = combine();
-      callback( retObj.response );
-    });
+      const prompt2 = sprintf('Q: Please isolate the 5 hardest words in the following "%s"\nA:\nA:',text);
+      retObj.prompt2 = prompt2;
+      openAiQuestion( prompt2, function(response2){
+        if ( typeof(response2) === 'object' && response2.error ) {
+          callback( getError( response2 ) );
+        } else {
+          retObj.response2 = trim(response2);
+          retObj.response = combine();
+          callback( retObj.response );
+        }
+      });
+    }
   });
 };
 

@@ -17,6 +17,71 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  removeWordsWeKnow: function( wordList, student_id ){
+    // return a list of words we already know
+    let obj = {};
+    for ( let i=0; i < wordList.length; i++ ) {
+      obj[ wordList[i] ] = true;
+    }
+    let op = [];
+    const recs = WordList.find( { student_id: student_id, active: false }).fetch();
+    for ( let i2=0; i2 < recs.length; i2++ ) {
+      const r = recs[i2];
+      if ( obj[r.raw_word] ) {
+        op.push(r.raw_word);
+      } else if ( obj[r.word] ) {
+        op.push(r.word);
+      }
+    }
+    return op;
+  },
+  saveWord: function( raw_word, type, success, student_id ){
+    /*
+    success = false - Student doesn't know the word - add it to the word list.  Points already accounted for.
+    success = true - student knows either the def or word - mark success that that part
+                     if both successful, mark work not active
+    type = 'word' or 'def' depending on what they don't know
+    record: { active: true, points: 0, raw_word: "enough", student_id: "SEhvA5hbk2Tgo5fZs",
+              when: "2022-12-13 20:30:31", word: "enough", _id: "S4JstH4J46vC8RCrK" }
+    */
+    // WordList.remove({ student_id: student_id }); // jones temp
+    const word = raw_word.toLowerCase();
+    let retObj = { word: raw_word, type: type, student_id: student_id };
+    retObj.WordList = WordList.find( { student_id: student_id, word: word }).fetch();
+    let doc = {};
+    if ( retObj.WordList.length > 0 ) {
+      const r = retObj.WordList[0];
+      doc.updated = lib.today();
+      doc.knowsWord = r.knowsWord;
+      doc.knowsDef = r.knowsDef;
+      if ( type === 'def' ) {
+        doc.knowsDef = success;
+      } else {
+        doc.knowsWord = success;
+      }
+      doc.active = true;
+      if ( doc.knowsWord && doc.knowsDef ) doc.active = false;
+      WordList.update(r._id, { $set: doc });
+      retObj.updated = true;
+    } else {
+      doc.word = word;
+      doc.raw_word = raw_word;
+      doc.created = lib.today();
+      doc.active = true;
+      doc.student_id = student_id;
+      doc.knowsWord = false;
+      doc.knowsDef = false;
+      if ( type === 'def' ) {
+        doc.knowsDef = success;
+      } else {
+        doc.knowsWord = success;
+      }
+      retObj.inserted = true;
+      WordList.insert(doc);
+    }
+    retObj.doc = doc;
+    return retObj;
+  },
   addToWordPoints: function( student, word, definition, points ){
     // definition: if true, then the points were awarded for the definition selected correctly
     let retObj = { student: student, word: word, definition: definition, points: points };

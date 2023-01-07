@@ -1,5 +1,4 @@
 import { Cookies } from 'meteor/ostrio:cookies';
-// import { wordsLeft } from '../ui/WordAudio';
 
 const cookies = new Cookies();
 
@@ -20,6 +19,17 @@ export const getCookie = function(key){
   return cookies.get(key)
 };
 
+export const saveWord = function( word, success, type ){
+  // type = 'def' or 'word' depending on if they don't know the word or the definition
+  // if success = true, then the student knows this part of the word
+  const student = getCookie('student');
+  Meteor.call('saveWord', word,type,success,student._id, function(err,results){
+    if ( err ) {
+      console.log('Error: lib.js line 30',err);
+    }
+  });
+};
+
 export const setSupervisorMode = function(v){
   setCookie('ltrSupervisor',v);
   Session.set('supervisor',v);
@@ -38,19 +48,101 @@ export const getSupervisorValue = function(){
   return int( Session.get('supervisor') );
 };
 
+const removeWordsWeKnow = function( wordList, callback ){
+  // See which words we already know out of the wordlist and add them to passed list
+  const student_id = getCookie('student')._id;
+  const start = epoch();
+  Meteor.call('removeWordsWeKnow', wordList, student_id, function(err,list){
+    if ( err ) {
+      console.log('Error in lib.js line 57',err);
+      callback();
+    }
+    let pastWords = Session.get('WordAudio_pastWords');
+    if ( ! pastWords ) pastWords = {};
+    for ( let i=0; i < list.length; i++ ) {
+      const w = list[i];
+      pastWords[w] = true;
+    }
+    Session.set('WordAudio_pastWords',pastWords);
+    callback();
+  });
+};
+
+const getHardestWords = function( text, info, ses ){
+  // ai has failed - get "hardest" words ourselves,
+  // basically the longest words
+  const list = text.toLowerCase().split(' ');
+  list.sort( function(a,b){
+    if ( a.length > b.length ) return -1;
+    if ( a.length < b.length ) return 1;
+    return 0;
+  });
+  let op = [];
+  let mx = list.length * 0.5;
+  if ( mx > 6 ) mx = 6;
+  for ( let i=0; i < list.length; i++ ) {
+    const w = list[i].trim();
+    if ( w && w.length > 2 ) op.push(w);
+    if ( op.length >= mx ) break;
+  }
+  const start = epoch();
+
+  Session.set('WordAudio_wordList',op);
+  Session.set('WordAudio_info',info);
+  removeWordsWeKnow( op, function(){
+    if ( wordsLeft() > 0 ) {
+      Session.set(ses,true); // start the popup
+    } else {
+      googlePlaySound('$sorry_no_words_left');
+    }
+  });
+
+  return op;
+};
+
+let AiDown = 0; // timer for the last time AI was down
 export const quizHardestWords = function(text, info, ses ){
   // info = { type: 'dc', id: lesson._id }
-  Meteor.call('getHardestWords', text, function(err,wordList){
-    console.log('jones44',wordList);
-    if ( err ) {
-      console.log('Error: DCLesson.js line 134',err);
-    } else {
-      Session.set('WordAudio_wordList',wordList);
-      Session.set('WordAudio_info',info);
-      if ( wordsLeft() > 0 ) {
-        Session.set(ses,true);
+  // Gets hardest words found in the text and starts up word audio popup.
+  const minutesSinceDown = ( epoch() - AiDown ) / ( 1000 * 60 );
+  if ( minutesSinceDown < 5 ) { // jones
+    // just brute force the words ourselves
+    getHardestWords( text, info, ses );
+    return;
+  }
+  const start = epoch();
+  let AiTimeOk = true;
+  Meteor.setTimeout( function(){
+    // If AI call hasn't completed in 3 seconds - give up and do it manually
+    AiTimeOk = false;
+    getHardestWords( text, info, ses );
+  },3000);
+  Meteor.call('getHardestWords', text, function(err,results){
+    console.log( sprintf('jones121 AI getHardestWords: time %.1f seconds', (epoch() - start) / 1000));
+    if ( ! AiTimeOk ) {
+      if ( err ) {
+        console.log('AI timed out (err)',err);
       } else {
-        googlePlaySound('$sorry_no_words_left');
+        console.log('AI timed out',results);
+      }
+    } else if ( results.error ) {
+      minutesSinceDown = epoch();
+      console.log('quizHardestWords. AI Error: ',results.error);
+      googlePlaySound('$aidown');
+    } else {
+      const wordList = results.list;
+      if ( err ) {
+        console.log('Error: lib.js line 69',err);
+      } else {
+        Session.set('WordAudio_wordList',wordList);
+        Session.set('WordAudio_info',info);
+        removeWordsWeKnow( wordList, function(){
+          if ( wordsLeft() > 0 ) {
+            Session.set(ses,true); // start the popup
+          } else {
+            googlePlaySound('$sorry_no_words_left');
+          }
+        });
       }
     }
   });
@@ -647,7 +739,10 @@ export const googlePlaySound = function( arg, callback ){
   let word = arg;
   const delta = epoch() - PreviousTime;
   // play the same sound if the previous play was more than 2 seconds ago
-  if ( arg === PreviousSound && delta < 2000 ) return; // don't repeat the same sound
+  if ( arg === PreviousSound && delta < 1000 ) {
+    if ( Meteor.isDevelopment ) console.log('Too soon for a repeat of %s',word);
+    return; // don't repeat the same sound
+  }
   let url = sprintf('%s/audio/%s.mp3',s3path,word.toLowerCase());
   let definition = false;
   let instruction = false;

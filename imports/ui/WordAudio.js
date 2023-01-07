@@ -89,6 +89,7 @@ const loadPopup = function(){
         options.points = 5;
         Session.set('Message_options',options);
         lib.addToWordPoints( word, false, options.points );
+        lib.saveWord( word, true, 'word' );
         testVocabulary( word );
       } else {
         lib.googlePlaySound( '$try_again', function(){
@@ -106,10 +107,12 @@ const loadPopup = function(){
               options.points = 5;
               Session.set('Message_options',options);
               lib.addToWordPoints( word, false, options.points );
+              lib.saveWord( word, true, 'word' );
               testVocabulary( word );
             } else {
               lib.googlePlaySound( '$the_word_is', function(){
                 lib.googlePlaySound( word, function(){
+                  lib.saveWord( word, false, 'word' );
                   lib.googlePlaySound( '$save_for_later', function(){
                     testVocabulary( word );
                   });
@@ -130,7 +133,6 @@ const testVocabulary = function( word ){
       console.log('Error: WordAudio.js line 84',err);
     } else {
       // vocabList = [ { word: definition: }]
-      console.log('jones86 testVocabulary',vocabList);
       let options = Session.get('Message_options');
       options.messages = [];
       let html = [];
@@ -181,7 +183,6 @@ Template.WordAudio.events({
       t = Session.get('GFLesson_wordAudio');
       if ( t ) Session.set('GFLesson_wordAudio',false);
     }
-    console.log('jones121',v);
   },
   'click .wa_chk'(e){
     const correctWord = get('currentWord');
@@ -203,7 +204,6 @@ Template.WordAudio.events({
     });
     if ( word === correctWord ) {
       DefAlreadyAnsweredCorrectly = true;
-      console.log('jones127 correct DefWrongCount=%s',DefWrongCount);
       let options = Session.get('Message_options');
       if ( DefWrongCount === 0 ) {
         options.points = 0;
@@ -214,11 +214,14 @@ Template.WordAudio.events({
           options.points = 5;
           Session.set('Message_options',options);
           lib.addToWordPoints( word, true, options.points );
+          lib.saveWord( word, true, 'def' );
         }
       });
     } else {
       DefWrongCount += 1;
-      lib.googlePlaySound( 'wrong_answer' );
+      const options = Session.get('Message_options');
+      lib.saveWord( options.title, false, 'def' );
+      lib.googlePlaySound( '$sorry' );
     }
   },
 });
