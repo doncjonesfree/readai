@@ -173,10 +173,11 @@ const wordListHtml = function(){
   let info = { total: 0, knowsWord: 0, knowsDef: 0, words: [] };
   for ( let i=0; i < wordList.length; i++ ) {
     const o = wordList[i];
+    const word = o.word.trim();
+    if ( ! word ) continue;
     info.total += 1;
     let d = o.created;
     if ( o.updated ) d = o.updated;
-    const word = o.word.trim();
     if ( word && datePasses( d, show_option) ) {
       if ( o.knowsWord ) info.knowsWord += 1;
       if ( o.knowsDef ) info.knowsDef += 1;
