@@ -35,6 +35,10 @@
         </div>
       {{ /each }}
       </div>
+      <input type="hidden" value="{{ wordsActive }}">
+      {{ #if wordAudio }}
+        {{ > WordAudio }}
+      {{ /if }}
   {{ /if }}
 
   {{ #if mode3 }}

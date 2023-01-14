@@ -81,6 +81,14 @@ Template.StudentHome.helpers({
   mode2() { return get('mode') === 2; },
   mode3() { return get('mode') === 3; },
   mode4() { return get('mode') === 4; },
+  wordAudio(){
+    const d = get('wordAudio')
+    if ( typeof(d) === 'boolean' && ! d ) {
+      // just closed word quiz - start lesson
+      FlowRouter.go('lesson');
+    }
+    return d;
+  },
   supervisor(){
     return lib.getSupervisorValue()
   },
@@ -166,7 +174,20 @@ Template.StudentHome.events({
     if ( student.points ) points = student.points;
     lib.setCookie('studentPoints',points);
 
-    FlowRouter.go('lesson');
+    Meteor.call('checkStudyWords', id, function(err,results){
+      if ( err ) {
+        console.log('Error: StudentHome.js line 171',err);
+      } else if ( ! results.active ){
+        // no active study words - start lesson
+        FlowRouter.go('lesson');
+      } else {
+        $(e.currentTarget).html(html);
+        Session.set('WordAudio_pastWords',results.pastWords);
+        Session.set('WordAudio_wordList',results.list);
+        Session.set('WordAudio_session_reset','StudentHome_wordsActive');
+        set('wordAudio',true);
+      }
+    });
   },
   'click .sh_student_progress'(e){
     e.stopPropagation();

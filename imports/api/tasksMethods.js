@@ -17,6 +17,79 @@ const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
 Meteor.methods({
+  checkStudyWords: function(id){
+    // Before starting a regular lesson, see if the student has study words to review
+    let op = [];
+
+    const trim = function(arg){
+      let w = arg.replace(/,/g,'');
+      return w.replace(/\./g,'');
+    };
+
+    const getPastWords = function(){
+      // Get the # of past words requested
+      const count = 8 - op.length;
+      const recs = WordList.find( { student_id: id, active: false }, { sort: { created: -1 }}).fetch();
+      let past = [];
+      for ( let i=0; i < recs.length; i++ ) {
+        const w = trim( recs[i].word );
+        if ( w && op.indexOf(w) < 0 ) past.push(w);
+        if ( past.length >= count ) break;
+      }
+      return past;
+    };
+
+    let recs = WordList.find( { student_id: id, active: true }).fetch();
+    recs.sort( function(a,b){
+      // put the words the don't know on top
+      aKnows = 0;
+      if ( a.knowsDef ) aKnows += 1;
+      if ( a.knowsWord ) aKnows += 1;
+      bKnows = 0;
+      if ( b.knowsDef ) bKnows += 1;
+      if ( b.knowsWord ) bKnows += 1;
+      if ( aKnows < bKnows ) return -1;
+      if ( aKnows > bKnows ) return 1;
+
+      // then put the oldest first
+      let aDate = a.created;
+      if ( a.updated ) aDate = a.updated;
+      let bDate = b.created;
+      if ( b.updated ) bDate = b.updated;
+      if ( aDate < bDate ) return -1;
+      if ( aDate > bDate ) return 1;
+      return 0;
+    });
+
+    // just the words
+    for ( let i=0; i < recs.length; i++ ) {
+      const r = recs[i];
+      const w = trim(r.word);
+      if ( w === r.word ) {
+        if ( w && op.indexOf(w) < 0 ) op.push(w);
+      } else {
+        // word stored in collection has period or comma.  This was saved in error
+        // so remove this from collection
+        WordList.remove(r._id);
+      }
+    }
+    if ( op.length === 0 ) {
+      return { active: false };
+    } else if ( op.length >= 8 ) {
+      return { active: true, list: op, pastWords: {} };
+    } else {
+      // we need to add some past words so we have some alternate definitions to choose from
+      const past = getPastWords();
+      let pastWords = {};
+      for ( let i=0; i < past.length; i++ ) {
+        const w = past[i];
+        pastWords[w] = true;
+        op.push(w);
+      }
+      return { active: true, list: op, pastWords: pastWords };
+    }
+    return op;
+  },
   removeWordsWeKnow: function( wordList, student_id ){
     // return a list of words we already know
     let obj = {};

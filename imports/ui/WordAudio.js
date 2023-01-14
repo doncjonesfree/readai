@@ -33,18 +33,17 @@ const nextWord = function(){
   return '';
 };
 
-let AudioSkipped = false;
+let AudioSkipped = {};
 const loadPopup = function(){
   // Load the popup, get voice input and compare to target word
   const debug = true; // jones
-  AudioSkipped = false;
   let list = [];
   list.push( { msg: 'Say the Word...' } );
   let options = {};
   options.setVariables = [];
   options.setVariables.push ( { name: 'WordAudio_', value: false } );
   const reset = get('session_reset'); // 'master_word_audio'
-  options.setVariables.push ( { name: reset, value: false } );
+  if ( reset ) options.setVariables.push ( { name: reset, value: false } );
 
   //options.getVariables = [ { name: 'header_pin', id: '#pin' }];
   const word = nextWord();
@@ -69,7 +68,7 @@ const loadPopup = function(){
     Session.set('Message_options',options);
 
     lib.getAudio( word, function(results){
-      if ( AudioSkipped ) return;
+      if ( AudioSkipped[ word ] ) return;
       if ( debug ) {
         if ( results.words ) {
           options.messages = [ { msg: sprintf('heard: "%s"',results.words) } ];
@@ -91,10 +90,10 @@ const loadPopup = function(){
         lib.addToWordPoints( word, false, options.points );
         lib.saveWord( word, true, 'word' );
         testVocabulary( word );
-      } else {
+      } else if ( ! AudioSkipped[ word ] ) {
         lib.googlePlaySound( '$try_again', function(){
           lib.getAudio( word, function(results){
-            if ( AudioSkipped ) return;
+            if ( AudioSkipped[ word ] ) return;
             if ( debug ) {
               if ( results.words ) {
                 options.messages = [ { msg: sprintf('heard: "%s"',results.words) } ];
@@ -171,7 +170,8 @@ Template.WordAudio.events({
   },
   'click #wa_skip'(e){
     // audio input may not be working - move on to vocabulary for the word
-    AudioSkipped = true;
+    const word = get('currentWord');
+    AudioSkipped[ word ] = true;
     let options = Session.get('Message_options');
     options.messages = [];
     Session.set('Message_options',options);
@@ -187,6 +187,8 @@ Template.WordAudio.events({
       if ( t ) Session.set('DCLesson_wordAudio',false);
       t = Session.get('GFLesson_wordAudio');
       if ( t ) Session.set('GFLesson_wordAudio',false);
+      t = Session.get('StudentHome_wordAudio');
+      if ( t ) Session.set('StudentHome_wordAudio',false);
     }
   },
   'click .wa_chk'(e){
