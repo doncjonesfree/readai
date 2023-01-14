@@ -29,7 +29,7 @@
                 reading skills with simple daily lessons your child
                 can do independently.
               </p>
-              <a href="#">Read More</a>
+              <a href="#" id="read_more_young">Read More</a>
             </div>
           </div>
 
@@ -41,7 +41,7 @@
                 Teach yourself how to read with our expert teaching materials and methods.
                 Your progress is automatically documented.
               </p>
-              <a href="#">Read More</a>
+              <a href="#" id="read_more_old">Read More</a>
             </div>
           </div>
 
@@ -59,6 +59,10 @@
           </div>
         </div>
       </div>
+      {{ #if showMessage }}
+        {{ > Message }}
+      {{ /if }}
+      <input type="hidden" value="{{ popupResponse }}">
     {{ /if }}
   </div>
 </template>
