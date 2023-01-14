@@ -43,7 +43,7 @@ export const getHardestWords = function( text, callback ){
     let op = [];
     for ( let w in obj ) {
       if ( lib.hasOwnProperty(obj,w)){
-        if ( w ) op.push( { word: w, length: w.length } );
+        if ( w && ! lib.verifyInteger(w) ) op.push( { word: w, length: w.length } );
       }
     }
     // put the longer words first
@@ -89,7 +89,36 @@ export const getKeywords = function( callback ){
   callback( retObj );
 };
 
-export async function openAiQuestion( prompt, callback ) {
+export function openAiQuestion( prompt, callback ) {
+  const openai = new OpenAIApi(configuration);
+  openai.createCompletion({
+    model: "text-davinci-003",
+    prompt: prompt,
+    temperature: 0,
+    max_tokens: 1000,
+    top_p: 1,
+    frequency_penalty: 0.0,
+    presence_penalty: 0.0,
+    stop: ["\n"],
+  })
+  .then(response => {
+    const status = response.status;
+    let data = '';
+    if ( response.data && response.data.choices && response.data.choices.length > 0 ) {
+      const c = response.data.choices[0];
+      if (c.text ) data = c.text.trim();
+    }
+    if ( status === 200 && data ) {
+      callback( { txt: data })
+    } else {
+      callback ( { error: sprintf('Error %s',status)});
+    }
+  })
+
+  //callback( { txt: 'cellar table master tenant'} );
+};
+
+export async function openAiQuestionDep( prompt, callback ) {
   let results = await openAiQuestion2( prompt );
   let retObj = { txt: '' };
   if ( results && results.data && results.data.choices && results.data.choices.length > 0 ) {

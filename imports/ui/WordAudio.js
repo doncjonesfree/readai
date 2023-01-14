@@ -30,7 +30,7 @@ const nextWord = function(){
       return w;
     }
   }
-  return w;
+  return '';
 };
 
 let AudioSkipped = false;
@@ -145,6 +145,7 @@ const testVocabulary = function( word ){
           html.push('</td>');
           html.push('<td>');
             html.push( v.definition );
+            html.push( sprintf('<div style="display: inline-block;"><i class="fa-solid fa-volume-off wa_hear_def icon" style="font-size: 1rem;" data="%s" title="click to hear the definition"></i></div>',v.word) );
           html.push('</td>');
         html.push('</tr>');
       }
@@ -164,6 +165,10 @@ Template.WordAudio.helpers({
 });
 
 Template.WordAudio.events({
+  'click .wa_hear_def'(e){
+    const word = $(e.currentTarget).attr('data');
+    lib.googlePlaySound( '*'+word );
+  },
   'click #wa_skip'(e){
     // audio input may not be working - move on to vocabulary for the word
     AudioSkipped = true;

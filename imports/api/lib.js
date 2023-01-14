@@ -71,6 +71,12 @@ const removeWordsWeKnow = function( wordList, callback ){
 const getHardestWords = function( text, info, ses ){
   // ai has failed - get "hardest" words ourselves,
   // basically the longest words
+  const trim = function( wIn ){
+    let op = wIn.trim();
+    op = op.replace(/,/g,'');
+    return op.replace(/\./g,'');
+  };
+
   const list = text.toLowerCase().split(' ');
   list.sort( function(a,b){
     if ( a.length > b.length ) return -1;
@@ -82,7 +88,7 @@ const getHardestWords = function( text, info, ses ){
   if ( mx > 6 ) mx = 6;
   for ( let i=0; i < list.length; i++ ) {
     const w = list[i].trim();
-    if ( w && w.length > 2 ) op.push(w);
+    if ( w && w.length > 2 ) op.push( trim(w));
     if ( op.length >= mx ) break;
   }
   const start = epoch();
@@ -105,31 +111,25 @@ export const quizHardestWords = function(text, info, ses ){
   // info = { type: 'dc', id: lesson._id }
   // Gets hardest words found in the text and starts up word audio popup.
   const minutesSinceDown = ( epoch() - AiDown ) / ( 1000 * 60 );
-  if ( minutesSinceDown < 5 ) { // jones
-    // just brute force the words ourselves
+  if ( minutesSinceDown < 5 ) {
+    // less than 5 minutes since last breakdown
+    // just brute force the words ourselves until more time has passed
     getHardestWords( text, info, ses );
     return;
   }
   const start = epoch();
-  let AiTimeOk = true;
+  let AiTimeOk = 0;
   Meteor.setTimeout( function(){
     // If AI call hasn't completed in 3 seconds - give up and do it manually
-    AiTimeOk = false;
-    getHardestWords( text, info, ses );
-  },3000);
+    if ( AiTimeOk === 0 ) {
+      AiTimeOk = 2;
+      getHardestWords( text, info, ses );
+    }
+  },4000);  // Give AI 4 seconds to come up with an answer - if not - do it manually ourselves
   Meteor.call('getHardestWords', text, function(err,results){
-    console.log( sprintf('jones121 AI getHardestWords: time %.1f seconds', (epoch() - start) / 1000));
-    if ( ! AiTimeOk ) {
-      if ( err ) {
-        console.log('AI timed out (err)',err);
-      } else {
-        console.log('AI timed out',results);
-      }
-    } else if ( results.error ) {
-      minutesSinceDown = epoch();
-      console.log('quizHardestWords. AI Error: ',results.error);
-      googlePlaySound('$aidown');
-    } else {
+    if ( AiTimeOk === 0 && results && results.list ) AiTimeOk = 1;
+    const delta = (epoch() - start) / 1000;
+    if ( AiTimeOk === 1 ) {
       const wordList = results.list;
       if ( err ) {
         console.log('Error: lib.js line 69',err);
@@ -143,6 +143,14 @@ export const quizHardestWords = function(text, info, ses ){
             googlePlaySound('$sorry_no_words_left');
           }
         });
+      }
+    } else {
+      // took too long or an error - consider it down
+      AiDown = epoch();
+      if ( results.error ) {
+        console.log('quizHardestWords. AI Error: ',results.error);
+      } else {
+        console.log('AI Took too long %.1f secs',delta);
       }
     }
   });

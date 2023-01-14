@@ -18,7 +18,6 @@ Template.Message.helpers({
   },
   mPoints: function(){
     let options = get('options');
-    console.log('jones21',options);
     if ( options.points ) {
       const totalPoints = lib.int( lib.getCookie('studentPoints') ) + options.points;
       Session.set('Points_points',options.points);
