@@ -8,6 +8,8 @@ const get = function(n) { return Session.get(pre + n )};
 const set = function(n,v) { Session.set(pre + n,v) };
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
+let WordsToReview = [];
+
 Template.Progress.onCreated(function ProgressOnCreated() {
   // modes:
   // 1 = show list of lessons taken
@@ -17,9 +19,10 @@ Template.Progress.onCreated(function ProgressOnCreated() {
   set('student',lib.getCookie('student'));
   set('points',lib.getCookie('studentPoints'));
   set('singleQuestion','');
-  setd('WordList',[]);
+  setd('wordList',[]);
   setd('mode',1);
   setd('show_option','week');
+  setd('wordAudioActive',true);
 
   loadHistoryEtc();
 
@@ -31,7 +34,7 @@ const loadHistoryEtc = function( callback ){
       console.log('Error: Progress.js line 19',err);
     } else {
       set('history',results.LessonHistory);
-      set('WordList',results.WordList);
+      set('wordList',results.wordList);
       if ( callback ) callback();
     }
   });
@@ -127,11 +130,91 @@ const getRefresh = function(n){
   return get(n);
 };
 
+const datePasses = function( d, show_option){
+  if ( show_option === 'all' ) {
+    return true;
+  } else if ( show_option === 'week' ) {
+    const m1 = lib.currentMoment();
+    const m2 = moment( d, lib.dateFormat);
+    const days = m1.diff(m2,'days');
+    if ( days <= 7 ) return true;
+  } else {
+    // month
+    const m1 = lib.currentMoment();
+    const m2 = moment( l.when, lib.dateFormat);
+    const months = m1.diff(m2,'months');
+    if ( months <= 1 ) return true;
+  }
+  return false;
+};
+
+const wordListHtml = function(){
+  const show_option = get('show_option');
+  let wordList = get('wordList');
+  wordList.sort(function(a,b){
+    aKnows = 0;
+    if ( a.knowsDef ) aKnows += 1;
+    if ( a.knowsWord ) aKnows += 1;
+    bKnows = 0;
+    if ( b.knowsDef ) bKnows += 1;
+    if ( b.knowsWord ) bKnows += 1;
+    if ( aKnows < bKnows ) return -1;
+    if ( aKnows > bKnows ) return 1;
+
+    // then put the oldest first
+    let aDate = a.created;
+    if ( a.updated ) aDate = a.updated;
+    let bDate = b.created;
+    if ( b.updated ) bDate = b.updated;
+    if ( aDate < bDate ) return -1;
+    if ( aDate > bDate ) return 1;
+    return 0;
+  });
+  let info = { total: 0, knowsWord: 0, knowsDef: 0, words: [] };
+  for ( let i=0; i < wordList.length; i++ ) {
+    const o = wordList[i];
+    info.total += 1;
+    let d = o.created;
+    if ( o.updated ) d = o.updated;
+    const word = o.word.trim();
+    if ( word && datePasses( d, show_option) ) {
+      if ( o.knowsWord ) info.knowsWord += 1;
+      if ( o.knowsDef ) info.knowsDef += 1;
+      if ( ! o.knowsWord || ! o.knowsDef) info.words.push(word);
+    }
+  }
+  let html = [];
+  html.push('<div style="margin-top: 1rem;">');
+  html.push( sprintf('Words: %s', info.total));
+  html.push( sprintf('&nbsp; Knows Word: %s', info.knowsWord));
+  html.push( sprintf('&nbsp; Knows Definition: %s', info.knowsDef));
+  html.push( sprintf('&nbsp; Words to work on: %s', info.words.length));
+  if ( info.words.length > 0 ) {
+    html.push('&nbsp; <a href="#" id="prg_word_review">review</a>');
+  }
+  html.push('</div>');
+  WordsToReview = info.words;
+  return html.join('\n');
+};
+
+
 Template.Progress.helpers({
   mode1() { return get('mode') === 1; },
   mode2() { return get('mode') === 2; },
   mode3() { return get('mode') === 3; },
   local() { return Meteor.isDevelopment },
+  wordAudioActive(){
+    const wordAudioActive = get('wordAudioActive');
+    if ( ! wordAudioActive ) {
+      set('wordAudio',false);
+      loadHistoryEtc();
+    }
+    return wordAudioActive;
+  },
+  wordAudio(){ return get('wordAudio')},
+  wordListHtml(){
+    return wordListHtml();
+  },
   gf_lesson() {
     let l = get('gf_lesson');
     if ( l && l.GatherFacts && l.GatherFacts.length > 0 ) {
@@ -192,24 +275,6 @@ Template.Progress.helpers({
     if ( show_option === 'all' ) sel = 'selected';
     op.push( { value: 'all', sel: sel, label: 'Show All' });
     return op;
-  },
-  wordsToStudyCount(){
-    let WordList = get('WordList');
-    if ( WordList.length === 1 ) {
-      return '1 Study Word';
-    } else if ( WordList.length > 1 ) {
-      return sprintf('%s Study Words',WordList.length);
-    } else {
-      return '';
-    }
-  },
-  wordsToStudy(){
-    let WordList = get('WordList');
-    if ( WordList.length > 0 ) {
-      return WordList;
-    } else {
-      return '';
-    }
   },
   wordHelper() {
     let wordHelper = get('wordHelper');
@@ -297,50 +362,6 @@ const getLessonGivenId = function(id, justIx ){
   return '';
 };
 
-const knowsWord = function( word, knows ){
-  let WordList = get('WordList');
-
-  let wordHelper = get('wordHelper');
-  if ( typeof( wordHelper.list_ix) !== 'undefined') {
-    // we are working on a list of words, not just one from a lesson
-    let ix = wordHelper.list_ix;
-    if ( knows ) {
-      WordList.splice(ix,1);
-    } else {
-      ix += 1;
-    }
-    if ( ix < WordList.length ) {
-      // we have more words to look at
-      wordHelper.word = WordList[ix].word;
-      wordHelper.list_ix = ix;
-      set('wordHelper',wordHelper);
-    } else {
-      loadHistoryEtc();
-      $('#pr_word_popup').hide();
-    }
-  } else {
-    // just a word from a lesson
-    loadHistoryEtc();
-    $('#pr_word_popup').hide();
-  }
-
-  const studentId = lib.getCookie('studentId');
-  Meteor.call('knowsWord', word, knows, studentId, function(err,results){
-    if ( err ) {
-      console.log('Error: Progress.js line 137',err);
-    } else {
-      console.log('knowsWord',results);
-      if ( results.points ) {
-        // give student points earned on screen
-        // "knowsWord" already stored points in WordList collection
-        const totalPoints = lib.int( lib.getCookie('studentPoints') ) + results.points;
-        lib.setCookie('studentPoints',totalPoints);
-        Session.set('header_points',totalPoints)
-      }
-    }
-  });
-};
-
 const setHistory = function( review ){
   // set reviewed value for appropriate history record
   let history = get('history');
@@ -372,6 +393,32 @@ const setGfReviewed = function(){
 };
 
 Template.Progress.events({
+  'click #prg_word_review': function(e){
+    const wait = '...';
+    const html = $(e.currentTarget).html();
+    if ( html === wait ) return;
+    const student_id = lib.getCookie('studentId');
+    $(e.currentTarget).html(wait);
+    Meteor.call('pastWords', student_id, WordsToReview,function(err,past){
+      $(e.currentTarget).html(html);
+      if ( err ) {
+        console.log('Error: Progress.js line 393',err);
+      } else {
+        let list = lib.copy(WordsToReview);
+        let pastWords = {};
+        for ( let i=0; i < past.length; i++ ) {
+          const w = past[i];
+          list.push(w);
+          pastWords[w] = true;
+        }
+        Session.set('WordAudio_pastWords',pastWords);
+        Session.set('WordAudio_wordList',list);
+        // Session.set('WordAudio_session_reset','StudentHome_wordsActive');
+        set('wordAudioActive',true);
+        set('wordAudio',true);
+      }
+    });
+  },
   'click #gf_done': function(e){
     const review = get('review');
     let lesson = get('gf_lesson');
@@ -523,27 +570,9 @@ Template.Progress.events({
       console.log('%s definition finished playing',word);
     });
   },
-  'click .pr_words'(e){
-    // user asked to study word list
-    e.preventDefault();
-    e.stopPropagation();
-
-    let WordList = get('WordList');
-
-    let wordHelper = {};
-    wordHelper.word = WordList[0].word;
-    wordHelper.list_ix = 0;
-    set('wordHelper',wordHelper);
-    $('#pr_word_popup').show();
-  },
   'click .lesson_word'(e){
     e.preventDefault();
     e.stopPropagation();
-    let wordHelper = {};
-    wordHelper.word = $(e.currentTarget).attr('data');
-    wordHelper.ix = lib.int( $(e.currentTarget).attr('data2') );
-    set('wordHelper',wordHelper);
-    $('#pr_word_popup').show();
   },
   'change .dc_chk_answer': function(e){
     const i = lib.int( $(e.currentTarget).attr('data') ); // question #

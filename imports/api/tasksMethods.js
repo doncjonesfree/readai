@@ -16,28 +16,40 @@ const mailgun = require("mailgun-js");
 const util = require('util');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
+const trim = function(arg){
+  let w = arg.replace(/,/g,'');
+  return w.replace(/\./g,'');
+};
+
+const getPastWords = function(op,id){
+  // Get the # of past words requested
+  const count = 8 - op.length;
+  const recs = WordList.find( { student_id: id, active: false }, { sort: { created: -1 }}).fetch();
+  let past = [];
+  for ( let i=0; i < recs.length; i++ ) {
+    const w = trim( recs[i].word );
+    if ( w && op.indexOf(w) < 0 ) past.push(w);
+    if ( past.length >= count ) break;
+  }
+  if ( past.length < count ) {
+    // we need more words
+    const recs = WordList.find( { active: false }, { sort: { created: -1 }}).fetch();
+    for ( let i=0; i < recs.length; i++ ) {
+      const w = trim( recs[i].word );
+      if ( w && op.indexOf(w) < 0 ) past.push(w);
+      if ( past.length >= count ) break;
+    }
+  }
+  return past;
+};
+
 Meteor.methods({
+  pastWords: function(student_id,currentWords){
+    return getPastWords(currentWords,student_id);
+  },
   checkStudyWords: function(id){
     // Before starting a regular lesson, see if the student has study words to review
     let op = [];
-
-    const trim = function(arg){
-      let w = arg.replace(/,/g,'');
-      return w.replace(/\./g,'');
-    };
-
-    const getPastWords = function(){
-      // Get the # of past words requested
-      const count = 8 - op.length;
-      const recs = WordList.find( { student_id: id, active: false }, { sort: { created: -1 }}).fetch();
-      let past = [];
-      for ( let i=0; i < recs.length; i++ ) {
-        const w = trim( recs[i].word );
-        if ( w && op.indexOf(w) < 0 ) past.push(w);
-        if ( past.length >= count ) break;
-      }
-      return past;
-    };
 
     let recs = WordList.find( { student_id: id, active: true }).fetch();
     recs.sort( function(a,b){
@@ -79,7 +91,7 @@ Meteor.methods({
       return { active: true, list: op, pastWords: {} };
     } else {
       // we need to add some past words so we have some alternate definitions to choose from
-      const past = getPastWords();
+      const past = getPastWords(op,id);
       let pastWords = {};
       for ( let i=0; i < past.length; i++ ) {
         const w = past[i];
@@ -118,7 +130,8 @@ Meteor.methods({
               when: "2022-12-13 20:30:31", word: "enough", _id: "S4JstH4J46vC8RCrK" }
     */
     // WordList.remove({ student_id: student_id }); // jones temp
-    const word = raw_word.toLowerCase();
+    const word = trim( raw_word.toLowerCase() );
+    if ( ! word ) return; // ignore if blank word 
     let retObj = { word: raw_word, type: type, student_id: student_id };
     retObj.WordList = WordList.find( { student_id: student_id, word: word }).fetch();
     let doc = {};
@@ -491,9 +504,11 @@ Meteor.methods({
     return { wordCount: retObj.wordCount, points: retObj.points };
   },
   'loadHistory': function( studentId ){
+    // information for student progress screen
     let retObj = {};
     retObj.LessonHistory = LessonHistory.find( { student_id: studentId }, { sort: { when: 1 }}).fetch();
-    retObj.WordList = WordList.find( { student_id: studentId, active: true }, { sort: { when: 1 }}).fetch();
+    let words = WordList.find( { student_id: studentId }, { sort: { created: 1 }}).fetch();
+    retObj.wordList = words;
     return retObj;
   },
   'dcSaveLessonHistory': function( lesson, studentId ){

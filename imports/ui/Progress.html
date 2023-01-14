@@ -63,9 +63,6 @@
 
     {{ #if mode1 }}
       <div class="button pr_home">Back</div>
-      {{ #if wordsToStudyCount }}
-        <div class="button pr_words">{{ wordsToStudyCount }}</div>
-      {{ /if }}
       {{ #if local }}
         <div class="button" id="pr_erase_reviewed">Erase Reviewed</div>
       {{ /if }}
@@ -77,6 +74,8 @@
             <option value="{{ value }}" {{ sel }}>{{ label }}</option>
           {{ /each }}
         </select>
+
+        {{{ wordListHtml }}}
 
         <table>
         <tr class="tr-heading">
@@ -109,6 +108,11 @@
 
         </table>
 
+        {{ #if wordAudio }}
+          {{ > WordAudio}}
+        {{ /if }}
+        <input type="hidden" value="{{ wordAudioActive}}">
+
         <!--
       <div class="pr_lesson_flex_heading">
         <div class="pr_lesson_when"><br>When</div>
@@ -140,18 +144,5 @@
     -->
     {{ /if }}
 
-    <div class="popup" id="pr_word_popup">
-      <div class="popup_inside">
-        {{ #with wordHelper }}
-          <div class="button" id="wh_knows" data="{{ word }}" data2="1">Knows</div>
-          <div class="button" id="wh_knows" data="{{ word }}" data2="0">Doesn't Know</div>
-          <div class="button" id="popup_close" data="pr_word_popup">Close</div>
-          <i class="fa-solid fa-circle-question icon" id="wh_instructions" data="{{ word }}"></i>
-          <div>&nbsp;</div>
-          <div id="wh_study_word" data="{{ word }}">{{ word }}</div>
-          <div id="wh_word_def" data="{{ word }}">D</div>
-        {{ /with }}
-      </div>
-    </div>
   </div>
 </template>

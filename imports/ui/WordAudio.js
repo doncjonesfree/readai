@@ -189,6 +189,8 @@ Template.WordAudio.events({
       if ( t ) Session.set('GFLesson_wordAudio',false);
       t = Session.get('StudentHome_wordAudio');
       if ( t ) Session.set('StudentHome_wordAudio',false);
+      t = Session.get('Progress_wordAudioActive');
+      if ( t ) Session.set('Progress_wordAudioActive',false);
     }
   },
   'click .wa_chk'(e){
