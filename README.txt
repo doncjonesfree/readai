@@ -76,3 +76,5 @@ meteor add froatsnook:request  https://atmospherejs.com/froatsnook/request
 did not do: meteor npm install --save request
 
 Added RecordRTC.js for getting microphone input. https://recordrtc.org/
+
+meteor npm install --save stripe
