@@ -114,7 +114,30 @@ Template.header.helpers({
   },
 });
 
+// From stripe.com payment links 
+const urlOnetime = 'https://donate.stripe.com/9AQeX3cL00yI8bSbII';
+const urlMonthly = 'https://donate.stripe.com/00geX3bGW1CM8bScMO';
+
+const donationPopup = function(){
+  let list = [ { msg: 'Select your donation type'}];
+  let options = {};
+  options.setVariables = [ { name: 'header_showMessage', value: false } ];
+  options.getVariables = [];
+  options.title = 'Donation';
+  options.messages = list;
+  options.setResponse = 'header_donationPopupResponse';
+  options.buttons = [];
+  options.buttons.push( { label: 'One-Time', value: 1, cls: 'button', href: urlOnetime });
+  options.buttons.push( { label: 'Monthly', value: 2, cls: 'button', href: urlMonthly });
+  options.buttons.push( { label: 'Cancel', value: 0, cls: 'button button-cancel' });
+  Session.set('Message_options',options);
+  set('showMessage',true);
+};
+
 Template.header.events({
+  'click #donate_popup'(e){
+    donationPopup();
+  },
   'click #email_pin'(e){
     const wait = 'email sent!';
     const html = $(e.currentTarget).html();

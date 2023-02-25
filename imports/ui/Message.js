@@ -44,7 +44,11 @@ Template.Message.helpers({
         const b = options.buttons[i];
         let style = '';
         if ( b.style ) style = sprintf('style="%s"',b.style);
-        html.push( sprintf('<div class="%s msg_submit" data="%s" %s>%s</div>',b.cls,b.value,style,b.label));
+        if ( b.href ) {
+          html.push( sprintf('<a class="%s msg_submit" href="%s" data="%s" target="_blank" %s>%s</a>',b.cls,b.href,b.value,style,b.label));
+        } else {
+          html.push( sprintf('<div class="%s msg_submit" data="%s" %s>%s</div>',b.cls,b.value,style,b.label));
+        }
       }
       return html.join('\n');
     }
