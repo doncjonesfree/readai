@@ -19,6 +19,7 @@
                {{ #if supervisor }}
                  <div class="nav-element myaccount" title="Change your name, email or pin #">my account</div>
                {{ /if }}
+               <div class="nav-element" id="donate_popup">donate</div>
                <div class="nav-element signout">
                  sign out ({{ user_name }})
                  {{ #if supervisor }}
@@ -30,10 +31,7 @@
              {{ /if }}
            {{ else }}
              <div class="nav-element">about us</div>
-             <div class="nav-element" id="donate_popup">
-               donate
-               <!-- <a href="https://donate.stripe.com/9AQeX3cL00yI8bSbII" target="_blank">donate</a> -->
-             </div>
+             <div class="nav-element" id="donate_popup">donate</div>
              <div class="nav-element" id="signup">sign up (free)</div>
              <div class="nav-element" id="signin">sign in</div>
            {{ /if }}

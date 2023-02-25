@@ -114,18 +114,20 @@ Template.header.helpers({
   },
 });
 
-// From stripe.com payment links 
+// From stripe.com payment links
 const urlOnetime = 'https://donate.stripe.com/9AQeX3cL00yI8bSbII';
 const urlMonthly = 'https://donate.stripe.com/00geX3bGW1CM8bScMO';
 
-const donationPopup = function(){
+export const donationPopup = function( arg ){
+  let preamble = 'header';
+  if ( arg ) preamble = arg;
   let list = [ { msg: 'Select your donation type'}];
   let options = {};
-  options.setVariables = [ { name: 'header_showMessage', value: false } ];
+  options.setVariables = [ { name: sprintf('%s_showMessage',preamble), value: false } ];
   options.getVariables = [];
   options.title = 'Donation';
   options.messages = list;
-  options.setResponse = 'header_donationPopupResponse';
+  options.setResponse = sprintf('%s_donationPopupResponse',preamble);
   options.buttons = [];
   options.buttons.push( { label: 'One-Time', value: 1, cls: 'button', href: urlOnetime });
   options.buttons.push( { label: 'Monthly', value: 2, cls: 'button', href: urlMonthly });
