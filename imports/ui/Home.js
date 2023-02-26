@@ -82,6 +82,74 @@ const message = function( youngOld ){
   return [ { msg: html.join('\n') } ];
 };
 
+const reformat = function(txt){
+  const list = txt.split('\n');
+  let op = [];
+  let p = '';
+  for ( let i=0; i < list.length; i++ ) {
+    const l = list[i].trim();
+    if ( l ) {
+      if ( p ) {
+        p += ' ' + l;
+      } else {
+        p = l;
+      }
+    } else if ( p ) {
+      op.push(p);
+      p = '';
+    }
+  }
+  if ( p ) op.push(p);
+  return op;
+};
+
+const popupAboutUs = function(){
+  const txt = `
+    In the early 1950's my father started teaching some of his fifth grade students to read.  These students
+    could not read the fifth grade text books.  Eventually that turned into a business teaching children to read
+    for over 50 years.  In 2003 my son and I took over the business and ran it for 10 years.
+
+    Over the years many innovative methods were developed and tested.  We have attempted to capture the essence
+    of the methods that were proven successful over many years and incorporate them into this website.
+
+    We have also included some new techniques in artificial intellegence to help this site to enable the student
+    to teach him / herself rather that requiring a one-to-one teacher as my father did.
+
+    Don Jones
+    `;
+  let msg = reformat(txt);
+  let list = [];
+  for ( let i=0; i <  msg.length; i++ ) {
+    list.push( { msg: msg[i] } );
+  }
+  let options = {};
+  options.setVariables = [ { name: 'home_showMessage', value: false } ];
+  options.getVariables = [];
+  options.title = 'About Us';
+  options.messages = list;
+  options.setResponse = 'home_popupResponse';
+  options.buttons = [];
+  options.buttons.push( { label: 'Close', value: 1, cls: 'button' });
+  Session.set('Message_options',options);
+  set('showMessage',true);
+};
+
+const popupMaterial = function(){
+  let msg = [];
+  msg.push('Sorry, Bonus Material coming soon!');
+  let list = [ { msg: msg.join('\n') } ];
+  let options = {};
+  options.setVariables = [ { name: 'home_showMessage', value: false } ];
+  options.getVariables = [];
+  options.title = 'Bonus Material';
+  options.messages = list;
+  options.setResponse = 'home_popupResponse';
+  options.buttons = [];
+  options.buttons.push( { label: 'Close', value: 1, cls: 'button' });
+  Session.set('Message_options',options);
+  set('showMessage',true);
+};
+
 const popup = function(youngOld){
   let list = message( youngOld );
   let options = {};
@@ -98,11 +166,17 @@ const popup = function(youngOld){
 };
 
 Template.Home.events({
+  'click #about_us'(e){
+    popupAboutUs();
+  },
   'click #read_more_young'(e){
     popup('young');
   },
   'click #read_more_old'(e){
     popup('old');
+  },
+  'click #read_more_material'(e){
+    popupMaterial();
   },
   'click .change_mode'(e) {
     const m = lib.int( $(e.currentTarget).attr('data'));
