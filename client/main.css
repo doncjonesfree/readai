@@ -54,6 +54,7 @@
   --color-error: rgb(187,54,50);
   --color-recording: rgb(187,54,50,.6);
   --color-warning: #339900;
+  --color-disabled: black;
   --color-ins-playing: rgba(178,34,34,.4);
 
   --color-button: rgb(90,131,180);
@@ -164,6 +165,11 @@
   border: 0;
   margin-left: 1rem !important;
   font-weight: var(--fw-light) !important;
+}
+
+.input-disabled {
+  font-weight: bold !important;
+  color: var(--color-disabled) !important;
 }
 
 .input-checkbox {

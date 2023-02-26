@@ -4,7 +4,13 @@
   <div class="main">
     <h1>Sign Up</h1>
 
-    {{{ data_entry }}}
+    {{ #if mode1 }}
+      {{{ data_entry }}}
+    {{ /if }}
+
+    {{ #if mode2 }}
+      {{{ data_entry2 }}}
+    {{ /if }}
   </div>
-  
+
 </template>

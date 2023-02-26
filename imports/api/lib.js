@@ -502,7 +502,7 @@ const justInfoHtml = function(obj){
     if ( obj.label ) {
       html.push( sprintf('<label class="input-label" for="%s">%s</label>',obj.id,obj.label));
     }
-    html.push( sprintf('<input class="input-text" type="text" id="%s" value="%s" %s%s disabled>',obj.id,obj.value,ph,title));
+    html.push( sprintf('<input class="input-text input-disabled" type="text" id="%s" value="%s" %s%s disabled>',obj.id,obj.value,ph,title));
   html.push( '</div>');
 
   return html.join('\n');

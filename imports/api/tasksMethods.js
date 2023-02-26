@@ -131,7 +131,7 @@ Meteor.methods({
     */
     // WordList.remove({ student_id: student_id }); // jones temp
     const word = trim( raw_word.toLowerCase() );
-    if ( ! word ) return; // ignore if blank word 
+    if ( ! word ) return; // ignore if blank word
     let retObj = { word: raw_word, type: type, student_id: student_id };
     retObj.WordList = WordList.find( { student_id: student_id, word: word }).fetch();
     let doc = {};
@@ -638,6 +638,20 @@ Meteor.methods({
     }
     if ( retObj.updates === 0 ) retObj.success = false;
     return retObj;
+  },
+  'collectionRemove': function( collection, id ){
+    // remove specific _ids from given collection 
+    switch ( collection ) {
+      case 'Users':
+      if ( Array.isArray(id) ){
+        for ( let i=0; i < id.length; i++ ){
+          Users.remove(id[i]);
+        }
+      } else {
+        Users.remove(id);
+      }
+      break;
+    }
   },
   'collectionFind': function( collection, find ){
     switch ( collection ) {
