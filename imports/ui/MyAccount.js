@@ -27,15 +27,16 @@ const accountFields = function(){
   let op = [];
 
   let list = [];
-  list.push('First Name and Email are required.');
+  list.push('First Name and 4 Digit Pin are required.');
   list.push('The 4 digit pin is required to enable "teacher" or "supervisor" mode.');
   list.push('In teacher/supervisor mode you can add students, view progress and quiz on words.');
+  list.push('Your email has been verified and cannot be changed.  If necessary contact support.')
   list.push('This website is free of charge!');
   op.push( { paragraph: list });
 
   op.push( { label: 'First Name *', type: 'text', required: true, value: getValue(doc,'first_name'), id: 'first_name', message: "you can enter just first name if you like" })
   op.push( { label: 'Last Name', type: 'text', required: false, value: getValue(doc,'last_name'), id: 'last_name' })
-  op.push( { label: 'Email *', type: 'email', required: true, value: getValue(doc,'email'), id: 'email' })
+  op.push( { just_info: true, label: 'Email *', type: 'email', required: true, value: getValue(doc,'email'), id: 'email' })
   op.push( { label: '4 Digit Pin *', type: 'pin', required: true, value: getValue(doc,'pin'), id: 'pin', message: 'Unlocks parent/supervisor options' })
   let verified = 'No';
   if ( doc.verified ) verified = 'Yes';
@@ -65,17 +66,17 @@ Template.MyAccount.events({
     const html = $(e.currentTarget).html();
     if ( wait === html ) return;
     let data = lib.docFromFields( accountFields() );
+    if ( ! data.doc.email ) data.doc.email = get('doc').email; // preserve email - we don't allow them to change it here
     set('doc',data.doc);
     set('error',data.error);
     if ( ! data.error ) {
       // updating
       const prevDoc = lib.getCookie('ltrSignin');
       const id = prevDoc._id;
-      // If they changed email - verified no longer true
-      if ( prevDoc.email !== data.doc.email ) data.doc.verified = false;
       let doc = lib.copy( data.doc );
       doc._id = id;
       delete doc[undefined];
+      doc.verified = true;
       lib.setCookie('ltrSignin',doc);
 
       $(e.currentTarget).html(wait);
