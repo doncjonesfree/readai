@@ -530,6 +530,31 @@ export const inputHtml = function(obj){
   return html.join('\n');
 };
 
+export const paragraphHtml = function(obj){
+  // { message:  }
+  return sprintf('<div class="paragraph">%s</div>',obj.message);
+};
+
+export const textareaHtml = function(obj){
+  // { label: id: placeholder: value:, title }
+  let html = [];
+  html.push( '<div class="textarea-wrapper">');
+    let ph = '';
+    if ( obj.placeholder ) ph = sprintf(' placeholder="%s"',obj.placeholder);
+    let title = '';
+    if ( obj.title ) title = sprintf(' title="%s"',obj.title);
+    let ac = ''; // autocomplete
+    if ( obj.autocomplete ) ac = sprintf('autocomplete = "%s"',obj.autocomplete);
+    if ( ! obj.value ) obj.value = '';
+    if ( obj.label ) {
+      html.push( sprintf('<label class="input-label" for="%s">%s</label>',obj.id,obj.label));
+    }
+    html.push( sprintf('<textarea class="textarea-text" id="%s" %s%s>%s</textarea>',obj.id,ph,title,ac,obj.value))
+  html.push( '</div>');
+
+  return html.join('\n');
+};
+
 export const flexEntryHtml = function(list){
   // left off here
   let html = [];

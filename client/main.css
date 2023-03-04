@@ -156,6 +156,27 @@
   margin-top: 1.5rem;
 }
 
+.textarea-wrapper {
+  width: 40rem;
+  height: 200px;
+  border: 1px solid var(--input-border-color);
+  border-radius: var(--input-radius);
+  background-color: #fff;
+  margin-top: 1.5rem;
+}
+
+.textarea-text {
+  position: relative;
+  background-color: #fff;
+  width: 95%;
+  height: 85%;
+  top: -9px;
+  color: var(--input-text-color);
+  margin-left: 1rem !important;
+  font-weight: var(--fw-light) !important;
+  border: 1px solid white;
+}
+
 .input-text {
   position: relative;
   background-color: #fff;

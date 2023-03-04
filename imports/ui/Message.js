@@ -6,6 +6,11 @@ const set = function(n,v) {  Session.set(pre + n,v) };
 const setd = function(n,v) {  Session.setDefault(pre + n,v) };
 
 Template.Message.created = function() {
+  const options = get('options');
+  if ( options && options.getVariables && options.getVariables.length > 0 ) {
+    const id = options.getVariables[0].id;
+    lib.focus('#'+id);
+  }
 };
 
 Template.Message.helpers({

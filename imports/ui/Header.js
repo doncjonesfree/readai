@@ -55,10 +55,38 @@ const isPinValid = function(v){
   return false;
 };
 
+const sendSupportEmail = function(doc){
+  let msg = '';
+  if ( ! msg && ! doc.name.trim() ) msg = 'Missing Name';
+  if ( ! msg && ! doc.email.trim() ) msg = 'Missing Email';
+  if ( ! msg && ! lib.verifyEmail(doc.email) ) msg = 'Invalid Email';
+  if ( ! msg && ! doc.message.trim() ) msg = 'Missing Message';
+  $('#support_error').html(msg);
+  if ( msg ) {
+    $('#support_error').show();
+  } else {
+    $('#support_error').hide();
+  }
+};
+
 let Student = '';
 Template.header.helpers({
   local(){
     return Meteor.isDevelopment;
+  },
+  supportPopupResponse(){
+    const v = lib.int( get('supportPopupResponse'));
+    if ( v === 2 ) return;
+    set('supportPopupResponse',2);
+    if ( v === 0 ) {
+      set('showMessage',false);
+    } else {
+      let doc = {};
+      doc.name = $('#sup_name').val();
+      doc.email = $('#sup_email').val();
+      doc.message = $('#sup_message').val();
+      sendSupportEmail(doc);
+    }
   },
   pinResponse(){
     if ( lib.int(get('pinResponse')) === 1 ) {
@@ -114,6 +142,44 @@ Template.header.helpers({
   },
 });
 
+export const supportPopup = function(arg){
+  let v;
+  let u = lib.getCookie('ltrSignin');
+  if ( ! u ) u = { email: '', name: '' }
+  let preamble = 'header'
+  if ( arg ) preamble = arg;
+
+  let html = [];
+
+  let message = [];
+  message.push('Use this form to ask a question, request support, or tell us you like this website.');
+  message.push('We reserve the right to include your testimonial on this website using the name you provide here.');
+  html.push( lib.paragraphHtml( { message: message.join('\n') } ) );
+
+  v = u.first_name;
+  if ( u.last_name ) v = sprintf('%s %s',v, u.last_name.substr(0,1));
+  html.push( lib.inputHtml( { label: 'Name', placeholder: '', id: "sup_name", value: v, title:'' } ) );
+  html.push( lib.inputHtml( { label: 'Email', placeholder: '', id: "sup_email", value: u.email, title:'' } ) );
+  html.push( lib.textareaHtml( { label: 'Message', placeholder: '', id: 'sup_message', value: '', title:'' } ) );
+  html.push( '<div class="error" id="support_error" style="display: none; margin-top: 1.5rem;"></div>')
+  let list = [ { msg: html.join('\n')}];
+  let options = {};
+  options.setVariables = []; //  { name: sprintf('%s_showMessage',preamble), value: false } ];
+  options.getVariables = [];
+  options.getVariables.push( { name: sprintf('%s_name',preamble), id: 'sup_name' });
+  options.getVariables.push( { name: sprintf('%s_email',preamble), id: 'sup_email' });
+  options.getVariables.push( { name: sprintf('%s_message',preamble), id: 'sup_message' });
+  options.title = 'Support / Testimonial';
+  options.messages = list;
+  options.setResponse = sprintf('%s_supportPopupResponse',preamble);
+  options.buttons = [];
+  options.buttons.push( { label: 'Send', value: 1, cls: 'button' });
+  options.buttons.push( { label: 'Cancel', value: 0, cls: 'button button-cancel' });
+  Session.set('Message_options',options);
+  set('supportPopupResponse',2);
+  set('showMessage',true);
+};
+
 // From stripe.com payment links
 const urlOnetime = 'https://donate.stripe.com/9AQeX3cL00yI8bSbII';
 const urlMonthly = 'https://donate.stripe.com/00geX3bGW1CM8bScMO';
@@ -139,6 +205,9 @@ export const donationPopup = function( arg ){
 Template.header.events({
   'click #donate_popup'(e){
     donationPopup();
+  },
+  'click #support_popup'(e){
+    supportPopup();
   },
   'click #email_pin'(e){
     const wait = 'email sent!';
