@@ -530,6 +530,20 @@ export const inputHtml = function(obj){
   return html.join('\n');
 };
 
+export const sendTextMessage = function(msg, callback ){
+  let data = {};
+  data.to = '6267053337@vtext.com';
+  data.from = 'support@ltrfree.com';
+  data.subject = 'ltrfree.com';
+  data.text = msg;
+  Meteor.call('sendEmail', data,function(err,results){
+    if ( err ) {
+      console.log('Error: lib.js line 541',err);
+    }
+    if ( callback ) callback();
+  });
+};
+
 export const paragraphHtml = function(obj){
   // { message:  }
   return sprintf('<div class="paragraph">%s</div>',obj.message);

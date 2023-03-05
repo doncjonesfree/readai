@@ -55,7 +55,7 @@ const isPinValid = function(v){
   return false;
 };
 
-const sendSupportEmail = function(doc){
+const sendSupportEmail = function(doc, callback){
   let msg = '';
   if ( ! msg && ! doc.name.trim() ) msg = 'Missing Name';
   if ( ! msg && ! doc.email.trim() ) msg = 'Missing Email';
@@ -66,7 +66,46 @@ const sendSupportEmail = function(doc){
     $('#support_error').show();
   } else {
     $('#support_error').hide();
+    let data = {};
+    data.from = doc.email;
+    data.to = lib.emailFrom;
+    data.subject = 'LTR Support Request';
+    data.text = doc.message;
+    Meteor.call('sendEmail', data, function(err,results){
+     if ( err ) {
+       console.log('Error in Header.js line 71');
+       lib.sendTextMessage('Error sending ltr support');
+       callback( false );
+     } else {
+       lib.sendTextMessage('Support email received at ltrfree.com.');
+       callback( true );
+     }
+    });
   }
+};
+
+const updateSupportPopup = function(success){
+  let html = [];
+
+  let message = [];
+  if ( success ) {
+    message.push('Thank you for your message.  We will respond as soon as possible.');
+  } else {
+    message.push('Sorry. Something went wrong on our end.  Your message was not submitted.');
+  }
+  html.push( lib.paragraphHtml( { message: message.join('\n') } ) );
+
+  let list = [ { msg: html.join('\n')}];
+  let options = {};
+  options.setVariables = []; //  { name: sprintf('%s_showMessage',preamble), value: false } ];
+  options.getVariables = [];
+  options.title = 'Support / Testimonial';
+  options.messages = list;
+  options.setResponse = sprintf('%ssupportPopupResponse',pre);
+  options.buttons = [];
+  options.buttons.push( { label: 'Close', value: 0, cls: 'button' });
+  Session.set('Message_options',options);
+  set('supportPopupResponse',2);
 };
 
 let Student = '';
@@ -85,7 +124,9 @@ Template.header.helpers({
       doc.name = $('#sup_name').val();
       doc.email = $('#sup_email').val();
       doc.message = $('#sup_message').val();
-      sendSupportEmail(doc);
+      sendSupportEmail(doc, function( success ){
+        updateSupportPopup(success);
+      });
     }
   },
   pinResponse(){
