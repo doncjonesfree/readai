@@ -1,12 +1,15 @@
 July 4,2024 - copied read into readai
 
 Use: "mr" to start this version.
-mr = 'MONGO_URL=mongodb+srv://donread:Penphone23@read1.x3n6s.mongodb.net/test meteor run --settings ./local_settings.json'
+mr = 'MONGO_URL=mongodb+srv://donread:<< mongopwd >>@read1.x3n6s.mongodb.net/test meteor run --settings ./local_settings.json'
 in ~/.bash_profile
 
 Resources we are considering:
 deepgram.com - streaming speech to text - about $.0059 per minute
-             - also text to speech 
+             - also text to speech
+openai - chat gpt - Perplexity say's its the best for generating sentences and short stories
+sassbook.com - perhaps for writing short stories.
+copy.ai - write sentences?
 /*
 
 https://blaze-tutorial.meteor.com/simple-todos/01-creating-app.html
